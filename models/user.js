@@ -26,10 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique:  {
-          name: true,
-          msg: "Username has already been assigned"
-        },
+        unique:  true,
         validate:{
           isAlphanumeric:{
             msg:"Username can only contain alphanumeric characters"
@@ -59,6 +56,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull:false,
+      unique: true,
       validate:{
         isEmail:{
           msg:"Enter a valid email"
