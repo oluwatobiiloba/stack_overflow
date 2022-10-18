@@ -16,10 +16,7 @@ module.exports = {
       username: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique:  {
-          name: true,
-          msg: "Username has already been assigned"
-        },
+        unique:  true,
         validate:{
           isAlphanumeric:{
             msg:"Username can only contain alphanumeric characters"
@@ -56,7 +53,13 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull:false,
+        unique: true,
+        validate:{
+          isEmail:{
+            msg:"Enter a valid email"
+          }
+        }
       },
       role: {
         type: Sequelize.INTEGER,

@@ -1,4 +1,4 @@
-const { sequelize, User} = require('../models')
+const { sequelize, User } = require('../models')
 
 
 exports.signUp = async (req,res,next)=>{
