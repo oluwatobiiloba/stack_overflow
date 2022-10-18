@@ -25,8 +25,14 @@ module.exports = {
           }
         }
       },
-      downvotes: Sequelize.INTEGER,
-      upvotes: Sequelize.INTEGER,
+      downvotes: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+      upvotes: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
       accepted: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
