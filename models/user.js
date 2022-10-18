@@ -9,8 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate({ Questions }) {
       // define association here
+      this.hasMany( Questions ,{ foreignKey:'userId', as : 'questions'})
     }
 
     toJSON(){
@@ -26,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique:  true,
+        unique: true ,
         validate:{
           isAlphanumeric:{
             msg:"Username can only contain alphanumeric characters"
@@ -43,20 +44,41 @@ module.exports = (sequelize, DataTypes) => {
     first_name: {
       type: DataTypes.STRING,
       allowNull: false,
-
+      validate:{
+        notNull:{
+          msg:"Username cannot be null"
+        },
+        notEmpty:{
+          msg:"Field cannot be empty"
+        }}
     },
     last_name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notNull:{
+          msg:"Username cannot be null"
+        },
+        notEmpty:{
+          msg:"Field cannot be empty"
+        }
+    }
     },
     phonenumber: {
       type:DataTypes.BIGINT,
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notNull:{
+          msg:"Username cannot be null"
+        },
+        notEmpty:{
+          msg:"Field cannot be empty"
+        }
+    }
     },
     email: {
       type: DataTypes.STRING,
       allowNull:false,
-      unique: true,
       validate:{
         isEmail:{
           msg:"Enter a valid email"
@@ -85,5 +107,8 @@ module.exports = (sequelize, DataTypes) => {
     tableName:'users',
     modelName: 'User',
   });
+  // User.associate = (models) => {
+  //   User.hasOne(models.Roles,{foreignKey: 'role_id'})
+  // }
   return User;
 };
