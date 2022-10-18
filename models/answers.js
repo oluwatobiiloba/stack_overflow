@@ -9,9 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({Questions, Comments}) {
+    static associate({Questions, Comments, User}) {
       // define association here
       this.belongsTo(Questions, { foreignKey: 'questionId', as: 'question'});
+      this.belongsTo(User, { foreignKey: 'userId', as: 'user'})
       //this.hasMany(Comments, { foreignKey: 'comment', as: 'comments'})
     }
   }
@@ -32,8 +33,14 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    downvotes: DataTypes.INTEGER,
-    upvotes: DataTypes.INTEGER,
+    downvotes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    upvotes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     accepted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
