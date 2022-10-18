@@ -16,11 +16,32 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Comments.init({
-    userId: DataTypes.INTEGER,
-    answerId: DataTypes.INTEGER,
-    comment: DataTypes.STRING
+    uuid:{
+      type:DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    answerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    comment: {
+    type: DataTypes.STRING,
+    allowNull:false,
+    validate: {
+      notNull: {
+        msg: 'Please provide a comment'
+      },
+      notEmpty:{
+        msg: 'Please provide a comment'
+      }
+    }}
   }, {
     sequelize,
+    tableName: 'comments',
     modelName: 'Comments',
   });
   return Comments;

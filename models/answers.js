@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(Questions, { foreignKey: 'questionId', as: 'question'});
       this.belongsTo(User, { foreignKey: 'userId', as: 'user'})
-      //this.hasMany(Comments, { foreignKey: 'comment', as: 'comments'})
+      this.hasMany(Comments, { foreignKey: 'answerId', as: 'comments'})
     }
   }
   Answers.init({
@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    comments: DataTypes.STRING
+  
   }, {
     sequelize,
     tableName: 'answers',
