@@ -1,4 +1,4 @@
-const { sequelize, User, Questions , Answers } = require('../models')
+const { sequelize, User, Questions , Answers, Votes } = require('../models')
 
 
 exports.createAnswer = async (req,res,next)=>{
@@ -9,16 +9,43 @@ exports.createAnswer = async (req,res,next)=>{
     console.log(req.body);
     try {
        
-        const newAnswer = await Answers.create({
-            answer,questionId:question.id,userId:user.id});
-        
+        const newAnswer = await Answers.create({ answer,questionId:question.id,userId:user.id});
+        const newVote = await Votes.create({answerId:newAnswer.id, userId : user.id })
     return res.status(201).json({
         status: 'success',
         message: "Answer Posted",
         data: {
-            newAnswer, 
+            newAnswer,
+            newVote
         }
         })
+    }
+    catch(err) {
+        console.log(err)
+        return res.status(500).json(err)
+    }
+}
+
+exports.vote = async (req,res,next)=>{
+    const {answerUuid,userUuid,upVote,downVote} = req.body
+
+    const answer =  await Answers.findOne({where: { uuid: answerUuid }});
+    
+    try {
+        if(upVote){
+            answer.upvotes += 1
+        } else if(downVote) {
+            answer.downvotes += 1
+        }
+        await answer.save()
+
+        return res.status(201).json({
+            status: 'success',
+            message: "vote Posted",
+            data: {
+               answer
+            }
+            })
     }
     catch(err) {
         console.log(err)
@@ -30,7 +57,7 @@ exports.getAllAnswers = async (req,res,next) => {
 
     try{
      
-     const answers = await Answers.findAll({include: ["user",'question']})
+     const answers = await Answers.findAll({include: ["user",'question','comments','votes']})
          return res.status(201).json({
              status: "success",
              message: `${answers.length} answers found`,
