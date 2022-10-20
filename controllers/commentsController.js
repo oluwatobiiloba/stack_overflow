@@ -5,7 +5,7 @@ exports.createComment = async (req,res,next)=>{
     const {comment,userUuid,answerUuid} = req.body
     const answer = await Answers.findOne({where: { uuid: answerUuid }});
     const user = await User.findOne({where: { uuid: userUuid }});
-    console.log(user,answer)
+    //console.log(user,answer)
 
     try {
        
@@ -20,7 +20,7 @@ exports.createComment = async (req,res,next)=>{
         })
     }
     catch(err) {
-        console.log(err)
+        console.log(err.message)
         return res.status(500).json(err)
     }
 }
@@ -36,7 +36,7 @@ exports.getAllComments = async (req,res,next) => {
              }
          })
     }catch(err){
-     console.log(err)
+     console.log(err.message)
      return res.status(500).json(err)
     }
  }
