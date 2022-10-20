@@ -1,3 +1,6 @@
 .env
+config.json
 /node_modules
 .DS_Store
+models/stack_overflow.code-workspace
+.gitignore

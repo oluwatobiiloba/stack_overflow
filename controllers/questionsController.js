@@ -12,7 +12,7 @@ exports.createQuestion = async (req,res,next)=>{
         
     return res.status(201).json({
         status: 'success',
-        message: "Question logged",
+        message: "Question logged 🙂",
         data: {
             newQuestion, 
         }

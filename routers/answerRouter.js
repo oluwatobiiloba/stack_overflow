@@ -8,6 +8,9 @@ router
 router
     .get('/',answersController.getAllAnswers)
 
+router
+    .put('/vote',answersController.vote)
+
 
 
 module.exports = router;
