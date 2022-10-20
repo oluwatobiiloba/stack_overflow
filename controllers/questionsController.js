@@ -19,7 +19,7 @@ exports.createQuestion = async (req,res,next)=>{
         })
     }
     catch(err) {
-        console.log(err)
+        console.log(err.message)
         return res.status(500).json(err)
     }
 }

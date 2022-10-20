@@ -3,13 +3,20 @@ const express = require('express');
 const router = express.Router();
 
 router
-    .post('/answer',answersController.createAnswer)
+    .route('/answer')
+    .post(answersController.createAnswer)
 
 router
-    .get('/',answersController.getAllAnswers)
+    .route('/')
+    .get(answersController.getAllAnswers)
+    
+router
+    .route('/:id')
+    .get(answersController.getAnswerById)
 
 router
-    .put('/vote',answersController.vote)
+    .route('/vote')
+    .put(answersController.vote)
 
 
 
