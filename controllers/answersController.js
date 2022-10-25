@@ -87,6 +87,8 @@ exports.getAllAnswers = async (req,res,next) => {
 
  exports.getAnswerById = async (req,res,next) => {
     try{
+
+        //uuid
         const data = await answersServices.getAnswerById(req.params.id);
         if(!data){
             return res.status(404).json({

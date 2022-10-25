@@ -8,15 +8,9 @@ module.exports = {
         const answers = await Answers.findAll({include: fields})
             .catch(
                 err => {
-                console.log(err.message);
-                return res.status(500).json({
-                    status: 'success',
-                    message: "Sorry, error occured processing your request 😢🚑",
-                    data: {
-                       err
-                    }
-                    })
-            });
+                    console.log(err.message);
+                    throw err
+                });
 
         return answers
     },
@@ -27,13 +21,7 @@ module.exports = {
             .catch(
                 err => {
                     console.log(err.message);
-                    return res.status(500).json({
-                        status: 'success',
-                        message: "Sorry, error occured processing your request 😢🚑",
-                        data: {
-                           err
-                        }
-                        })
+                    throw err
                 });
                
                 return answer
@@ -52,15 +40,8 @@ module.exports = {
         send = {newAnswer,newVote}
         }catch(err){
                 console.log(err.message);
-                return res.status(500).json({
-                    status: 'failed',
-                    message: "Sorry, error occured processing your request 😢🚑",
-                    data: {
-                       err
-                    }
-                    })
-            
-        }
+                throw err
+            }
 
         return send
 
@@ -69,10 +50,15 @@ module.exports = {
     voteAnswer: async function(query){
         const {answerUuid,userUuid,upVote,downVote} = query.body
 
-        const answer =  await Answers.findOne({where: { uuid: answerUuid }});
-        const vote = await Votes.findOne({where: {answerId: answer.id }});
-        
         try{
+            const answer =  await Answers.findOne({where: { uuid: answerUuid }})
+        if(!answer){
+            throw new Error("No answer with that Id")};
+        const vote = await Votes.findOne({where: {answerId: answer.id }});
+        if(!vote){
+            const user = await User.findOne({where : {uuid:userUuid}})
+            const newVote = await Votes.create({answerId:answer.id, userId : user.id })
+        };
             if(upVote){
                 answer.upvotes += 1;
                 vote.upvotes = answer.upvotes;
@@ -85,9 +71,26 @@ module.exports = {
         }
         catch(err) {
             console.log(err.message)
-            return res.status(500).json(err)
+            throw err
         }
 
         return cast
+    },
+
+    getAnswerByUserIdandQuestionId: async function(query){
+
+        const {userUuid,questionUuid} = query.body
+
+        try{
+            const user = await User.findOne({where: {uuid:userUuid}});
+            const question = await Questions.findOne({where: {uuid:questionUuid}});
+            const answer = await findOne({where: {userId:user.id,questionId:question.id}})
+
+            return answer
+        }catch(err){
+            console.log(err.message)
+            throw err
+        }
+
     }
 }

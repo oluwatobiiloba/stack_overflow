@@ -7,7 +7,7 @@ router
     .post(answersController.createAnswer)
 
 router
-    .route('/')
+    .route('/all_answers')
     .get(answersController.getAllAnswers)
     
 router

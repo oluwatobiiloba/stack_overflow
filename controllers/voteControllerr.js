@@ -1,34 +1,35 @@
 const { User, Answers, Votes} = require("../models");
 const votes = require("../models/votes");
+const voteServices = require('../services/voteServices')
 
-exports.vote = async (req,res,next)=>{
-    const {answerUuid,userUuid,upVote,downVote} = req.body
-    //const answer = await Answers.findOne({where: { uuid: answerUuid }});
-    //const user = await User.findOne({where: { uuid: userUuid }});
-    const vote = await Votes.findOne({where: {answerId: 3}});
-    const answer =  await Answers.findOne({where: { uuid: answerUuid }});
+// exports.vote = async (req,res,next)=>{
+//     const {answerUuid,userUuid,upVote,downVote} = req.body
+//     //const answer = await Answers.findOne({where: { uuid: answerUuid }});
+//     //const user = await User.findOne({where: { uuid: userUuid }});
+//     const vote = await Votes.findOne({where: {answerId: 3}});
+//     const answer =  await Answers.findOne({where: { uuid: answerUuid }});
     
-    try {
-        if(upVote){
-            vote.upvotes += 1
-        } else if(downVote) {
-            vote.downvotes += 1
-        }
-        await vote.save()
+//     try {
+//         if(upVote){
+//             vote.upvotes += 1
+//         } else if(downVote) {
+//             vote.downvotes += 1
+//         }
+//         await vote.save()
 
-        return res.status(201).json({
-            status: 'success',
-            message: "vote Posted",
-            data: {
-               vote
-            }
-            })
-    }
-    catch(err) {
-        console.log(err)
-        return res.status(500).json(err)
-    }
-}
+//         return res.status(201).json({
+//             status: 'success',
+//             message: "vote Posted",
+//             data: {
+//                vote
+//             }
+//             })
+//     }
+//     catch(err) {
+//         console.log(err)
+//         return res.status(500).json(err)
+//     }
+// }
 
 // exports.vote = async (req,res,next) => {
 //     const {answerUuid,userUuid, upVote , downVote} = req.body
@@ -63,7 +64,7 @@ exports.getAllVotes = async (req,res,next) => {
 
     try{
      
-     const votes = await Votes.findAll()
+     const votes = await voteServices.getVotes()
          return res.status(201).json({
              status: "success",
              message: `${votes.length} votes found`,
