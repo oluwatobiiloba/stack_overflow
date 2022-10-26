@@ -48,16 +48,19 @@ module.exports = {
     },
 
     voteAnswer: async function(query){
-        const {answerUuid,userUuid,upVote,downVote} = query.body
-
+        const {answerUuid,upVote,downVote} = query.body
+        const { id } = query.user
+        
         try{
             const answer =  await Answers.findOne({where: { uuid: answerUuid }})
         if(!answer){
             throw new Error("No answer with that Id")};
-        const vote = await Votes.findOne({where: {answerId: answer.id }});
+        const vote = await Votes.findOne({where: {answerId: answer.id,userId:id} });
+        console.log(vote)
         if(!vote){
-            const user = await User.findOne({where : {uuid:userUuid}})
-            const newVote = await Votes.create({answerId:answer.id, userId : user.id })
+            const voter = await User.findOne({where : {id:id}})
+            const newVote = await Votes.create({answerId:answer.id, userId : voter.id })
+            return newVote
         };
             if(upVote){
                 answer.upvotes += 1;

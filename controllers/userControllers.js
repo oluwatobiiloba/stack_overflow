@@ -94,5 +94,10 @@ exports.signout = async(req,res,next) => {
         message: "Bye!"})
 }
 
+exports.protect = async(req,res,next) => {
+    req.user = await authServices.protect(req)
+    
+    next()
+}
 
 

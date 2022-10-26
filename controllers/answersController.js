@@ -1,6 +1,7 @@
 const { sequelize, User, Questions , Answers, Votes } = require('../models')
 const answersServices = require('../services/answerServices')
-
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken')
 
 exports.createAnswer = async (req,res,next)=>{
     
@@ -24,7 +25,6 @@ exports.createAnswer = async (req,res,next)=>{
 exports.vote = async (req,res,next)=>{
     try{
         const data = await answersServices.voteAnswer(req);
-        console.log('in controller')
         return res.status(201).json({
           status: 'success',
           message: `Vote logged`,

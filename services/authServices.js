@@ -46,7 +46,7 @@ module.exports = {
            throw new Error('Please provide email and password');
         }
         
-        const user = await User.findOne({where : {uuid: 'b3884b19-5314-4f1b-abe3-2b6dedae41f2'}})
+        const user = await User.findOne({where : {username}})
        
 
         if (!user || !await bcrypt.compare(password,user.password)) {
@@ -57,5 +57,31 @@ module.exports = {
         payload = {user,sendToken}
         return payload
     },
+
+    protect: async function(req){
+     try{   let token;
+
+        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+            token = req.headers.authorization.split(' ')[1];
+        }else if(req.cookies.jwt){
+            token = req.cookies.jwt
+        }
+        if(!token){
+            throw new Error('Login required')
+        }
+        const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET)
+        const userExist = await User.findOne({where: {id:decoded.id}})
+        if(!userExist){
+            throw new Error('This user does not exist anymore')
+        
+       
+        }
+        return userExist
+    }catch(err){
+            console.log(err)
+        }
+
+        
+    }
     
 }
