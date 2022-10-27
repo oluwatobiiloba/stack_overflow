@@ -3,10 +3,16 @@ const express = require('express');
 const router = express.Router();
 
 router
-    .post('/signup',userController.signUp)
+    .route('/signup')
+    .post(userController.signUp)
 
-router 
-    .get('/', userController.getAllUsers)
+router
+    .route('/')
+    .get(userController.getAllUsers)
+
+router
+    .route('/signin')
+    .post(userController.signIn)
 
 
 

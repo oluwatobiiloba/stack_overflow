@@ -77,3 +77,21 @@ exports.getAllVotes = async (req,res,next) => {
      return res.status(500).json(err)
     }
  }
+
+ exports.getVotesByAnswerId = async (req,res) => {
+    try{
+        const payload = await voteServices.getVotesByAnswer(req.params.id)
+
+        return res.status(201).json({
+            status: "success",
+            message: ` votes found`,
+            data:{
+                payload
+            }
+        })
+       
+
+    }catch(err){
+
+    }
+ }

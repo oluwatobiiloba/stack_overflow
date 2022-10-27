@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('votes', {
+    await queryInterface.createTable('voters', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -24,8 +24,8 @@ module.exports = {
       },
       downvotes: {
         type: Sequelize.BOOLEAN,
-      defaultValue: false,
-      allowNull:true
+        defaultValue: false,
+        allowNull:true
       },
       createdAt: {
         allowNull: false,
@@ -38,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('votes');
+    await queryInterface.dropTable('voters');
   }
 };
