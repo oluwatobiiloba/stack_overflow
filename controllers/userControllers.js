@@ -95,8 +95,17 @@ exports.signout = async(req,res,next) => {
 }
 
 exports.protect = async(req,res,next) => {
-    req.user = await authServices.protect(req)
-    
+    try{req.user = await authServices.protect(req)
+    }catch(err){
+        console.log(err)
+        return res.status(401).json({
+            status: 'failed',
+            message: "Sorry, You need to be logged in",
+            data: {
+               message: err.message
+            }
+            })
+    }
     next()
 }
 

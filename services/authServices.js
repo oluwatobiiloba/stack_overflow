@@ -78,7 +78,7 @@ module.exports = {
         }
         return userExist
     }catch(err){
-            console.log(err)
+            throw new Error('Please log in')
         }
 
         

@@ -1,4 +1,5 @@
-const { sequelize, User, Questions , Answers, Votes } = require('../models')
+const { sequelize, User, Questions , Answers, Voters } = require('../models');
+const votes = require('../models/votes');
 
 //Answers Services(logic)
 
@@ -36,7 +37,7 @@ module.exports = {
         
        try{ 
         const newAnswer = await Answers.create({ answer,questionId:question.id,userId:user.id})
-        const newVote = await Votes.create({answerId:newAnswer.id, userId : user.id })
+        const newVote = await Voters.create({answerId:newAnswer.id, userId : user.id })
         send = {newAnswer,newVote}
         }catch(err){
                 console.log(err.message);
@@ -55,26 +56,37 @@ module.exports = {
             const answer =  await Answers.findOne({where: { uuid: answerUuid }})
         if(!answer){
             throw new Error("No answer with that Id")};
-        const vote = await Votes.findOne({where: {answerId: answer.id,userId:id} });
-        console.log(vote)
+        let vote = await Voters.findOne({where: {answerId: answer.id,userId:id} });
         if(!vote){
             const voter = await User.findOne({where : {id:id}})
-            const newVote = await Votes.create({answerId:answer.id, userId : voter.id })
-            return newVote
-        };
-            if(upVote){
-                answer.upvotes += 1;
-                vote.upvotes = answer.upvotes;
-            } else if(downVote) {
-                answer.downvotes += 1;
-                vote.downvotes = answer.downvotes;
-            }
-            cast = await Promise.all([ answer.save(),vote.save()])
-            
+            const newVote = await Voters.create({answerId:answer.id, userId : voter.id })
+            vote = newVote
         }
-        catch(err) {
+        
+        if(!(vote.upvotes === false && vote.downvotes === false)){
+            if(upVote === true && vote.downvotes === true){
+                vote.upvotes = true;
+                vote.downvotes= false
+            }else if(downVote === true && vote.upvotes === true){
+                vote.upvotes = false;
+                vote.downvotes= true
+            }else {
+                throw new Error("You've already place this vote")
+            }
+        }else if((vote.upvotes === false && vote.downvotes === false)){
+            if(upVote){
+                vote.upvotes = true;
+               }else if(downVote) {
+                answer.downvotes += 1;
+                vote.downvotes = true;
+        }else{
+            throw new Error("You've already placed this vote")
+        };
+        }
+        cast = await Promise.all([ answer.save(),vote.save()])
+    }catch(err) {
             console.log(err.message)
-            throw err
+            throw err.message
         }
 
         return cast

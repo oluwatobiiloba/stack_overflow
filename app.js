@@ -9,6 +9,7 @@ app.use(express.json())
 const port = process.env.PORT;
 
 db_init = async function main(){
+   //await sequelize.sync({alter:true})
     await sequelize.authenticate()
     console.log("table initialized")
 }
@@ -25,3 +26,4 @@ app.listen(port, ()=>{
     db_init(),
     console.log(`server started on port: ${port}`)
 })
+
