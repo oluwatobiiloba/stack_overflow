@@ -1,5 +1,5 @@
 const { sequelize, User, Questions , Answers, Voters } = require('../models');
-const votes = require('../models/votes');
+
 
 //Answers Services(logic)
 

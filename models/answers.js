@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(Questions, { foreignKey: 'questionId', as: 'question'});
       this.belongsTo(User, { foreignKey: 'userId', as: 'user'})
       this.hasMany(Comments, { foreignKey: 'answerId', as: 'comments'});
-      this.hasMany(Votes, { foreignKey: 'answerId', as: 'votes'})
+      
     }
   }
   Answers.init({

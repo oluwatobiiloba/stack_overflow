@@ -1,5 +1,5 @@
-const { User, Answers, Votes} = require("../models");
-const votes = require("../models/votes");
+const { User, Answers, Voters} = require("../models");
+
 const voteServices = require('../services/voteServices')
 
 // exports.vote = async (req,res,next)=>{
@@ -74,7 +74,13 @@ exports.getAllVotes = async (req,res,next) => {
          })
     }catch(err){
      console.log(err)
-     return res.status(500).json(err)
+        return res.status(401).json({
+            status: 'failed',
+            message: "Unable to fetch data",
+            data: {
+               message: err.message
+            }
+            })
     }
  }
 
@@ -92,6 +98,13 @@ exports.getAllVotes = async (req,res,next) => {
        
 
     }catch(err){
-
+        console.log(err)
+        return res.status(401).json({
+            status: 'failed',
+            message: "Could not retrieve any data",
+            data: {
+               message: err.message
+            }
+            })
     }
  }

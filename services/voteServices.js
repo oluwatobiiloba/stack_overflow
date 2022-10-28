@@ -16,9 +16,9 @@ module.exports = {
         // const {upvotes , downvotes} = votes
         // console.log(votes[2].dataValues)
         // console.log(upvotes)
-        var upvotes = []
-        var downvotes = []
-        var voters = []
+        let upvotes = []
+        let downvotes = []
+        let voters = []
         votes.forEach(function(vote){
             upvotes.push([vote.dataValues.upvotes,vote.dataValues.userId])
             downvotes.push([vote.dataValues.downvotes,vote.dataValues.userId])
@@ -31,9 +31,7 @@ module.exports = {
         downvotes = downvotes.filter(function(vote){
             return vote[0];
         })
-        console.log(voters)
-        console.log(upvotes)
-        console.log(downvotes)
+       
         const payload = {
             Upvotes:upvotes.length,
             Downvotes: downvotes.length,
