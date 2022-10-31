@@ -3,7 +3,7 @@ const user = require('../models/user');
 
 module.exports ={
     getAllComments: async function(){
-        var fields = ["user","answers"]
+        let fields = ["user","answers"]
       
         const comment = await Comments.findAll({include:fields}).catch(
             err => {

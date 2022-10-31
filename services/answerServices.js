@@ -5,7 +5,7 @@ const { sequelize, User, Questions , Answers, Voters } = require('../models');
 
 module.exports = {
     getAllAnswers: async function(){
-        var fields =   ["user",'question','comments','votes'];
+        let fields =   ["user",'question','comments','votes'];
         const answers = await Answers.findAll({include: fields})
             .catch(
                 err => {
@@ -17,7 +17,7 @@ module.exports = {
     },
 
     getAnswerById: async function(uuid){
-        var fields = ["user",'question','comments','votes']
+        let fields = ["user",'question','comments','votes']
         const answer = await Answers.findOne({where: {uuid: uuid} , include: fields})
             .catch(
                 err => {

@@ -33,7 +33,7 @@
         },
 
         getQuestionById: async function(uuid){
-            var fields = ["user",'answers'];
+            let fields = ["user",'answers'];
 
             const question = await Questions.findOne({where:{uuid:uuid}, include:fields})
                 .catch(err=> {
@@ -47,7 +47,7 @@
         },
 
         getQuestionsByUser: async function(userId){
-            var fields = ["user"]
+            let fields = ["user"]
 
             const user = await User.findAll({where:{uuid:userId}});
             if(!user){
