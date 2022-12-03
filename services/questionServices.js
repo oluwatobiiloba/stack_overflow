@@ -27,77 +27,98 @@ const answerServices = require('./answerServices')
                 data: "Unavailable",
                 status: "not used"
             }
-            const user = await User.findOne({where: {uuid: userUuid}})
-            if(!user){
-             throw new Error('Are you a registered user?? 😬👀')
-            }
-            //log Question in db
-            const askQuestion = await Questions.create({question,userId:user.id})
-            .catch(
-             err => {
-             console.log(err.message);
-             throw err
-         });
-         
-         let ai_models = {
-            fastcodegen: {
-                model: "code-cushman-001",
-                prompt: question,
-                temperature: 0,
-                max_tokens: 1000,
-                top_p: 1,
-                frequency_penalty: 0,
-                presence_penalty: 0,
-              },
-  
-            slowcodegen:  {
-                model: "code-davinci-002",
-                prompt: question,
-                temperature: 0,
-                max_tokens: 1000,
-                top_p: 1,
-                frequency_penalty: 0,
-                presence_penalty: 0,
-              },
-            ideas: {
-                model: "text-davinci-001",
-                prompt: question,
-                temperature: 0.4,
-                max_tokens: 1000,
-                top_p: 1,
-                frequency_penalty: 0,
-                presence_penalty: 0,
-              }
+            let askQuestion = {}
+            let ai_status = {}
+            let ai_answer = {}
 
-         }
+            await User.findOne({where: {uuid: userUuid}})
+            .then(
+                async (user) =>{
+                    if(!user){
+                        throw new Error('Are you a registered user?? 😬👀')
+                       }
+                     //log Question in db
+                  let askquestion =  await Questions.create({question,userId:user.id})
+                  return askquestion
+                }
+            ).then(
+                async(askQuestion) => {
+                    let uuid = askQuestion.uuid
+                    let ai_models = {
+                        fastcodegen: {
+                            model: "code-cushman-001",
+                            prompt: question,
+                            temperature: 0,
+                            max_tokens: 1000,
+                            top_p: 1,
+                            frequency_penalty: 0,
+                            presence_penalty: 0,
+                          },
+              
+                        slowcodegen:  {
+                            model: "code-davinci-002",
+                            prompt: question,
+                            temperature: 0,
+                            max_tokens: 3000,
+                            top_p: 1,
+                            frequency_penalty: 0,
+                            presence_penalty: 0,
+                          },
+                        ideas: {
+                            model: "text-davinci-001",
+                            prompt: question,
+                            temperature: 0.4,
+                            max_tokens: 1000,
+                            top_p: 1,
+                            frequency_penalty: 0,
+                            presence_penalty: 0,
+                          }
+            
+                     }
 
-         if(ai_assist){
-            if(ai_assist_type === 'tips'){
-                model = ai_models.ideas
-            } else if(ai_assist_type === 'slowcodegen'){
-                model = ai_models.slowcodegen
-            } else if(ai_assist_type === 'fastcodegen'){
-                model = ai_models.fastcodegen
-            }
-            console.log(model)
-            aiResponse = await aiClient.createCompletion(model);  
-         }
-         
-         //let ai_answer = aiResponse.data.choices.text
-          let ai_answer = (ai_assist) ? aiResponse.data.choices[0].text :"Not availabale or selected" ;
-          console.log(aiResponse.data)
-          let ai_status = (aiResponse.status === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
-          //save AI answer
-          let save_params={ 
-            body:{
-                answer: ai_answer,
-                userUuid: process.env.AI_UUID,
-                questionUuid: askQuestion.uuid
-            }
-        }
+                     //AI model selector
+                        if(ai_assist){
+                            if(ai_assist_type === 'tips'){
+                                model = ai_models.ideas
+                            } else if(ai_assist_type === 'slowcodegen'){
+                                model = ai_models.slowcodegen
+                            } else if(ai_assist_type === 'fastcodegen'){
+                                model = ai_models.fastcodegen
+                            }
+
+                            //AI Lookup
+                            aiResponse = await aiClient.createCompletion(model); 
+                        }
+                        let respdata = aiResponse.data
+                        let respstatus = aiResponse.status
+                        return [respdata, respstatus ,uuid, ai_assist, askQuestion]
+                }
+        
+            ).then(async (data)=>{
+                ai_answer = (data[3]) ? data[0].choices[0].text :"Not availabale or selected" ;
           
-        if(ai_assist){answerServices.createAnswer(save_params)}
-         return {askQuestion,ai_status,ai_answer}
+                ai_status = (data[1] === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
+                //save AI answer
+                askQuestion = data[4]
+                
+                let save_params={ 
+                  body:{
+                      answer: ai_answer,
+                      userUuid: process.env.AI_UUID,
+                      questionUuid: data[2]
+                  }
+              }
+                // Save Ai answere to db
+              if(data[3]){answerServices.createAnswer(save_params)}
+              
+            })
+            .catch(
+                err => {
+                console.log(err.message);
+                throw err
+            });
+            
+            return {askQuestion,ai_answer,ai_status}
         },
 
         getAllQuestions: async function(){

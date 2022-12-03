@@ -95,9 +95,8 @@ exports.getAllQuestions = async (req,res,next) => {
  exports.askAI = async(req,res,next) => {
     const {question,userUuid} = req.body
     
-    console.log(req.body);
     try {
-       const data = await questionServices.askAI(req)
+       let data = await questionServices.askAI(req)
        return res.status(201).json({
         status: "Successful",
         message: `Question asked and answered successfully`,
