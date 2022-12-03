@@ -15,7 +15,6 @@ router
     .route('/:id')
     .get(answersController.getAnswerById)
 
-    
 router
     .use(userControllers.protect)
     .route('/vote')

@@ -86,7 +86,6 @@ exports.getAllAnswers = async (req,res,next) => {
 
  exports.getAnswerById = async (req,res,next) => {
     try{
-
         //uuid
         const data = await answersServices.getAnswerById(req.params.id);
         if(!data){
@@ -99,8 +98,8 @@ exports.getAllAnswers = async (req,res,next) => {
             status: 'success',
             message: `Answer found`,
             data: {
-               data
-            }
+            isAi:data.isAi,
+            answer: data.answer}
             })
     }catch(err){
             console.log(err.message)

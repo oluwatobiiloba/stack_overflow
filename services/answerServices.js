@@ -37,14 +37,18 @@ module.exports = {
 
     getAnswerById: async function(uuid){
         let fields = ["user",'question','comments','votes']
+        console.log('here')
         const answer = await Answers.findOne({where: {uuid: uuid} , include: fields})
-            .catch(
-                err => {
-                    console.log(err.message);
-                    throw err
-                });
-               
-                return answer
+        resobj = {
+            answer,
+            isAi: false
+        }
+        if(answer.userId === 0 ){
+            resobj.isAi = true
+        }
+       
+
+                return resobj
     },
 
     createAnswer: async function(query){
@@ -63,7 +67,7 @@ module.exports = {
         await Answers.findAll({include: fields}).then(
             async update => {
                  let key = 'answers:all'
-                 console.log('here')
+                 
                  await redisClient.setEx(key, 30 ,JSON.stringify(update))
              }
          )

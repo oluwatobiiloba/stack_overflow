@@ -19,11 +19,9 @@ router
     .route('/user/:id')
     .get(questionsController.getQuestionByUserId)
 
-
-
-
-
-
+router
+    .route('/askAI')
+    .post(questionsController.askAI)
 
 
 
