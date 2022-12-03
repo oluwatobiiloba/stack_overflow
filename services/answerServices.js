@@ -1,19 +1,38 @@
 const { sequelize, User, Questions , Answers, Voters } = require('../models');
-
-
+const util = require('util')
+const redis = require('redis')
+const redisClient = require('../util/redis_helper');
 //Answers Services(logic)
 
 module.exports = {
     getAllAnswers: async function(){
         let fields =   ["user",'question','comments','votes'];
-        const answers = await Answers.findAll({include: fields})
-            .catch(
-                err => {
-                    console.log(err.message);
-                    throw err
-                });
-
-        return answers
+        let isCached = false;
+        let answers;
+        let cachedAnswers;
+        //checked for cached data
+        
+        cachedAnswers = await redisClient.get(JSON.stringify(fields))
+        .then(
+           async cachedAnswers =>{
+                if(cachedAnswers){
+                    isCached = true;
+                    answers = JSON.parse(cachedAnswers);
+                } else {
+                    answers = await Answers.findAll({include: fields})
+                    if(answers.length === 0 ){
+                        throw new Error('No Answers Found')
+                    }
+                    await redisClient.set(JSON.stringify(fields), JSON.stringify(answers))
+                }
+            }
+        ).catch(
+            err => {
+                console.log(err.message);
+                throw err
+            });
+        
+        return {answers,isCached}
     },
 
     getAnswerById: async function(uuid){

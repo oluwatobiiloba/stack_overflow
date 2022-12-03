@@ -74,10 +74,9 @@ exports.getAllAnswers = async (req,res,next) => {
       const data = await answersServices.getAllAnswers();
       return res.status(201).json({
         status: 'success',
-        message: `${data.length} Answer(s) found`,
-        data: {
-           data
-        }
+        message: `${data.answers.length} Answer(s) found`,
+        fromCache: data.isCached,
+        data: data.answers
         })
     }catch(err){
      console.log(err.message)

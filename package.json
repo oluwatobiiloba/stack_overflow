@@ -2,7 +2,6 @@
   "name": "stackoverflow_lite",
   "version": "1.0.0",
   "description": "A stackoverflow api clone",
-  "main": "index.js",
   "scripts": {
     "start": "node app.js",
     "dev_start": "nodemon app.js",
@@ -19,6 +18,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "promisify": "^0.0.3",
+    "redis": "^4.5.1",
     "sequelize": "^6.25.2"
   },
   "devDependencies": {
