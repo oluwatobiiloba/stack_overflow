@@ -10,9 +10,9 @@ module.exports = {
         let isCached = false;
         let answers;
         let cachedAnswers;
-        //checked for cached data
-        
-        cachedAnswers = await redisClient.get(JSON.stringify(fields))
+        let key = 'answers:all'
+
+        await redisClient.get(key)
         .then(
            async cachedAnswers =>{
                 if(cachedAnswers){
@@ -23,7 +23,7 @@ module.exports = {
                     if(answers.length === 0 ){
                         throw new Error('No Answers Found')
                     }
-                    await redisClient.set(JSON.stringify(fields), JSON.stringify(answers))
+                    await redisClient.setEx(key, 30 ,JSON.stringify(answers))
                 }
             }
         ).catch(
@@ -49,6 +49,7 @@ module.exports = {
 
     createAnswer: async function(query){
        const { answer,userUuid,questionUuid} = query.body
+       let fields =   ["user",'question','comments','votes'];
 
        console.log(query.body)
        const question = await Questions.findOne({where : {uuid:questionUuid}});
@@ -58,11 +59,20 @@ module.exports = {
         const newAnswer = await Answers.create({ answer,questionId:question.id,userId:user.id})
         const newVote = await Voters.create({answerId:newAnswer.id, userId : user.id })
         send = {newAnswer,newVote}
+        //update redis cache
+        await Answers.findAll({include: fields}).then(
+            async update => {
+                 let key = 'answers:all'
+                 console.log('here')
+                 await redisClient.setEx(key, 30 ,JSON.stringify(update))
+             }
+         )
+ 
         }catch(err){
                 console.log(err.message);
                 throw err
             }
-
+        
         return send
 
     },
