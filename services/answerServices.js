@@ -123,7 +123,11 @@ module.exports = {
             }else if(downVote === true && vote.upvotes === true){
                 vote.upvotes = false;
                 vote.downvotes= true
-            }else {
+            }else if((downVote === false && vote.upvotes === false) || ( upVote === false && vote.downVote === false)){
+                vote.downvotes = false
+                vote.upVote = false
+            }
+            else {
                 throw new Error("You've already place this vote")
             }
         }else if((vote.upvotes === false && vote.downvotes === false)){
