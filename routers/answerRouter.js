@@ -10,16 +10,22 @@ router
 router
     .route('/all_answers')
     .get(answersController.getAllAnswers)
+
+router
+    .use(userControllers.protect)
+    .route('/getAnswerByUseridandQuestionId')
+    .get(answersController.getAnswerByUserIdandQuestionId)
+    
     
 router
     .route('/:id')
     .get(answersController.getAnswerById)
-
+    
 router
     .use(userControllers.protect)
     .route('/vote')
     .put(answersController.vote)
-
+    
 
 
 module.exports = router;
