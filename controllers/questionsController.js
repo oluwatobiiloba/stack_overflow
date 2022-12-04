@@ -92,3 +92,31 @@ exports.getAllQuestions = async (req,res,next) => {
     }
  }
 
+ exports.askAI = async(req,res,next) => {
+    const {question,userUuid} = req.body
+    
+    try {
+       let data = await questionServices.askAI(req)
+       return res.status(201).json({
+        status: "Successful",
+        message: `Question asked and answered successfully`,
+        data:{
+            AI_status: data.ai_status,
+            AI_Answer: data.ai_answer,
+            Question: data.askQuestion
+
+        }
+       })
+    }
+    catch(err) {
+        console.log(err.message)
+        return res.status(500).json({
+            status: 'failed',
+            message: "Sorry, error occured processing your request 😢🚑",
+            data: {
+               message: err.message
+            }
+            })
+    }
+ }
+

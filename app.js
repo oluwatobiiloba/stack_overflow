@@ -1,9 +1,9 @@
-require('dotenv').config({path: './config.env'});
+require('dotenv').config({path: './.env'});
 const express = require("express");
 const { sequelize } = require('./models');
 const index = require("./routers");
 const app = express();
-
+const aiClient = require('./util/ai_helper')
 const redisClient = require('./util/redis_helper')
 
 
@@ -26,6 +26,20 @@ redis_init = async ()=>{
   })
     
 }
+//INITIALIZE OPEN AI
+
+  ai_init = async () => {
+
+    const response = await aiClient.listEngines()
+    if(response.status === 200){
+      console.log('AI engine is up and running!! 🤖🤖🤖🤖')
+    } else {
+      console.log('Unable to run AI 💥')
+    }
+  }
+  
+
+
 
 app.use('/api/v1/', index);
 
@@ -38,6 +52,7 @@ app.get('/',(req,res)=>{
 app.listen(port, ()=>{
     db_init(),
     redis_init(),
+    ai_init()
     console.log(`server started on port: ${port}`)
 })
 
