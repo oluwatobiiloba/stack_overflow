@@ -2,6 +2,7 @@ const { sequelize, User, Questions , Answers, Voters } = require('../models');
 const util = require('util')
 const redis = require('redis')
 const redisClient = require('../util/redis_helper');
+const voteServices = require('./voteServices');
 //Answers Services(logic)
 
 module.exports = {
@@ -102,7 +103,11 @@ module.exports = {
 
     voteAnswer: async function(query){
         const {answerUuid,upVote,downVote} = query.body
-        const { id } = query.user
+        let { uuid , id } = query.user
+        console.log(id)
+        if(!uuid){
+            throw new Error('User does not exist')
+        }
 
         try{
             await sequelize.transaction(async (t) => {
@@ -111,35 +116,33 @@ module.exports = {
 
         let vote = await Voters.findOne({where: {answerId: answer.id,userId:id} }, { transaction: t });
         if(!vote){
-            const voter = await User.findOne({where : {id:id}}, { transaction: t })
-            const newVote = await Voters.create({answerId:answer.id, userId : voter.id }, { transaction: t })
+            const newVote = await Voters.create({answerId:answer.id, userId : id}, { transaction: t })
             vote = newVote
         }
-        
-        if(!(vote.upvotes === false && vote.downvotes === false)){
-            if(upVote === true && vote.downvotes === true){
-                vote.upvotes = true;
-                vote.downvotes= false
-            }else if(downVote === true && vote.upvotes === true){
-                vote.upvotes = false;
-                vote.downvotes= true
-            }else if((downVote === false && vote.upvotes === false) || ( upVote === false && vote.downVote === false)){
-                vote.downvotes = false
-                vote.upVote = false
-            }
-            else {
-                throw new Error("You've already place this vote")
-            }
-        }else if((vote.upvotes === false && vote.downvotes === false)){
-            if(upVote){vote.upvotes = true;
-               }else if(downVote) {
-                answer.downvotes += 1;
-                vote.downvotes = true;
+
+        if(upVote){
+            vote.upvotes = true
+            vote.downvotes = false
+        }else if(downVote){
+            console.log('here')
+            vote.downvotes = true
+            vote.upvotes = false
+        }else if(upVote === true && downVote === true){
+            throw new Error('You can only upvote or downvote at a time')
         }else{
-            throw new Error("You've already placed this vote")
-        };
+            throw new Error('Please pass a valid vote')
         }
-        cast = await Promise.all([ answer.save({ transaction: t }),vote.save({ transaction: t })])}) 
+        
+        savedVote = await vote.save()
+        votecalc = await voteServices.getVotesByAnswer(answerUuid,answer)
+        //console.log(votecalc)
+        answer.upvotes = votecalc.Upvotes
+        answer.downvotes = votecalc.Downvotes
+        
+        savedAnswer = await answer.save()
+        cast = [savedAnswer,savedVote]
+    }) 
+        
     }catch(err) {
             console.log(err.message)
             throw err.message

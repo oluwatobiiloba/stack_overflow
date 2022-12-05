@@ -10,9 +10,9 @@ module.exports = {
         return votes
     },
 
-    getVotesByAnswer: async function(uuid){
-        const answer = await Answers.findOne({where: {uuid}})
-        const votes = await Voters.findAll({where: {answerid:answer.id}})
+    getVotesByAnswer: async function(uuid, answer = null, votes = null ){
+        if(!answer){ answer = await Answers.findOne({where: {uuid}})}
+        votes = await Voters.findAll({where: {answerid:answer.id}})
         // const {upvotes , downvotes} = votes
         // console.log(votes[2].dataValues)
         // console.log(upvotes)
@@ -25,7 +25,6 @@ module.exports = {
             voters.push(vote.dataValues.userId)
         })
         upvotes = upvotes.filter(function(vote){
-            console.log(vote)
             return vote[0] ;
         })
         downvotes = downvotes.filter(function(vote){
