@@ -104,48 +104,54 @@ module.exports = {
     voteAnswer: async function(query){
         const {answerUuid,upVote,downVote} = query.body
         let { uuid , id } = query.user
+        let answer =  {}
+        let vote = {}
+        let cast
         console.log(id)
         if(!uuid){
             throw new Error('User does not exist')
         }
 
-        try{
-            await sequelize.transaction(async (t) => {
-                const answer =  await Answers.findOne({where: { uuid: answerUuid }},{ transaction: t })
-        if(!answer){throw new Error("No answer with that Id")};
+        await sequelize.transaction(async (t) => {
+            await Answers.findOne({where: { uuid: answerUuid }},{ transaction: t })
+            .then((answer) => {
+                if(!answer){throw new Error("No answer with that Id")};
+                    return answer
+            }).then(
+               async (answer) =>{
+                    vote = await Voters.findOne({where: {answerId: answer.id,userId:id} }, { transaction: t });
+                    if(!vote){
+                        vote = await Voters.create({answerId:answer.id, userId : id}, { transaction: t })
+                        
+                    }
 
-        let vote = await Voters.findOne({where: {answerId: answer.id,userId:id} }, { transaction: t });
-        if(!vote){
-            const newVote = await Voters.create({answerId:answer.id, userId : id}, { transaction: t })
-            vote = newVote
-        }
-
-        if(upVote){
-            vote.upvotes = true
-            vote.downvotes = false
-        }else if(downVote){
-            console.log('here')
-            vote.downvotes = true
-            vote.upvotes = false
-        }else if(upVote === true && downVote === true){
-            throw new Error('You can only upvote or downvote at a time')
-        }else{
-            throw new Error('Please pass a valid vote')
-        }
-        
-        savedVote = await vote.save()
-        votecalc = await voteServices.getVotesByAnswer(answerUuid,answer)
-        answer.upvotes = votecalc.Upvotes
-        answer.downvotes = votecalc.Downvotes
-        
-        savedAnswer = await answer.save()
-        cast = [savedAnswer,savedVote]
-    }) 
-        
-    }catch(err) {
-            console.log(err.message)
-            throw err.message
-        }
+                    if(upVote){
+                        vote.upvotes = true
+                        vote.downvotes = false
+                    }else if(downVote){
+                        console.log('here')
+                        vote.downvotes = true
+                        vote.upvotes = false
+                    }else if(upVote === true && downVote === true){
+                        throw new Error('You can only upvote or downvote at a time')
+                    }else{
+                        throw new Error('Please pass a valid vote')
+                    }
+                    savedVote = await vote.save()
+                    return [answer,savedVote]
+                }
+            ).then(async ([answer,savedVote])=>{
+                votecalc = await voteServices.getVotesByAnswer(answerUuid,answer)
+                answer.upvotes = votecalc.Upvotes
+                answer.downvotes = votecalc.Downvotes
+                savedAnswer = await answer.save()
+                cast = [savedAnswer,savedVote]
+            })
+            .catch((err) => {
+                console.log(err.message)
+                throw err.message
+            });
+        })
 
         return cast
     },
