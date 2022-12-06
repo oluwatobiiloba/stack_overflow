@@ -135,7 +135,6 @@ module.exports = {
         
         savedVote = await vote.save()
         votecalc = await voteServices.getVotesByAnswer(answerUuid,answer)
-        //console.log(votecalc)
         answer.upvotes = votecalc.Upvotes
         answer.downvotes = votecalc.Downvotes
         
