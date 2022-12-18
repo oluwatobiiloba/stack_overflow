@@ -48,7 +48,7 @@ module.exports = {
 
         await sequelize.transaction(async(t) => {
 
-        answer = await Answers.findOne({where: {uuid: uuid} , include: fields}, { transaction: t })
+        Answers.findOne({where: {uuid: uuid} , include: fields}, { transaction: t })
         .then( (answer) => {
             if(!answer){
                 throw new Error('Answer Not found')
@@ -77,7 +77,7 @@ module.exports = {
        let question = {}
 
         const result = await sequelize.transaction(async (t) => {
-            question = await Questions.findOne({where : {uuid:questionUuid}},{ transaction: t })
+            Questions.findOne({where : {uuid:questionUuid}},{ transaction: t })
             .then(async(question) => {
                 user = await User.findOne({where : {uuid:userUuid}},{ transaction: t });
                 return {user,question}
@@ -113,7 +113,7 @@ module.exports = {
         }
 
         await sequelize.transaction(async (t) => {
-            await Answers.findOne({where: { uuid: answerUuid }},{ transaction: t })
+            Answers.findOne({where: { uuid: answerUuid }},{ transaction: t })
             .then((answer) => {
                 if(!answer){throw new Error("No answer with that Id")};
                     return answer
@@ -164,7 +164,7 @@ module.exports = {
         let resp = []
         await sequelize.transaction(async (t) => {
 
-            await User.findOne({where: {uuid:userUuid}}, { transaction: t })
+        User.findOne({where: {uuid:userUuid}}, { transaction: t })
         .then(
             async (user)=>{
                 if(!user){
