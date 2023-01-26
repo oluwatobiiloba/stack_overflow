@@ -31,7 +31,7 @@ const answerServices = require('./answerServices')
             let ai_status = {}
             let ai_answer = {}
 
-            await User.findOne({where: {uuid: userUuid}})
+            User.findOne({where: {uuid: userUuid}})
             .then(
                 async (user) =>{
                     if(!user){
