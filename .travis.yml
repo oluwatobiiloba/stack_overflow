@@ -12,11 +12,15 @@ cache:
     - node_modules
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS database_test;'
+  - sequelize db:migrate
+  - sequelize db:seed:all
 install: 
   - npm install
 script:
   - nohup npm run start &
   - sleep 3
   - npm run test
+after_success: 
+  -npm run coverage
 
 
