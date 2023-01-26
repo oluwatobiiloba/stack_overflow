@@ -5,11 +5,13 @@ const index = require("./routers");
 const app = express();
 const aiClient = require('./util/ai_helper')
 const redisClient = require('./util/redis_helper')
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/config/config.js')[env];
 
 
 app.use(express.json())
 
-const port = process.env.PORT;
+const port = config.app_port;
 
 db_init = async function main(){
    //await sequelize.sync({ alter: true })
