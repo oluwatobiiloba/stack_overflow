@@ -1,5 +1,6 @@
 const answersController = require('../controllers/answersController');
 const express = require('express');
+const userControllers = require('../controllers/userControllers')
 const router = express.Router();
 
 router
@@ -7,17 +8,24 @@ router
     .post(answersController.createAnswer)
 
 router
-    .route('/')
+    .route('/all_answers')
     .get(answersController.getAllAnswers)
+
+router
+    .use(userControllers.protect)
+    .route('/getAnswerByUseridandQuestionId')
+    .get(answersController.getAnswerByUserIdandQuestionId)
+    
     
 router
     .route('/:id')
     .get(answersController.getAnswerById)
-
+    
 router
+    .use(userControllers.protect)
     .route('/vote')
     .put(answersController.vote)
-
+    
 
 
 module.exports = router;

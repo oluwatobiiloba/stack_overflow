@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { hashPassword } = require('../hooks/auth_hooks');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -108,6 +109,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName:'users',
     modelName: 'User',
   });
+    User.beforeCreate(hashPassword)
   // User.associate = (models) => {
   //   User.hasOne(models.Roles,{foreignKey: 'role_id'})
   // }

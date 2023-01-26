@@ -3,18 +3,18 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Votes extends Model {
+  class Voters extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate({ Answers }) {
+      this.belongsTo(Answers, { foreignKey: 'answerId', as: 'answers'});
       // define association here
-      this.belongsTo(Answers, { foreignKey: 'answerId', as : 'answer'})
     }
   }
-  Votes.init({
+  Voters.init({
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -24,17 +24,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     upvotes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull:true
     },
     downvotes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull:true
     },
   }, {
     sequelize,
-    tableName: 'votes',
-    modelName: 'Votes',
+    tableName:'voters',
+    modelName: 'Voters',
   });
-  return Votes;
+  return Voters;
 };

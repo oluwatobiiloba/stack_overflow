@@ -1,21 +1,14 @@
-const { sequelize, User, Questions , Answers, Comments } = require('../models')
-
+const commentServices = require('../services/commentServices')
 
 exports.createComment = async (req,res,next)=>{
-    const {comment,userUuid,answerUuid} = req.body
-    const answer = await Answers.findOne({where: { uuid: answerUuid }});
-    const user = await User.findOne({where: { uuid: userUuid }});
-    //console.log(user,answer)
-
-    try {
-       
-        const newComment = await Comments.create({ comment,answerId:answer.id,userId:user.id});
+    try{
+        const data = await commentServices.creatComment(req)
         
     return res.status(201).json({
         status: 'success',
         message: "Comment Posted 🙂",
         data: {
-            newComment, 
+            data, 
         }
         })
     }
@@ -27,16 +20,71 @@ exports.createComment = async (req,res,next)=>{
 
 exports.getAllComments = async (req,res,next) => {
     try{
-     const comments = await Comments.findAll({include: ["user",'answers']})
+     const data = await commentServices.getAllComments();
+     if(!data){
+        return res.status(404).json({
+            status: 'failed',
+            message: "That's odd, no comments found",
+            })
+    }
          return res.status(201).json({
              status: "success",
-             message: `${comments.length} comments found`,
+             message: `${data.length} comments found`,
              data:{
-                 comments
+                 data
              }
          })
     }catch(err){
      console.log(err.message)
      return res.status(500).json(err)
+    }
+ }
+
+ exports.getCommentsByUserId = async (req,res,next) => {
+    try{
+     const data = await commentServices.getCommentsByUserId(req.params.id);
+     if(!data){
+        return res.status(404).json({
+            status: 'failed',
+            message: "Sorry, no comments by this user",
+            })}
+    return res.status(201).json({
+             status: "success",
+             message: `${data.length} comments found`,
+             data:{
+                 data
+             }
+         })
+    }catch(err){
+     console.log(err.message)
+     return res.status(404).json({
+        status: 'Not found',
+        message: err.message,
+        data:{
+            err
+        }
+        })
+    }
+ }
+
+ exports.getCommentsByAnswerId = async (req,res,next) => {
+    try{
+     const data = await commentServices.getCommentsByAnswerId(req.params.id);
+         return res.status(201).json({
+             status: "success",
+             message: `${data.length} comments found`,
+             data:{
+                 data
+             }
+         })
+    }catch(err){
+     console.log(err.message)
+     return res.status(404).json({
+        status: 'Not found',
+        message: err.message,
+        data:{
+            err
+        }
+        })
     }
  }
