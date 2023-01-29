@@ -25,14 +25,8 @@ CREATE TABLE `users` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `userId` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `username_2` (`username`),
-  UNIQUE KEY `username_3` (`username`),
-  UNIQUE KEY `username_4` (`username`),
-  UNIQUE KEY `username_5` (`username`),
-  KEY `userId` (`userId`),
-  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `votes` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  PRIMARY KEY (`id`)
+
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
