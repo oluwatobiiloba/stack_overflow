@@ -33,7 +33,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `username_5` (`username`),
   KEY `userId` (`userId`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `votes` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 ALTER TABLE `users`
