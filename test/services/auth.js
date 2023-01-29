@@ -32,7 +32,7 @@ describe("Auth Services", function () {
 
     before(async function () {
         //Check for test UserID
-        let user = await User.findOne({ where: { email: email, first_name: first_name, last_name: last_name } })
+        let user = await User.findOne({ where: { email: email, first_name: first_name, last_name: last_name } }) 
         user_id = user.id
     })
 
