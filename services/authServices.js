@@ -1,10 +1,8 @@
-const { sequelize,User} = require('../models')
+const { User } = require('../models')
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const user = require('../models/user');
 const bcrypt = require('bcryptjs');
 const { promisify } = require('util');
-const { nextTick } = require('process');
+
 
 
 module.exports = {
