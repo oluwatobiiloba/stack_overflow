@@ -1,26 +1,28 @@
 language: node_js
 node_js:
-  - "16"
+- '16'
 dist: trusty
 services:
-  - mysql
-  - redis-server
+- mysql
+- redis-server
 env:
+  matrix:
   - NODE_ENV=test PORT=3000
+  global:
+  - secure: XW7q1mT45q94CsTZSMRIkeFL7nvBI92Q4X27KTanIhwKyKGvN+yasfuM7CUOIR4AipPEvaZoePyNE4voI/k5pDibgomMDac2b18Ztu7orfdW6Qu1qAKHmNYxbYkoge/ooaPnct73MtLmlJZZ4kcpNlKadR7ufrNbBdL4cyWvVJLLaySFH5a6vtiRfKhIkFMQl+WjNvzw2FmCnYSGDVhE+nDTRSC36Hv5wbNsj7jddnEsK51YZfIuUx+blL+Ev672i2MA4l84lF1/nSfY57x70CuIk2X4pbzpQA8z+y3nfH+VZiJ5m3UZGuT36/C71yFPFohO9WLozBWWIu50MXnX9yk4SQs/x5M0CPXU3fMZQcS9xUe7KkKvSHpSIOh1EBcB5GgMOncgETnertnKF3czV2Q7HyHHb/FEUUMwQCYR7HZamO11VWuhhDOHNxkLMbkxDdsDlov5yeC0HTwffv7K5aO9XEfqqzbrXTdkJb4aFTcjLmuJ68J5/WC/dhKRl8VkMd9NSomu990ymWpCQ3K1tb8FbWWS8Mr8MbKhPsToTT7GXrhXsVIaBTJbm6Gdr/ddcb9SEfYaHhEz/ZU4L13fkzdN8wmvEoOp+HFKDOlrEQQRgUp3XBs/KQIXPYSufJM12AbbnpnPpHmWqzB9sG+J7yLG1G4n5pBtx5OsISt0kVc=
+  - secure: oAFcsETTlvksMAB0CzZ/MVNlRBFhfgZx5YRzADTO/L5lQeEfisRbGvaJ/YPqsnp9Mn25Ah3mSuUmnAYWbGW5opup1I0gUrHU4BdserZ4A1XzYxel6oyyVh+SErfZOKiCh6R7uhqpjyxxD1tIOaRAw8KRjae5hNhklGrd/XXv6fkCKwJJzOv1ZdZ1FMfr/3P0MUa+1bvqU923mlhpRRLMm9nuCJLJfXutpuUVqYFC5aZuGYVOSphEIq6QSleg6CimPaj+lqM/bWbmuEnYuZyc4xrwY1EZYwVAwj97c9KoU2pyQB4+wi1wTojsubjsTO2RKnS1IuBMDYFpUAW9SPQlb0ubob45TlOcTNukkL/xBWyEzMc5ijBnx/VAuNNEusVAaPIu37Dveojmo/C0aakXrktzua0/1oKROhRTdyRN14LbTGNixAIAZezXja+u2lgBpzPMbD8nCksih0SvARB2qmxZH7xudY90cHa6ABtW3wsl7azPgFh5drZQTvMyEHY0nxdPZCaUMnGCJ2oa8FXbPsEdilciWUg0LVMEzNT45Ghxb3aU8b/jB9sevGj9x3/W5MDu93gCAqvCt54w0gGbxgL8AYDT6tBuCrVEm78FBvrnk+5il7BIUgDf21e7Yfz3E+jVLIMk1Cz97KQx3gQyjXXgmLJhTF6yNYOOnkCI908=
 cache:
   directories:
-    - node_modules
+  - node_modules
 before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS database_test;'
-  - sequelize db:migrate
-  - sequelize db:seed:all
-install: 
-  - npm install
+- mysql -u root --password="" < test/travis.sql
+install:
+- npm install
 script:
-  - nohup npm run start &
-  - sleep 3
-  - npm run test
-after_success: 
-  -npm run coverage
-
-
+- npm install --save sequelize
+- npm install --save mysql2
+- sequelize db:migrate
+- nohup npm run start &
+- sleep 3
+- npm run test
+after_success: "-npm run coverage"
