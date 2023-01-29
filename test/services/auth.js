@@ -48,7 +48,6 @@ describe("Auth Services", function () {
     it("should signToken", function (done) {
         let id = "10"
         let result = authServices.signToken(id)
-        console.log(result)
         let verif = jwt.verify(result, process.env.JWT_SECRET)
         verif.should.be.a('object')
         verif.should.have.property('id')
