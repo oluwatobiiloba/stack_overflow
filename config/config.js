@@ -26,7 +26,7 @@ module.exports ={
     "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "port": 3241,
+    "port": 3306,
     "JWT_SECRET": "test",
     "JWT_EXPIRES": "10m",
     "JWT_COOKIE_EXPIRES_IN": "10m",

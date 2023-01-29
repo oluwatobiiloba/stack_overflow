@@ -26,17 +26,33 @@ module.exports = {
     },
     registerUser: async function(query){
         const {username ,first_name,last_name,phonenumber,email,password,role} = query.body
-        const newUser = await User.create({
+        const user = await User.create({
             username ,
             first_name,
             last_name,
             phonenumber,
             email,
             password,
-            role});
-            console.log(newUser.id)
-        token = this.signToken(newUser.id)
-        payload = {token,newUser}
+            role
+        });
+        token = this.signToken(user.id)
+
+        let respObj = {
+            id: user.id,
+            uuid: user.uuid,
+            username: user.username,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            phonenumber: user.phonenumber,
+            email: user.email,
+            role: user.role,
+            stack: user.stack,
+            nationality: user.nationality,
+            age: user.age
+        }
+        respObj.token = token
+
+        payload = { respObj }
         return payload
     },
     signIn: async function(query){
@@ -46,7 +62,7 @@ module.exports = {
            throw new Error('Please provide email and password');
         }
         
-        const user = await User.findOne({where : {username}})
+        let user = await User.findOne({ where: { username } })
        
 
         if (!user || !await bcrypt.compare(password,user.password)) {
@@ -54,12 +70,29 @@ module.exports = {
         }
        
         sendToken = await this.createSendToken(user)
-        payload = {user,sendToken}
+        let respObj = {
+            id: user.id,
+            uuid: user.uuid,
+            username: user.username,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            phonenumber: user.phonenumber,
+            email: user.email,
+            role: user.role,
+            stack: user.stack,
+            nationality: user.nationality,
+            age: user.age
+        }
+
+        respObj.sendToken = sendToken
+
+        payload = { respObj }
         return payload
     },
 
     protect: async function(req){
-     try{   let token;
+        try {
+            let token;
 
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token = req.headers.authorization.split(' ')[1];
