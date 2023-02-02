@@ -38,8 +38,8 @@ const answerServices = require('./answerServices')
                         throw new Error('Are you a registered user?? 😬👀')
                        }
                      //log Question in db
-                  let askquestion =  await Questions.create({question,userId:user.id})
-                  return askquestion
+
+                    return Questions.create({ question, userId: user.id })
                 }
             ).then(
                 async(askQuestion) => {
@@ -80,9 +80,11 @@ const answerServices = require('./answerServices')
                         if(ai_assist){
                             if(ai_assist_type === 'tips'){
                                 model = ai_models.ideas
-                            } else if(ai_assist_type === 'slowcodegen'){
+                            }
+                            if (ai_assist_type === 'slowcodegen') {
                                 model = ai_models.slowcodegen
-                            } else if(ai_assist_type === 'fastcodegen'){
+                            }
+                            if (ai_assist_type === 'fastcodegen') {
                                 model = ai_models.fastcodegen
                             }
 
