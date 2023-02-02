@@ -5,11 +5,12 @@ const { sequelize, User } = require('../../models')
 const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
 let should = chai.should();
+let assert = chai.assert;
 
 const authServices = require('../../services/authServices');
 
 
-describe("Auth Services", function () {
+describe("Auth Services", async function () {
 
     let email = "mocha@mochatest.com"
     let password = "password"
@@ -30,6 +31,34 @@ describe("Auth Services", function () {
 
     }
 
+    let req = {}
+    let test_user = {}
+    test_user.id = 19
+    let token = await authServices.createSendToken(test_user)
+
+    req.headers = {
+
+        authorization: `Bearer ${token.token}`,
+        'content-type': 'application/json',
+        'user-agent': 'PostmanRuntime/7.30.0',
+        accept: '*/*',
+        'postman-token': '29844342-3233-4c56-b3cf-7b085960dff3',
+        host: '127.0.0.1:3535',
+        'accept-encoding': 'gzip, deflate, br',
+        connection: 'keep-alive',
+        'content-length': '118',
+        cookies: {
+            jwt: token.token,
+            cookieOptions: token.cookieOptions,
+        }
+
+    }
+    data.email = email
+    data.password = password
+    data.username = username
+
+    let loginData = { body: data }
+
     before(async function () {
         //Check for test UserID
         let user = await User.findOne({ where: { email: email, first_name: first_name, last_name: last_name } }) 
@@ -45,6 +74,52 @@ describe("Auth Services", function () {
         done()
     })
 
+    it('test auth.createSendToken', async function () {
+        // call the function
+        let user = { id: 1 };
+        let statusCode = null;
+        let res = null;
+        let result = await authServices.createSendToken(user, statusCode, res);
+        result.should.be.a('object')
+        result.should.have.property("cookieOptions")
+        result.should.have.property("token")
+    })
+
+
+
+    it("should protect a route", async function () {
+
+        authServices.protect(req)
+            .then(function (result) {
+                result.should.be.a('object')
+                result.should.have.property("headers")
+                result.headers.should.have.property("cookies")
+                result.should.have.property("user")
+                result.user.id.should.be.a("number")
+                result.user.id.should.equal(19)
+
+            }).then(function () {
+                let authSresp = authServices.protect(req)
+                console.log(authSresp)
+            })
+            .catch(async function (error) {
+                done(error)
+            })
+
+
+    });
+
+    it("should test route protection errors", async function () {
+        req.headers.authorization = null
+        authServices.protect(req)
+            .catch(async function (error) {
+                expect(error).to.exist;
+                done(error)
+            })
+
+    });
+
+
     it("should signToken", function (done) {
         let id = "10"
         let result = authServices.signToken(id)
@@ -57,13 +132,11 @@ describe("Auth Services", function () {
         done()
     })
 
-    it("should login a user", function (done) {
-        data.email = email
-        data.password = password
-        data.username = username
 
-        let query = { body: data }
-        authServices.signIn(query)
+
+    it("should login a user", function (done) {
+
+        authServices.signIn(loginData)
             .then(function (result) {
                 result.should.be.a('object')
                 result.respObj.id.should.equal(user_id)
@@ -87,6 +160,29 @@ describe("Auth Services", function () {
 
     })
 
+    it('test No username or password', function () {
+        delete loginData.body.username
+        authServices.signIn(loginData)
+            .then(function (payload) {
+            })
+            .catch(err => {
+                assert.equal(err.message, 'Please provide username and password');
+            })
+
+    })
+
+    it('test Invalid username Error ', function () {
+        loginData.body.username = username + "test"
+        authServices.signIn(loginData)
+            .then(function (payload) {
+                console.log(payload)
+                assert.equal(payload, 1);
+            })
+            .catch(err => {
+                assert.equal(err.message, "Incorrect username or password");
+
+            })
+    })
 
     it("should register a user", function (done) {
         let query = { body: regData }

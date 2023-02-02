@@ -59,11 +59,11 @@ exports.getAllUsers = async (req,res,next) => {
 
 exports.signIn = async (req,res,next) => {
     try{
-        payload = await authServices.signIn(req)
-        const {token, cookieOptions} = payload.sendToken
-        user = payload.user
-        res.cookie('jwt',token,cookieOptions)
-        console.log(res.cookie.jwt)
+        let payload = await authServices.signIn(req)
+        console.log(payload)
+        const { token, cookieOptions } = payload.respObj.sendToken
+        let user = payload.respObj
+        res.cookie('jwt', token, cookieOptions)
             return res.status(201).json({
                 status: "success",
                 message: `Logged in Succesfully`,
@@ -73,7 +73,7 @@ exports.signIn = async (req,res,next) => {
                 }
             })
        }catch(err){
-        console.log(err)
+
         return res.status(401).json({
             status: 'failed',
             message: "Sorry, Invalid login Parameters 😢🚑",

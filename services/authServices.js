@@ -54,20 +54,22 @@ module.exports = {
         return payload
     },
     signIn: async function(query){
-        const {username,password} = query.body
-        
+        const { username, password } = query.body
+        let password_check 
         if (!username || !password) {
-           throw new Error('Please provide email and password');
+            throw new Error('Please provide username and password');
         }
         
         let user = await User.findOne({ where: { username } })
-       
 
-        if (!user || !await bcrypt.compare(password,user.password)) {
+        if (user) {
+            password_check = await bcrypt.compare(password, user.password)
+        }
+
+        if (!user || !password_check) { 
             throw new Error('Incorrect username or password')
         }
-       
-        sendToken = await this.createSendToken(user)
+        let sendToken = await this.createSendToken(user)
         let respObj = {
             id: user.id,
             uuid: user.uuid,
@@ -91,25 +93,18 @@ module.exports = {
     protect: async function(req){
         try {
             let token;
-
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token = req.headers.authorization.split(' ')[1];
-        }else if(req.cookies.jwt){
+        } else if (req?.headers?.cookies?.jwt) {
             token = req.cookies.jwt
         }
-        if(!token){
-            throw new Error('Login required')
-        }
-        const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET)
-        const userExist = await User.findOne({where: {id:decoded.id}})
-        if(!userExist){
-            throw new Error('This user does not exist anymore')
-        
-       
-        }
-        return userExist
+            const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
+            const userExist = await User.findOne({ where: { id: decoded.id } }).catch((err) => { throw new Error('This user does not exist anymore') })
+
+            req.user = userExist
+            return req
     }catch(err){
-            throw new Error('Please log in')
+            throw new Error('Please log in or Invalid User')
         }
 
         
