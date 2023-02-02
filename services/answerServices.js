@@ -15,7 +15,7 @@ module.exports = {
         
         await sequelize.transaction(async (t) => { 
         
-        await redisClient.get(key)
+            redisClient.get(key)
         .then(
            async cachedAnswers =>{
                 if(cachedAnswers){
@@ -31,7 +31,6 @@ module.exports = {
             }
         ).catch(
             err => {
-                console.log(err.message);
                 throw err
             });
         
@@ -76,7 +75,7 @@ module.exports = {
        let user = {}
        let question = {}
 
-        const result = await sequelize.transaction(async (t) => {
+        await sequelize.transaction(async (t) => {
             Questions.findOne({where : {uuid:questionUuid}},{ transaction: t })
             .then(async(question) => {
                 user = await User.findOne({where : {uuid:userUuid}},{ transaction: t });
@@ -107,7 +106,7 @@ module.exports = {
         let answer =  {}
         let vote = {}
         let cast
-        console.log(id)
+
         if(!uuid){
             throw new Error('User does not exist')
         }
@@ -128,11 +127,12 @@ module.exports = {
                     if(upVote){
                         vote.upvotes = true
                         vote.downvotes = false
-                    }else if(downVote){
-                        console.log('here')
+                    }
+                    if (downVote) {
                         vote.downvotes = true
                         vote.upvotes = false
-                    }else if(upVote === true && downVote === true){
+                    }
+                    if (upVote === true && downVote === true) {
                         throw new Error('You can only upvote or downvote at a time')
                     }else{
                         throw new Error('Please pass a valid vote')
@@ -148,7 +148,7 @@ module.exports = {
                 cast = [savedAnswer,savedVote]
             })
             .catch((err) => {
-                console.log(err.message)
+
                 throw err.message
             });
         })
