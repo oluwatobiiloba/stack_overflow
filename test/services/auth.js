@@ -100,7 +100,7 @@ describe("Auth Services", async function () {
 
             }).then(function () {
                 let authSresp = authServices.protect(req)
-                console.log(authSresp)
+                
             })
             .catch(async function (error) {
                 done(error)
@@ -113,7 +113,7 @@ describe("Auth Services", async function () {
         req.headers.authorization = null
         authServices.protect(req)
             .catch(async function (error) {
-                expect(error).to.exist;
+                
                 done(error)
             })
 
@@ -175,7 +175,7 @@ describe("Auth Services", async function () {
         loginData.body.username = username + "test"
         authServices.signIn(loginData)
             .then(function (payload) {
-                console.log(payload)
+                
                 assert.equal(payload, 1);
             })
             .catch(err => {

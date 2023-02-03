@@ -13,7 +13,7 @@ const answerServices = require('./answerServices')
            const askQuestion = await Questions.create({question,userId:user.id})
            .catch(
             err => {
-            console.log(err.message);
+            
             throw err
         });
 
@@ -116,7 +116,7 @@ const answerServices = require('./answerServices')
             })
             .catch(
                 err => {
-                console.log(err.message);
+                
                 throw err
             });
             
@@ -142,7 +142,7 @@ const answerServices = require('./answerServices')
 
             const question = await Questions.findOne({where:{uuid:uuid}, include:fields})
                 .catch(err=> {
-                    console.log(err.message);
+                    
                 throw err
                 });
             if(!question){
@@ -161,7 +161,7 @@ const answerServices = require('./answerServices')
             const question = await Questions.findAll({where: {userId:user.id}})
                 .catch(
                     err => {
-                        console.log(err.message);
+                        
                     throw err
                     })
             if(!question){

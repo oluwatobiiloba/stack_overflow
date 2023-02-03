@@ -60,7 +60,7 @@ exports.getAllUsers = async (req,res,next) => {
 exports.signIn = async (req,res,next) => {
     try{
         let payload = await authServices.signIn(req)
-        console.log(payload)
+        
         const { token, cookieOptions } = payload.respObj.sendToken
         let user = payload.respObj
         res.cookie('jwt', token, cookieOptions)
