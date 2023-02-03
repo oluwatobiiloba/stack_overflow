@@ -19,7 +19,7 @@ jobs:
           datadog_site: us5.datadoghq.com
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
-          test_search_query: 'tag:e2e-tests'
+          
 
   
 
