@@ -57,8 +57,13 @@ exports.getAllUsers = async (_req, res) => {
 exports.signIn = async (req, res) => {
     let data = req.body
     try{
+<<<<<<< HEAD
         let payload = await authServices.signIn(data)
         console.log(payload)
+=======
+        let payload = await authServices.signIn(req)
+        
+>>>>>>> c344adb4876e2da8dfa77317a89cdb71b7e5986c
         const { token, cookieOptions } = payload.respObj.sendToken
         let user = payload.respObj
         res.cookie('jwt', token, cookieOptions)

@@ -6,7 +6,7 @@ module.exports ={
       
         const comment = await Comments.findAll({include:fields}).catch(
             err => {
-                console.log(err)
+                
             throw new Error('Something went wrong on our end: 😒')
         })
       return comment
