@@ -30,6 +30,5 @@ jobs:
       run: |
         touch .env
         echo NODE_ENV=test >> .env
-    - run: npm install
     - run: npm run build --if-present
     - run: npm run test
