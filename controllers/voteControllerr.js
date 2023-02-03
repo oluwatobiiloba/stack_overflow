@@ -1,66 +1,7 @@
-const { User, Answers, Voters} = require("../models");
 
 const voteServices = require('../services/voteServices')
 
-// exports.vote = async (req,res,next)=>{
-//     const {answerUuid,userUuid,upVote,downVote} = req.body
-//     //const answer = await Answers.findOne({where: { uuid: answerUuid }});
-//     //const user = await User.findOne({where: { uuid: userUuid }});
-//     const vote = await Votes.findOne({where: {answerId: 3}});
-//     const answer =  await Answers.findOne({where: { uuid: answerUuid }});
-    
-//     try {
-//         if(upVote){
-//             vote.upvotes += 1
-//         } else if(downVote) {
-//             vote.downvotes += 1
-//         }
-//         await vote.save()
-
-//         return res.status(201).json({
-//             status: 'success',
-//             message: "vote Posted",
-//             data: {
-//                vote
-//             }
-//             })
-//     }
-//     catch(err) {
-//         console.log(err)
-//         return res.status(500).json(err)
-//     }
-// }
-
-// exports.vote = async (req,res,next) => {
-//     const {answerUuid,userUuid, upVote , downVote} = req.body
-    
-//     const answer = await Answers.findOne({where: { uuid: answerUuid }});
-//     const vote = await Votes.findOne({where: {answerId:answer.id} });
-//     const user = await User.findOne({where: { uuid: userUuid }});
-    
-//     console.log(answer)
-//     try{
-//         const answer = await Answers.findOne({where: { uuid: answerUuid }});
-//         const vote = await Votes.findOne({where: {answerId:answer.id} });
-//         const user = await User.findOne({where: { uuid: userUuid }});
-
-//     return   res.status(201).json({
-//             status: "success",
-//             message: `vote added successfully`,
-//             data:{
-//                 answer,
-//                 vote,
-//                 user
-//             }
-//         })  
-//     }catch(err){
-//         console.log(err)
-//         return res.status(500).json(err)
-//     }
-// }
-
-
-exports.getAllVotes = async (req,res,next) => {
+exports.getAllVotes = async (_req, res, _next) => {
 
     try{
      

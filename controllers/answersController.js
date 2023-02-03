@@ -1,6 +1,6 @@
 const answersServices = require('../services/answerServices')
 
-exports.createAnswer = async (req,res,next)=>{
+exports.createAnswer = async (req, res) => {
     
     try{
         const data = await answersServices.createAnswer(req);
