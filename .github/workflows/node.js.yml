@@ -30,5 +30,11 @@ jobs:
       run: |
         touch .env
         echo NODE_ENV=test >> .env
-    - run: npm run build --if-present
-    - run: npm run test
+        sudo npm install
+        npm install --save sequelize
+        npm install --save mysql2
+        sequelize db:migrate
+        nohup npm run start &
+        sleep 3
+        npm run test
+
