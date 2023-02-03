@@ -29,14 +29,15 @@ jobs:
 
     # Run Synthetic tests within your GitHub workflow.
     # For additional configuration options visit the action within the marketplace: https://github.com/marketplace/actions/datadog-synthetics-ci
+    - name: Print name
+      run: echo "Hello ${{secrets.DD_APP_KEY}}, ${{secrets.DD_API_KEY}}"
+      env:
+        BUILD: 'We are currently running the Build job'
     - name: Run Datadog Synthetic tests
       uses:  DataDog/synthetics-ci-github-action@2b56dc0cca9daa14ab69c0d1d6844296de8f941e
       with:
         app_key: ${{secrets.DD_APP_KEY}}
         api_key: ${{secrets.DD_API_KEY}}
         test_search_query: 'tag:e2e-tests' #Modify this tag to suit your tagging strategy
-    - name: Print name
-      run: echo "Hello ${{secrets.DD_APP_KEY}}, ${{secrets.DD_API_KEY}}"
-      env:
-        BUILD: 'We are currently running the Build job'
+  
 
