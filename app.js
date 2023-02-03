@@ -7,6 +7,11 @@ const aiClient = require('./util/ai_helper')
 const redisClient = require('./util/redis_helper')
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/config/config.js')[env];
+const Honeybadger = require('@honeybadger-io/js')
+let db_init
+let logger
+let redis_init;
+let ai_init;
 
 
 app.use(express.json())
@@ -19,6 +24,13 @@ db_init = async function main(){
     console.log("table initialized")
 }
 
+logger = function main() {
+  Honeybadger.configure({
+    apiKey: process.env.HONEYBADGER_API_KEY,
+  });
+  console.log("Honey badger Configured")
+}
+
 redis_init = async ()=>{
   redisClient.on('error', err => console.error('Redis Client Error', err))
   await redisClient.connect().then(
@@ -26,7 +38,8 @@ redis_init = async ()=>{
   ).catch(err => {
     console.log('Redis initialization failed:', err)
   })
-    
+
+
 }
 //INITIALIZE OPEN AI
 
@@ -54,7 +67,8 @@ app.get('/',(req,res)=>{
 app.listen(port, ()=>{
     db_init(),
     redis_init(),
-    ai_init()
+      ai_init(),
+      logger()
     console.log(`server started on port: ${port}`)
 })
 

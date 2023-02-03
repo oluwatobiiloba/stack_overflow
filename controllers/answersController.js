@@ -1,7 +1,4 @@
-const { sequelize, User, Questions , Answers, Votes } = require('../models')
 const answersServices = require('../services/answerServices')
-const { promisify } = require('util');
-const jwt = require('jsonwebtoken')
 
 exports.createAnswer = async (req,res,next)=>{
     
@@ -22,7 +19,7 @@ exports.createAnswer = async (req,res,next)=>{
   
 }
 
-exports.vote = async (req,res,next)=>{
+exports.vote = async (req, res) => {
     try{
         const data = await answersServices.voteAnswer(req);
         return res.status(201).json({
@@ -42,7 +39,7 @@ exports.vote = async (req,res,next)=>{
     
 }
 
-exports.getAllAnswers = async (req,res,next) => {
+exports.getAllAnswers = async (res) => {
 
     try{
       const data = await answersServices.getAllAnswers();
@@ -61,7 +58,7 @@ exports.getAllAnswers = async (req,res,next) => {
     }
  }
 
- exports.getAnswerById = async (req,res,next) => {
+exports.getAnswerById = async (req, res) => {
     try{
         
         //uuid
@@ -84,7 +81,7 @@ exports.getAllAnswers = async (req,res,next) => {
     }
  }
 
- exports.getAnswerByUserIdandQuestionId = async (req,res,next) => {
+exports.getAnswerByUserIdandQuestionId = async (req, res) => {
     
     try{
         //uuid
