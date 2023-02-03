@@ -1,7 +1,6 @@
-const { sequelize, User, Questions , } = require('../models')
 const questionServices = require('../services/questionServices')
 
-exports.createQuestion = async (req,res,next)=>{
+exports.createQuestion = async (req, res) => {
     const {question,userUuid} = req.body
     
     
@@ -27,7 +26,7 @@ exports.createQuestion = async (req,res,next)=>{
     }
 }
 
-exports.getAllQuestions = async (req,res,next) => {
+exports.getAllQuestions = async (_req, res) => {
 
     try{
      const questions = await questionServices.getAllQuestions();
@@ -44,7 +43,7 @@ exports.getAllQuestions = async (req,res,next) => {
     }
  }
 
- exports.getQuestionById = async (req,res,next) => {
+exports.getQuestionById = async (req, res) => {
     try{
         const data = await questionServices.getQuestionById(req.params.id);
         if(!data){
@@ -68,7 +67,7 @@ exports.getAllQuestions = async (req,res,next) => {
     }
  }
 
- exports.getQuestionByUserId = async (req,res,next) => {
+exports.getQuestionByUserId = async (req, res) => {
     try{
         const data = await questionServices.getQuestionsByUser(req.params.id)
         if(!data){
@@ -92,7 +91,7 @@ exports.getAllQuestions = async (req,res,next) => {
     }
  }
 
- exports.askAI = async(req,res,next) => {
+exports.askAI = async (req, res) => {
     const {question,userUuid} = req.body
     
     try {

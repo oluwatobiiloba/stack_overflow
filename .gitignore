@@ -4,3 +4,4 @@ config.json
 .DS_Store
 models/stack_overflow.code-workspace
 .gitignore
+/.nyc_output

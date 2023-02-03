@@ -1,5 +1,5 @@
-const {Answers , Questions , User , Comments} = require('../models');
-const user = require('../models/user');
+const { Answers, User, Comments } = require('../models');
+const logger = require('../util/logger');
 
 module.exports ={
     getAllComments: async function(){
@@ -7,7 +7,7 @@ module.exports ={
       
         const comment = await Comments.findAll({include:fields}).catch(
             err => {
-                
+                logger.error(err);  
             throw new Error('Something went wrong on our end: 😒')
         })
       return comment
@@ -36,7 +36,7 @@ module.exports ={
             throw new Error("This answer does not exist 🤔")}
 
         const comment = await Comments.findAll({where:{answerId:answer.id}}).catch(
-            err => {
+            () => {
                 throw  new Error("This answer has no comments 🤥")
             }
         )
@@ -47,7 +47,7 @@ module.exports ={
         const { comment,userUuid,answerUuid } = query.body;
 
         const user = await User.findOne({where: {uuuid:userUuid}}).catch(
-            err => {
+            () => {
                 throw new Error("No user found")
             }
         )
@@ -55,7 +55,7 @@ module.exports ={
             throw new Error("No user with that Id")}
 
         const answer = await Answers.findOne({where: {uuid:answerUuid}}).catch(
-            err => {
+            () => {
                 throw new Error("No answers found")
             }
         )

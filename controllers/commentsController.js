@@ -1,6 +1,6 @@
 const commentServices = require('../services/commentServices')
 
-exports.createComment = async (req,res,next)=>{
+exports.createComment = async (req, res) => {
     try{
         const data = await commentServices.creatComment(req)
         
@@ -18,7 +18,7 @@ exports.createComment = async (req,res,next)=>{
     }
 }
 
-exports.getAllComments = async (req,res,next) => {
+exports.getAllComments = async (res) => {
     try{
      const data = await commentServices.getAllComments();
      if(!data){
@@ -40,7 +40,7 @@ exports.getAllComments = async (req,res,next) => {
     }
  }
 
- exports.getCommentsByUserId = async (req,res,next) => {
+exports.getCommentsByUserId = async (req, res) => {
     try{
      const data = await commentServices.getCommentsByUserId(req.params.id);
      if(!data){
@@ -67,7 +67,7 @@ exports.getAllComments = async (req,res,next) => {
     }
  }
 
- exports.getCommentsByAnswerId = async (req,res,next) => {
+exports.getCommentsByAnswerId = async (req, res) => {
     try{
      const data = await commentServices.getCommentsByAnswerId(req.params.id);
          return res.status(201).json({
