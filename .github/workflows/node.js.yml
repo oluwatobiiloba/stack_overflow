@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -30,6 +30,11 @@ jobs:
       run: |
         touch .env
         echo NODE_ENV=test >> .env
+    - name: Install npm latest
+      run: |
+         npm i -g npm@latest
+    - name: Install npm packages
+      run: |
         sudo npm install
         npm install --save sequelize
         npm install --save mysql2
