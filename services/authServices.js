@@ -1,6 +1,7 @@
 const { User } = require('../models')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const Sentry = require('@sentry/node');
 
 
 
@@ -52,8 +53,8 @@ module.exports = {
         payload = { respObj }
         return payload
     },
-    signIn: async function(query){
-        const { username, password } = query.body
+    signIn: async function (data) {
+        const { username, password } = data
         let password_check 
         if (!username || !password) {
             throw new Error('Please provide username and password');
@@ -108,5 +109,8 @@ module.exports = {
 
         
     }
-    
+
+
 }
+
+

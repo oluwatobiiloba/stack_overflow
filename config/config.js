@@ -19,7 +19,12 @@ module.exports = {
     AI_UUID: process.env.AI_UUID,
     app_port: process.env.PORT,
     HONEYBADGER_KEY: process.env.HONEYBADGER_KEY,
-    CODECOV_TOKEN: process.env.CODECOV_TOKEN
+    CODECOV_TOKEN: process.env.CODECOV_TOKEN,
+    SENTRY_URL: process.env.SENTRY_URL,
+    DD_CIVISIBILITY_AGENTLESS_ENABLED: process.env.DD_CIVISIBILITY_AGENTLESS_ENABLED,
+    DD_API_KEY: process.env.DD_API_KEY,
+    DD_SITE: process.env.DD_SITE,
+    NODE_OPTIONS: process.env.NODE_OPTIONS,
   },
   test: {
     username: 'root',
@@ -38,7 +43,13 @@ module.exports = {
     AI_UUID: process.env.AI_UUID,
     app_port: 3000,
     HONEYBADGER_KEY: process.env.HONEYBADGER_KEY,
-    CODECOV_TOKEN: process.env.CODECOV_TOKEN
+    CODECOV_TOKEN: process.env.CODECOV_TOKEN,
+    SENTRY_URL: process.env.SENTRY_URL,
+    DD_CIVISIBILITY_AGENTLESS_ENABLED:
+      process.env.DD_CIVISIBILITY_AGENTLESS_ENABLED,
+    DD_API_KEY: process.env.DD_API_KEY,
+    DD_SITE: process.env.DD_SITE,
+    NODE_OPTIONS: process.env.NODE_OPTIONS,
   },
   production: {
     username: 'root',
@@ -57,7 +68,13 @@ module.exports = {
     AI_UUID: process.env.AI_UUID,
     app_port: process.env.PORT,
     HONEYBADGER_KEY: process.env.HONEYBADGER_KEY,
-    CODECOV_TOKEN: process.env.CODECOV_TOKEN
+    CODECOV_TOKEN: process.env.CODECOV_TOKEN,
+    SENTRY_URL: process.env.SENTRY_URL,
+    DD_CIVISIBILITY_AGENTLESS_ENABLED:
+      process.env.DD_CIVISIBILITY_AGENTLESS_ENABLED,
+    DD_API_KEY: process.env.DD_API_KEY,
+    DD_SITE: process.env.DD_SITE,
+    NODE_OPTIONS: process.env.NODE_OPTIONS,
   },
 };
 

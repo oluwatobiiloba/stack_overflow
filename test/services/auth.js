@@ -57,7 +57,7 @@ describe("Auth Services", async function () {
     data.password = password
     data.username = username
 
-    let loginData = { body: data }
+    let loginData = data 
 
     before(async function () {
         //Check for test UserID
@@ -161,7 +161,7 @@ describe("Auth Services", async function () {
     })
 
     it('test No username or password', function () {
-        delete loginData.body.username
+        delete loginData.username
         authServices.signIn(loginData)
             .then(function (payload) {
             })
@@ -172,7 +172,7 @@ describe("Auth Services", async function () {
     })
 
     it('test Invalid username Error ', function () {
-        loginData.body.username = username + "test"
+        loginData.username = username + "test"
         authServices.signIn(loginData)
             .then(function (payload) {
                 
