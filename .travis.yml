@@ -22,6 +22,7 @@ script:
 - npm install --save sequelize
 - npm install --save mysql2
 - sequelize db:migrate
+- curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov
 - nohup npm run start &
 - sleep 3
 - npm run test

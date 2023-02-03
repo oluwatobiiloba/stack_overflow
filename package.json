@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "A stackoverflow api clone",
   "scripts": {
-    "start": "node app.js",
+    "start": "node -r newrelic app.js",
     "dev_start": "nodemon app.js",
-    "test": "nyc mocha test/services --reporter spec --timeout 60000 --exit"
+    "test": "nyc mocha test/services --reporter spec --timeout 60000 --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov"
   },
   "author": "oluwatobiiloba",
   "license": "ISC",
@@ -18,6 +19,7 @@
     "jsonwebtoken": "^9.0.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
+    "newrelic": "^9.8.1",
     "openai": "^3.1.0",
     "promisify": "^0.0.3",
     "redis": "^4.5.1",

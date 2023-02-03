@@ -18,7 +18,8 @@ module.exports = {
     AI_ORG: process.env.AI_ORG,
     AI_UUID: process.env.AI_UUID,
     app_port: process.env.PORT,
-    HONEYBADGER_KEY: process.env.HONEYBADGER_KEY
+    HONEYBADGER_KEY: process.env.HONEYBADGER_KEY,
+    CODECOV_TOKEN: process.env.CODECOV_TOKEN
   },
   test: {
     username: 'root',
@@ -36,7 +37,8 @@ module.exports = {
     AI_ORG: process.env.AI_ORG,
     AI_UUID: process.env.AI_UUID,
     app_port: 3000,
-    HONEYBADGER_KEY: process.env.HONEYBADGER_KEY
+    HONEYBADGER_KEY: process.env.HONEYBADGER_KEY,
+    CODECOV_TOKEN: process.env.CODECOV_TOKEN
   },
   production: {
     username: 'root',
@@ -54,7 +56,8 @@ module.exports = {
     AI_ORG: process.env.AI_ORG,
     AI_UUID: process.env.AI_UUID,
     app_port: process.env.PORT,
-    HONEYBADGER_KEY: process.env.HONEYBADGER_KEY
+    HONEYBADGER_KEY: process.env.HONEYBADGER_KEY,
+    CODECOV_TOKEN: process.env.CODECOV_TOKEN
   },
 };
 

@@ -1,0 +1,12 @@
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:12.310Z","msg":"Using New Relic for Node.js. Agent version: 9.8.1; Node version: v14.20.0."}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:12.477Z","msg":"Using LegacyContextManager"}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:12.482Z","msg":"Adding destroy hook to clean up unresolved promises.","component":"async_hooks"}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:12.534Z","msg":"Agent state changed from stopped to starting."}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:12.978Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:12.978Z","msg":"Agent state changed from starting to connecting."}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:17.551Z","msg":"Agent state changed from connecting to connected."}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:17.552Z","msg":"Connected to collector-001.eu01.nr-data.net:443 with agent run ID BfOMQSfaETmyADoDeB3JCERj3S9EAAgBAAAnIQEAAI9bAgQdyP3uAwAFOS44LjEAGUZMVy1PbHV3YXRvYmlsb2JhQXJlbXUtUEMAEnN0YWNrb3ZlcmZsb3dfbGl0ZQ.","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:17.552Z","msg":"Reporting to: https://rpm.eu.newrelic.com/accounts/3801976/applications/499711470","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:17.557Z","msg":"Valid event_harvest_config received. Updating harvest cycles. {\"report_period_ms\":5000,\"harvest_limits\":{\"error_event_data\":8,\"log_event_data\":833,\"analytic_event_data\":833,\"custom_event_data\":250}}"}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:17.568Z","msg":"Agent state changed from connected to started."}
+{"v":0,"level":30,"name":"newrelic","hostname":"FLW-OluwatobilobaAremu-PC","pid":36699,"time":"2023-02-03T15:57:18.569Z","msg":"Starting initial 1000ms harvest."}
