@@ -10,6 +10,7 @@
   "author": "oluwatobiiloba",
   "license": "ISC",
   "dependencies": {
+    "@honeybadger-io/js": "^4.9.3",
     "airbnb": "^0.0.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
