@@ -92,7 +92,7 @@ module.exports = {
                     })})
             .catch(
                 err => {
-                    console.log(err.message);
+                    
                     throw err
                 });
         })
@@ -208,7 +208,7 @@ module.exports = {
             }
         ).catch(
             err => {
-                console.log(err.message);
+                
                 throw err
             })
         })

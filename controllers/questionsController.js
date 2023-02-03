@@ -4,7 +4,7 @@ const questionServices = require('../services/questionServices')
 exports.createQuestion = async (req,res,next)=>{
     const {question,userUuid} = req.body
     
-    console.log(req.body);
+    
     try {
        const data = await questionServices.createQuestion(req)
        return res.status(201).json({
