@@ -33,11 +33,8 @@ jobs:
     - name: Install npm latest
       run: |
          npm i -g npm@latest
-    - name: Install npm packages
+    - name: run test
       run: |
-        sudo npm install
-        npm install --save sequelize
-        npm install --save mysql2
         nohup npm run start &
         sleep 3
         npm run test
