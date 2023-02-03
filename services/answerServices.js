@@ -1,6 +1,4 @@
-const { sequelize, User, Questions , Answers, Voters } = require('../models');
-const util = require('util')
-const redis = require('redis')
+const { sequelize, User, Questions, Answers, Voters } = require('../models');
 const redisClient = require('../util/redis_helper');
 const voteServices = require('./voteServices');
 //Answers Services(logic)
@@ -10,7 +8,6 @@ module.exports = {
         let fields =   ["user",'question','comments','votes'];
         let isCached = false;
         let answers;
-        let cachedAnswers;
         let key = 'answers:all'
         
         await sequelize.transaction(async (t) => { 
@@ -43,7 +40,6 @@ module.exports = {
     getAnswerById: async function(uuid){
         let fields = ["user",'question','comments','votes']
         let resobj = {}
-        let answer = {}
 
         await sequelize.transaction(async(t) => {
 
@@ -72,8 +68,7 @@ module.exports = {
        let fields =   ["user",'question','comments','votes'];
        let newAnswer = {}
        let newVote = {}
-       let user = {}
-       let question = {}
+        let user = {}
 
         await sequelize.transaction(async (t) => {
             Questions.findOne({where : {uuid:questionUuid}},{ transaction: t })
@@ -102,8 +97,7 @@ module.exports = {
 
     voteAnswer: async function(query){
         const {answerUuid,upVote,downVote} = query.body
-        let { uuid , id } = query.user
-        let answer =  {}
+        let { uuid, id } = query.user
         let vote = {}
         let cast
 
