@@ -41,7 +41,7 @@ exports.getAllUsers = async (_req, res) => {
 }
 
 exports.signIn = async (req, res) => {
-    let data = req.body
+    const data = req.body
     try {
         let payload = await authServices.signIn(data)
 

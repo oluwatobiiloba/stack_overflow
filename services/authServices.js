@@ -97,7 +97,7 @@ module.exports = {
         } else if (req?.headers?.cookies?.jwt) {
             token = req.cookies.jwt
         }
-            const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
+            const decoded = jwt.verify(token, process.env.JWT_SECRET)
             const userExist = await User.findOne({ where: { id: decoded.id } }).catch((err) => { throw new Error('This user does not exist anymore') })
 
             req.user = userExist

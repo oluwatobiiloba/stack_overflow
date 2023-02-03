@@ -4,7 +4,7 @@ const voteServices = require('./voteServices');
 //Answers Services(logic)
 
 module.exports = {
-    getAllAnswers: async function(){
+    async getAllAnswers() {
         let fields =   ["user",'question','comments','votes'];
         let isCached = false;
         let answers;
@@ -37,7 +37,7 @@ module.exports = {
     return {answers,isCached}
 },
 
-    getAnswerById: async function(uuid){
+    async getAnswerById(uuid) {
         let fields = ["user",'question','comments','votes']
         let resobj = {}
 
@@ -63,7 +63,7 @@ module.exports = {
                return resobj
     },
 
-    createAnswer: async function(query){
+    async createAnswer(query) {
        const { answer,userUuid,questionUuid} = query.body
        let fields =   ["user",'question','comments','votes'];
        let newAnswer = {}
@@ -95,9 +95,9 @@ module.exports = {
 
     },
 
-    voteAnswer: async function(query){
+    async voteAnswer(query) {
         const {answerUuid,upVote,downVote} = query.body
-        let { uuid, id } = query.user
+        const { uuid, id } = query.user
         let vote = {}
         let cast
 
@@ -150,7 +150,7 @@ module.exports = {
         return cast
     },
 
-    getAnswerByUserIdandQuestionId: async function(query){
+    async getAnswerByUserIdandQuestionId(query) {
         const {userUuid,questionUuid} = query.body
 
         let question = {}
