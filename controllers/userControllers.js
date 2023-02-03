@@ -1,19 +1,5 @@
 const { User } = require('../models')
 const authServices = require('../services/authServices')
-// const createSendToken =(user, statusCode, res) => {
-
-//     const payload = authServices.createSendToken(user)
-//     console.log(payload.token)
-//     user.password = undefined
-//     res.cookie('jwt', payload.token, payload.cookieOptions)
-//     res.status(statusCode).json({
-//         status: 'success',
-//         payload,
-//         data: {
-//             user
-//         }
-//     });
-// }
 
 exports.signUp = async (req, res) => {
     const {username ,first_name,last_name,phonenumber,email,password,role} = req.body
@@ -57,7 +43,7 @@ exports.getAllUsers = async (_req, res) => {
 exports.signIn = async (req, res) => {
     let data = req.body
     try {
-        let payload = await authServices.signIn(req)
+        let payload = await authServices.signIn(data)
 
         const { token, cookieOptions } = payload.respObj.sendToken
         let user = payload.respObj
