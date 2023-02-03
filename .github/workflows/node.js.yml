@@ -38,7 +38,6 @@ jobs:
         sudo npm install
         npm install --save sequelize
         npm install --save mysql2
-        sequelize db:migrate
         nohup npm run start &
         sleep 3
         npm run test
