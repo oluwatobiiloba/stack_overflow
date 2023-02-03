@@ -30,9 +30,17 @@ jobs:
       run: |
         touch .env
         echo NODE_ENV=test >> .env
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: modules-${{ hashFiles('package-lock.json') }}
     - name: Install npm latest
       run: |
          npm i -g npm@latest
+    - name: Install dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm ci --ignore-scripts
     - name: run test
       run: |
         nohup npm run start &
