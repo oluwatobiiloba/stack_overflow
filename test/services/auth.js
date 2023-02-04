@@ -57,9 +57,11 @@ describe("Auth Services", async function () {
     data.username = username
 
     let loginData = data 
-
+    console.log(loginData);
+    console.log(req);
     before(async function () {
         //Check for test UserID
+        console.log('Before');
         let user = await User.findOne({ where: { email: email, first_name: first_name, last_name: last_name } }) 
         user_id = user.id
     })
