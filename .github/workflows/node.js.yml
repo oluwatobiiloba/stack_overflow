@@ -31,6 +31,7 @@ jobs:
 
     - name: Set up MySQL
       run: |
+        sudo start mysql
         mysql --user=test --password=${MYSQL_ROOT_PASSWORD}
 
     - name: Import test data
