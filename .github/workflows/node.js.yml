@@ -32,7 +32,7 @@ jobs:
     - name: Set up MySQL
       run: |
         sudo apt install mysql-server mysql-client
-        sudo start service mysql
+        sudo systemctl restart mysql
 
     - name: Import test data
       run: |
