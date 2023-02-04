@@ -14,8 +14,8 @@ cache:
   directories:
   - node_modules
 before_install:
-- mysql -u root --password="" < test/travis.sql
 - sudo apt-get install libstdc++6
+- mysql -u root --password="" < test/travis.sql
 install:
 - npm install
 script:
