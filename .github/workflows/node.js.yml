@@ -28,14 +28,14 @@ jobs:
         echo "DD_SERVICE=${DD_SERVICE}" >> $GITHUB_ENV
 
     - name: Set up MySQL
-      uses: mysql/mysql-docker-action@v1
+      run: sudo apt-get install mysql-client
 
     - name: Import test data
       run: |
         mysql -u root --password="" < test/travis.sql
 
     - name: Set up Redis
-      uses: redis/redis-action@v1
+      run: sudo apt-get install redis-server
 
     - name: Install dependencies
       run: |
