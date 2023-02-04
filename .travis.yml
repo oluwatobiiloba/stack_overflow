@@ -1,19 +1,20 @@
 language: node_js
 node_js:
 - '16'
-dist: trusty
+dist: focal
 services:
 - mysql
 - redis-server
 env:
   matrix:
-  - NODE_ENV=test PORT=3000 DB_HOST=127.0.0.1 DB_DIALECT=mysql DB_PORT=3306 DB_NAME=stackoverflow_lite2 DD_ENV=ci DD_SERVICE=stack_overflow npm test REDIS_URL=redis://127.0.0.1:6379 
+  - NODE_ENV=test DD_ENV=ci DD_SERVICE=stack_overflow
   global:
-    secure: yfto5ksvk7m07CAj7Kt+UeCNhi8BTpjIN0/y2dje/fjy3NXiJGB2RLIzIuRIDHmLDPxAfXPTGdn8ZfCZV30BW6gvB+U9DzeQ5et9mjyIyJRHROv/R2TDZVtfWthfgtJKNBVT1KyCxX9AXSh6EpPgkAFwJomrp6hBkzJd2iEz1Nfd4ZBA/9g74sIGJoK/nXLNCbMsNudNF8uU+zKxV8PxEV000VliLWxe+ZQHLWjcF6rqUfth34qlRM6FzlW8wO7Lvg63gtQdlTPHpnMnzxpAqdPdt68CtIPgsd5x7g3wH5y5DCBktb3kgRsTuPSHxmK6rYyFHwhUBMz5riIfgKhKFGJGFfssSCgNWvGTCn1VarGX1EVwPTa0aHM/xLRb6tJffkRV2kIZyFpzIcW87vMXEl4qk48ES5Isrn7BRCIW5QJze8XZ7JTQNK9H4HpYC+iLcUilyoVbQOKWUc4Qa1Sif9q+RiXX6k1u3VB1pQBeAWCqls81i75NMtOy5QKz8+LQGgWliV4hGhzehG6teMtdz1rAAU3M/2TInR/iof257BWkFeSGPsxxFAEA/jEcR7k9yl5Cbj6pCNNZfrJ7IofHVU+Xg/qoQ4tmczPjnspH1K1LAe90DsKn8VQAgv/Rv/mjjgUwWFgMP5Irv/UJEvCsL9f4Pn0EJAFGj6qqkRVayN0=
+    secure: aazC5t81K4NYbFMunqCVwVLvTr7b0aSnVxCxa/oWLbUrk5/HHJF/+bvCOUH4CI7D+nR6uQ6oJBj0qg4pedh7U5BwlAj/yEofe3b44OZVRDB2StXqHH0JSCZ1uOpaCyzLMXtSYHL4PSJdXPE3dI/K9zpTXu1FPcIc0krKCNXm+45ILusCf8OQt5xhZ9LJZI4o3ngBndy2b8gIahm9RiBZsoRTiOYu+3PNMsU6jbl4PvclgrKlqGkKpNvRtcLgTfTrEVi3lQR8XMLIi3Wn4bYliAAY3XHwIJ5T8xKlVvNC/UijIU3D2jeNYs5CcnE6MFrru1TV7yAy34CvQeBsfrfIA0vf9pCHlH6WMsaIpet9ILExIWgTx/TjcSWf7M/KJ8aLlB6ZbM+oAjP8rzN0+bRP3VhgupIkcbRKk4C5hY1ko+2XIZBREkdg1jg4C+0biP83DqRcrg7/WytpmZX6InYKUOcjFYPiqfVgKT6SWqK4p/Im7B+Z024ejw+0mgpUMTI/CFlhHOBaDGqlv4GIZlD//S7GQscNiZcLzaasd2PAOyTcAcqr48JNr8dVt0IiVe3xzeW5DRHe/aAA/49exyAG2qnhclX9pJ01mT1baCm1Ev01o7bD5kPy26XvjLLNXAVXm36gDAPhxz2pJOPv/lC3IOXDoDeMDlRCR7eWKQuIdRQ=
 cache:
   directories:
   - node_modules
 before_install:
+- sudo apt-get install libstdc++6
 - mysql -u root --password="" < test/travis.sql
 install:
 - npm install

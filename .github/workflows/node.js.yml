@@ -1,96 +1,56 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: MySQL, Redis, and Sequelize Workflow
 
 on:
-  push:
-    branches: [ "dev" ]
   pull_request:
-    branches: [ "dev" ]
+    branches:
+      - dev
+
+env:
+  NODE_ENV: test
+  DD_ENV: ci
+  DD_SERVICE: stack_overflow
 
 jobs:
-  build:
-    environment: dev
+  setup-mysql:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: Setup MySQL
-      uses: mirromutth/mysql-action@v1.1 
-      with:
-        mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-        mysql database: 'database_test' 
-        mysql root password: 'root'
-    - run: mysql -u root --password=“” < test/travis.sql
-    - name: Install Redis
-      uses: pustovitDmytro/redis-github-action@v1.0.2
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set environment variables
+      env:
+        NODE_ENV: ${{ env.NODE_ENV }}
+        DD_ENV: ${{ env.DD_ENV }}
+        DD_SERVICE: ${{ env.DD_SERVICE }}
 
-    - name: setup redis
-      uses: zhulik/redis-action@1.1.0
-      with:
-          redis version: '5'
-          number of databases: 100
+    - name: Set up MySQL client
+      uses: mysql/mysql-docker-action@v1
+    
+    - name: Create database and import test data
+      run: |
+        mysql -u root --password="" < test/travis.sql
 
-    - name: create env file
-      run: |
-        touch .env
-        echo NODE_ENV=test  >> .env
-    - name: Cache dependencies
-      uses: actions/cache@v3
-      with:
-        path: ./node_modules
-        key: modules-${{ hashFiles('package-lock.json') }}
-    - name: Install npm latest
-      run: |
-         npm i -g npm@latest
+    - name: Set up Redis client
+      uses: redis/redis-action@v1
+
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
-      run: npm ci --ignore-scripts
-    - name: run test
-      env :
-        PORT : 3535
-        DB_USERNAME : root
-        DB_PASSWORD : ""
-        DB_HOST : '127.0.0.1'
-        DB_DIALECT : 'mysql'
-        DB_PORT : '3306'
-        DB_NAME : 'stackoverflow_lite2'
-        JWT_SECRET : ${{secrets.JWT_SECRET}}
-        JWT_EXPIRES : ${{secrets. JWT_EXPIRES}}
-        JWT_COOKIE_EXPIRES_IN : ${{secrets.JWT_COOKIE_EXPIRES_IN }}
-        BCRYPT_STRING : ${{secrets.BCRYPT_STRING}}
-        REDIS_URL : 'redis://127.0.0.1:6379'
-        AI_KEY : ${{secrets.AI_KEY}}
-        AI_ORG : ${{secrets.AI_ORG}}
-        AI_UUID : ${{secrets.AI_UUID}}
-        HONEYBADGER_KEY : ${{secrets.HONEYBADGER_KEY}}
-        CODECOV_TOKEN : ${{secrets.CODECOV_TOKEN}}
-        SENTRY_URL : ${{secrets.SENTRY_URL}}
-        DD_CIVISIBILITY_AGENTLESS_ENABLED : true
-        DD_API_KEY : ${{secrets.DD_API_KEY}}
-        DD_SITE : ${{secrets.DD_SITE}}
-        DD_ENV : 'ci'
-        DD_SERVICE : stack_overflow npm test
-        DD_APP_KEY : ${{secrets.DD_APP_KEY}}
       run: |
-        npm install
         npm install --save sequelize
         npm install --save mysql2
-        ‘sequelize db:migrate’
+
+    - name: Run migrations
+      run: npx sequelize db:migrate
+
+  test:
+    runs-on: ubuntu-latest
+    needs: setup-mysql
+    steps:
+
+    - name: Run tests
+      run: |
         nohup npm run start &
         sleep 3
         npm run test
-        ‘-npm run coverage’
- 
+        npm run coverage
 

@@ -63,8 +63,8 @@ module.exports = {
                return resobj
     },
 
-    async createAnswer(query) {
-       const { answer,userUuid,questionUuid} = query.body
+    async createAnswer(data) {
+        const { answer, userUuid, questionUuid } = data
        let fields =   ["user",'question','comments','votes'];
        let newAnswer = {}
        let newVote = {}
@@ -95,9 +95,9 @@ module.exports = {
 
     },
 
-    async voteAnswer(query) {
-        const {answerUuid,upVote,downVote} = query.body
-        const { uuid, id } = query.user
+    async voteAnswer(data, user) {
+        const { answerUuid, upVote, downVote } = data
+        const { uuid, id } = user
         let vote = {}
         let cast
 
@@ -128,7 +128,8 @@ module.exports = {
                     }
                     if (upVote === true && downVote === true) {
                         throw new Error('You can only upvote or downvote at a time')
-                    }else{
+                    }
+                    if (typeof upVote !== 'boolean' && typeof downVote !== 'boolean') {
                         throw new Error('Please pass a valid vote')
                     }
                     savedVote = await vote.save()
@@ -150,8 +151,8 @@ module.exports = {
         return cast
     },
 
-    async getAnswerByUserIdandQuestionId(query) {
-        const {userUuid,questionUuid} = query.body
+    async getAnswerByUserIdandQuestionId(data) {
+        const { userUuid, questionUuid } = data
 
         let question = {}
         let answer = {}

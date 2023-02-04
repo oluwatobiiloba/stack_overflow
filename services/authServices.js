@@ -1,7 +1,6 @@
 const { User } = require('../models')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const Sentry = require('@sentry/node');
 
 
 
@@ -22,8 +21,8 @@ module.exports = {
 
         return payload
     },
-    registerUser: async function(query){
-        const {username ,first_name,last_name,phonenumber,email,password,role} = query.body
+    registerUser: async function (data) {
+        const { username, first_name, last_name, phonenumber, email, password, role } = data
         const user = await User.create({
             username ,
             first_name,
@@ -91,22 +90,23 @@ module.exports = {
     },
 
     protect: async function(req){
-        try {
-            let token;
+
+        let token;
+        let decoded
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token = req.headers.authorization.split(' ')[1];
-        } else if (req?.headers?.cookies?.jwt) {
-            token = req.cookies.jwt
+        } else if (req.headers.cookies.jwt) {
+            token = req.headers.cookies.jwt
         }
-            const decoded = jwt.verify(token, process.env.JWT_SECRET)
-            const userExist = await User.findOne({ where: { id: decoded.id } }).catch((err) => { throw new Error('This user does not exist anymore') })
-
-            req.user = userExist
-            return req
-    }catch(err){
-            throw new Error('Please log in or Invalid User')
+        try {
+            decoded = jwt.verify(token, process.env.JWT_SECRET)
+        } catch (error) {
+            throw new Error('Not Authorized');
         }
+        const userExist = await User.findOne({ where: { id: decoded.id } }).catch((err) => { throw new Error('This user does not exist anymore') })
 
+        req.user = userExist
+        return req
         
     }
 

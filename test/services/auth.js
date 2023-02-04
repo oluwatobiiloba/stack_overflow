@@ -4,7 +4,6 @@ const { where } = require('sequelize');
 const { sequelize, User } = require('../../models')
 const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
-let should = chai.should();
 let assert = chai.assert;
 
 const authServices = require('../../services/authServices');
@@ -119,6 +118,18 @@ describe("Auth Services", async function () {
 
     });
 
+    it("should test route protection errors", async function () {
+        req.headers.cookies.jwt = null;
+        req.headers.authorization = null;
+        authServices.protect(req)
+            .catch(async function (error) {
+                console.log(error)
+                expect(error).to.exist;
+                done(error)
+            })
+
+    });
+
 
     it("should signToken", function (done) {
         let id = "10"
@@ -185,7 +196,7 @@ describe("Auth Services", async function () {
     })
 
     it("should register a user", function (done) {
-        let query = { body: regData }
+        let query = regData
         authServices.registerUser(query)
             .then(function (result) {
                 result.should.be.a('object')
