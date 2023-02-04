@@ -34,7 +34,6 @@ jobs:
         MYSQL_ROOT_PASSWORD: "password"
       run: |
         sudo apt-get install mysql-server mysql-client
-        "password" | sudo mysql_secure_installation 
         sudo systemctl start mysql. service
         
     - name: Import test data
