@@ -32,8 +32,9 @@ jobs:
     - name: Set up MySQL
       run: |
         sudo apt-get install mysql-server mysql-client
-        password | sudo mysql_secure_installation  
-        sudo service mysql restart
+        "password" | sudo mysql_secure_installation 
+        sudo systemctl start mysql. service
+        
     - name: Import test data
       run: |
         sudo mysql < .github/workflows/travis.sql
