@@ -91,24 +91,8 @@ app.get('/',(req,res)=>{
 app.listen(port, ()=>{
   db_init(),
     redis_init(),
-      ai_init(),
-    logger(),
-
-    setTimeout(() => {
-      const transaction = Sentry.startTransaction({
-        op: "test",
-        name: "My First Test Transaction",
-      });
-      try {
-        foo();
-      } catch (e) {
-        let error = e + " test"
-        console.log(error);
-        Sentry.captureException(error);
-      } finally {
-        transaction.finish();
-      }
-    }, 99);
+    ai_init(),
+    logger()
   console.log(`server started on port: ${port}`);
 })
 
