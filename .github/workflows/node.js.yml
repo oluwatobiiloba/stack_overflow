@@ -45,28 +45,28 @@ jobs:
       env :
         PORT : 3535
         DB_USERNAME : root
-        DB_PASSWORD : Hibrahim00..
+        DB_PASSWORD : ${{secrets.DB_PASSWORD}}
         DB_HOST : 127.0.0.1
         DB_DIALECT : mysql
         DB_PORT : 3306
         DB_NAME : stackoverflow_lite2
-        JWT_SECRET : stackoverflow
-        JWT_EXPIRES : 10m
-        JWT_COOKIE_EXPIRES_IN : 10
-        BCRYPT_STRING : stackoverflow
+        JWT_SECRET : ${{secrets.JWT_SECRET}}
+        JWT_EXPIRES : ${{secrets. JWT_EXPIRES}}
+        JWT_COOKIE_EXPIRES_IN : ${{secrets.JWT_COOKIE_EXPIRES_IN }}
+        BCRYPT_STRING : ${{secrets.BCRYPT_STRING}}
         REDIS_URL : redis://127.0.0.1:6379
-        AI_KEY : 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
-        AI_ORG : org-jZ1NQsXwnYa8b8C65gYWBoXn
-        AI_UUID : 2bdda0e4-a65e-47d9-8085-d06a0da5d51c
-        HONEYBADGER_KEY : hbp_i3Qh3i4OYpEd6IFpwRkmogiRWlg5EU20NxXQ
-        CODECOV_TOKEN : 9798862f-19e2-477a-b975-748fe1b5a9b7
-        SENTRY_URL : https://88e74b1f40984253adfb9bbb6e4c820d@o4504617178038272.ingest.sentry.io/4504617179152384
+        AI_KEY : ${{secrets.AI_KEY}}
+        AI_ORG : ${{secrets.AI_ORG}}
+        AI_UUID : ${{secrets.AI_UUID}}
+        HONEYBADGER_KEY : ${{secrets.HONEYBADGER_KEY}}
+        CODECOV_TOKEN : ${{secrets.CODECOV_TOKEN}}
+        SENTRY_URL : ${{secrets.SENTRY_URL}}
         DD_CIVISIBILITY_AGENTLESS_ENABLED : true
-        DD_API_KEY : 8cfab4e9c1dbb2f91be2af5d82d65375
-        DD_SITE : us5.datadoghq.com
+        DD_API_KEY : ${{secrets.DD_API_KEY}}
+        DD_SITE : ${{secrets.DD_SITE}}
         DD_ENV : ci
         DD_SERVICE : stack_overflow npm test
-        DD_APP_KEY : 3cc0bdc127499ddc165963d60371e8a60ac6fc32
+        DD_APP_KEY : ${{secrets.DD_APP_KEY}}
       run: |
         nohup npm run start &
         sleep 3
