@@ -1,7 +1,7 @@
 language: node_js
 node_js:
 - '16'
-dist: trusty
+dist: focal
 services:
 - mysql
 - redis-server
