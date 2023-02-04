@@ -28,7 +28,10 @@ jobs:
         echo "DD_SERVICE=${DD_SERVICE}" >> $GITHUB_ENV
 
     - name: Set up MySQL
-      run: sudo apt-get install mysql-client
+      run: |
+        sudo apt-get purge mysql-server mysql-client
+        sudo apt-get install mysql-server mysql-client
+        sudo /etc/init.d/mysql restart
 
     - name: Import test data
       run: |
