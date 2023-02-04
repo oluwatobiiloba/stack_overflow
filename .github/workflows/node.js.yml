@@ -67,8 +67,15 @@ jobs:
         DD_ENV : ci
         DD_SERVICE : stack_overflow npm test
         DD_APP_KEY : ${{secrets.DD_APP_KEY}}
-      run: |
-        nohup npm run start &
-        sleep 3
-        npm run test
+    - uses: actions/checkout@v2
+    - run: mysql -u root --password=“” < test/travis.sql
+    - run: npm install
+    - run: npm install --save sequelize
+    - run: npm install --save mysql2
+    - run: ‘sequelize db:migrate’
+    - run: nohup npm run start &
+    - run: sleep 3
+    - run: npm run test
+    - run: ‘-npm run coverage’
+ 
 
