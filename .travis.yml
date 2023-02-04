@@ -7,8 +7,7 @@ services:
 - redis-server
 env:
   matrix:
-  - NODE_ENV=test PORT=3000 DB_HOST=127.0.0.1 DB_DIALECT=mysql DB_PORT=3306 DB_NAME=stackoverflow_lite2
-    DD_ENV=ci DD_SERVICE=stack_overflow npm test REDIS_URL=redis://127.0.0.1:6379
+  - NODE_ENV=test DD_ENV=ci DD_SERVICE=stack_overflow
   global:
     secure: eflSEonB32Ybd1q1LTXwO2Sl912j2VGLfYeJ3kKXcdVwk9s91DMgJWVMR++SOzP5623OPaYZKXo3xPV/EuGmwNCQIgGnHQplh+ZcZVyQZ8u7NbUE2Hb4tYZkvR7H9uCfXzAo+TG5onUa4+aggSQTURm1I1FZRIN0XmI1B6UlsPxxNh9K6LxHBpjNOCizLBEeSPSvRBvrBM2NZSbieFEhHOky9ssCld61QH3bk5z/JU6zU/kiBlwkAoOlBN0praJIK/B1c33UL1fpBuY6NT0nz4uTsAmpkg4IyrBc5C+q68g+hMzWQwqZ0p9AYMWCd/h0EsN3+Y67umtBkkcjUMJQtgw/krcOxsN0/BLv+0OweD5lqH8v/YLq8u6/uvGUr4uWbQJYlq2PELlt9O9yUU7NBU4iGykvdqlBefe/7lxQIcK/pxHSmq9J8Guj1jkRC17HenMP6J4fctfbjTspIhe7KFiyopTH2tK01znA5pOTqR4+y4vpaHUXpfWCBlahyTi4aRrV6GVdCLbN6+cw0/CwGD+ZCeeAGiP5WMmdSM1/EAXNXx/DLsP5gykUjAew45TfavZSogm6z9dCmq+vt7j33jTCOXt72ENlYRpJ1nCjuise97wgBUtqE6RNaF7apJnIVi+epVyGq/9THXlVl7x41DxORItEMt05A/7YKi64Vms=
 cache:
