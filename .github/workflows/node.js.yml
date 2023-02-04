@@ -7,9 +7,6 @@ on:
       - main
 
 env:
-  NODE_ENV: test_github_actions
-  DD_ENV: ci
-  DD_SERVICE: stack_overflow
   MYSQL_ROOT_PASSWORD: password
 
 jobs:
@@ -31,7 +28,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Set environment variables
       env:
-        NODE_ENV: ${{ env.NODE_ENV }}
+        NODE_ENV: test_github_actions
         DD_ENV: ${{ env.DD_ENV }}
         DD_SERVICE: ${{ env.DD_SERVICE }}
         DD_CIVISIBILITY_AGENTLESS_ENABLED: ${{vars.DD_CIVISIBILITY_AGENTLESS_ENABLED}}
@@ -44,6 +41,10 @@ jobs:
         DD_API_KEY: ${{secrets.DD_API_KEY}}
         DD_SITE: ${{secrets.DD_SITE}}
         NODE_OPTIONS: ${{vars.NODE_OPTIONS}}
+        JWT_SECRET: ${{secrets.JWT_SECRET}}
+        JWT_EXPIRES: ${{vars.JWT_EXPIRES}}
+        JWT_COOKIE_EXPIRES_IN: ${{vars.JWT_COOKIE_EXPIRES_IN}}
+        BCRYPT_STRING: ${{secrets.BCRYPT_STRING}}
 
       run: |
         sudo /etc/init.d/mysql start
