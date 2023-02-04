@@ -65,11 +65,12 @@ jobs:
         npm install
         npm install --save sequelize
         npm install --save mysql2
-        npm run test
 
     - name: Run migrations
       run: npx sequelize db:migrate
 
+    - name: Run   Tests
+      run: npm run test
   test:
     runs-on: ubuntu-latest
     needs: setup
