@@ -31,7 +31,7 @@ jobs:
       with:
         mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
         mysql database: 'database_test' 
-        mysql root password: ''
+        mysql root password: 'root'
     - run: mysql -u root --password=“” < test/travis.sql
     - name: Install Redis
       uses: pustovitDmytro/redis-github-action@v1.0.2
@@ -61,16 +61,16 @@ jobs:
       env :
         PORT : 3535
         DB_USERNAME : root
-        DB_PASSWORD : ${{secrets.DB_PASSWORD}}
-        DB_HOST : 127.0.0.1
-        DB_DIALECT : mysql
-        DB_PORT : 3306
-        DB_NAME : stackoverflow_lite2
+        DB_PASSWORD : ""
+        DB_HOST : '127.0.0.1'
+        DB_DIALECT : 'mysql'
+        DB_PORT : '3306'
+        DB_NAME : 'stackoverflow_lite2'
         JWT_SECRET : ${{secrets.JWT_SECRET}}
         JWT_EXPIRES : ${{secrets. JWT_EXPIRES}}
         JWT_COOKIE_EXPIRES_IN : ${{secrets.JWT_COOKIE_EXPIRES_IN }}
         BCRYPT_STRING : ${{secrets.BCRYPT_STRING}}
-        REDIS_URL : redis://127.0.0.1:6379
+        REDIS_URL : 'redis://127.0.0.1:6379'
         AI_KEY : ${{secrets.AI_KEY}}
         AI_ORG : ${{secrets.AI_ORG}}
         AI_UUID : ${{secrets.AI_UUID}}
@@ -80,7 +80,7 @@ jobs:
         DD_CIVISIBILITY_AGENTLESS_ENABLED : true
         DD_API_KEY : ${{secrets.DD_API_KEY}}
         DD_SITE : ${{secrets.DD_SITE}}
-        DD_ENV : ci
+        DD_ENV : 'ci'
         DD_SERVICE : stack_overflow npm test
         DD_APP_KEY : ${{secrets.DD_APP_KEY}}
       run: |
