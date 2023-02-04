@@ -29,11 +29,11 @@ jobs:
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1 
       with:
-      mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-      mysql database: 'database_test' 
-      mysql root password: ${{ secrets.RootPassword }} 
-      mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-      mysql password: ${{ secrets.DatabasePassword }} # Required if "mysql user" exists. The password for the "mysql user"
+        mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
+        mysql database: 'database_test' 
+        mysql root password: ''
+        mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+        mysql password: ""
     - run: mysql -u root --password=“” < test/travis.sql
     - name: Install Redis
       uses: pustovitDmytro/redis-github-action@v1.0.2
