@@ -47,10 +47,6 @@ jobs:
 
       run: |
         sudo /etc/init.d/mysql start
-        echo "NODE_ENV=${NODE_ENV}" >> $GITHUB_ENV
-        echo "DD_ENV=${DD_ENV}" >> $GITHUB_ENV
-        echo "DD_SERVICE=${DD_SERVICE}" >> $GITHUB_ENV
-        echo "DD_CIVISIBILITY_AGENTLESS_ENABLED=${DD_CIVISIBILITY_AGENTLESS_ENABLED}" >> $GITHUB_ENV
     - name: Import test data
       env:
         MYSQL_PWD: ${{ env.MYSQL_ROOT_PASSWORD }}
@@ -67,7 +63,7 @@ jobs:
         npm install --save mysql2
 
     - name: Run migrations
-      run: sequelize db:migrate
+      run: npx sequelize db:migrate
 
     - name: Run   Tests
       run: |
