@@ -65,8 +65,6 @@ jobs:
         npm install
         npm install --save sequelize
         npm install --save mysql2
-        nohup npm run start &
-        sleep 3
         npm run test
 
     - name: Run migrations
