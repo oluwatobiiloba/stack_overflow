@@ -29,9 +29,7 @@ jobs:
 
     - name: Set up MySQL
       run: |
-        sudo apt-get purge mysql-server mysql-client
         sudo apt-get install mysql-server mysql-client
-        sudo /etc/init.d/mysql restart
 
     - name: Import test data
       run: |
