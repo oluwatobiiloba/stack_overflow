@@ -15,6 +15,7 @@ env:
 jobs:
   setup:
     runs-on: ubuntu-latest
+    environment: dev
     services:
       mysql:
         image: mysql:8.0
