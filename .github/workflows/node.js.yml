@@ -68,8 +68,6 @@ jobs:
 
     - name: Run   Tests
       run: |
-        nohup npm run start &
-        sleep 3
         npm run test
   # test:
   #   runs-on: ubuntu-latest
