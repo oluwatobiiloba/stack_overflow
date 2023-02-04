@@ -36,7 +36,7 @@ jobs:
 
     - name: Import test data
       run: |
-        sudo mysql -u root 
+        - mysql -u root --password="" < .github/workflows/travis.sql
 
     - name: Set up Redis
       run: sudo apt-get install redis-server
