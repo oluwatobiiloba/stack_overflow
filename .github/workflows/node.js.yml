@@ -34,6 +34,7 @@ jobs:
         DD_ENV: ${{ env.DD_ENV }}
         DD_SERVICE: ${{ env.DD_SERVICE }}
       run: |
+        sudo /etc/init.d/mysql start
         echo "NODE_ENV=${NODE_ENV}" >> $GITHUB_ENV
         echo "DD_ENV=${DD_ENV}" >> $GITHUB_ENV
         echo "DD_SERVICE=${DD_SERVICE}" >> $GITHUB_ENV
