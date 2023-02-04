@@ -34,7 +34,7 @@ jobs:
         NODE_ENV: ${{ env.NODE_ENV }}
         DD_ENV: ${{ env.DD_ENV }}
         DD_SERVICE: ${{ env.DD_SERVICE }}
-        DD_CIVISIBILITY_AGENTLESS_ENABLED: ${{secret.DB_PASSWORD}}
+        DD_CIVISIBILITY_AGENTLESS_ENABLED: ${{secrets.DB_PASSWORD}}
       run: |
         sudo /etc/init.d/mysql start
         echo "NODE_ENV=${NODE_ENV}" >> $GITHUB_ENV
