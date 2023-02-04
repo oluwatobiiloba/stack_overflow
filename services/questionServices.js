@@ -152,7 +152,7 @@ const answerServices = require('./answerServices')
         },
 
      getQuestionsByUser: async function (userId) {
-         let data
+         let data = {}
          const user = await User.findAll({ where: { uuid: userId } });
          if (!user) {
              throw new Error("No user with that Id")
