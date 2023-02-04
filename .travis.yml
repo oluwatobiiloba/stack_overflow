@@ -16,8 +16,7 @@ cache:
 before_install:
 - sudo apt-get install libstdc++6
 - mysql -u root --password="" < test/travis.sql
-- sudo /etc/init.d/mysql restart
-- mysql -u root -p
+
 install:
 - npm install
 script:
