@@ -31,7 +31,6 @@ jobs:
 
     - name: Set up MySQL
       run: |
-        sudo apt-get install mysql-server mysql-client
         sudo mysqld --user=root --password=${MYSQL_ROOT_PASSWORD}
 
     - name: Import test data
