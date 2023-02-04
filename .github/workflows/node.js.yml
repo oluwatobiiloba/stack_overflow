@@ -26,6 +26,20 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - name: actions-setup-mysql
+      uses: jordiprats/mysql-action@1.1
+      with:
+        mysql-version: '8.0'
+    - run: mysql -u root --password=“” < test/travis.sql
+    - name: Install Redis
+      uses: pustovitDmytro/redis-github-action@v1.0.2
+
+    - name: setup redis
+      uses: zhulik/redis-action@1.1.0
+      with:
+          redis version: '5'
+          number of databases: 100
+
     - name: create env file
       run: |
         touch .env
@@ -68,7 +82,6 @@ jobs:
         DD_SERVICE : stack_overflow npm test
         DD_APP_KEY : ${{secrets.DD_APP_KEY}}
       run: |
-        mysql -u root --password=“” < test/travis.sql
         npm install
         npm install --save sequelize
         npm install --save mysql2
