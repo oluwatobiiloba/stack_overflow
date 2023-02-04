@@ -31,7 +31,7 @@ jobs:
 
     - name: Set up MySQL
       run: |
-        sudo mysqld --user=root --password=${MYSQL_ROOT_PASSWORD}
+        sudo mysql --user=root --password=${MYSQL_ROOT_PASSWORD}
 
     - name: Import test data
       run: |
