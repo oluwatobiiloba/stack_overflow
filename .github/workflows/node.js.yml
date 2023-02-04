@@ -46,9 +46,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup-mysql
     steps:
+
     - name: Run tests
       run: |
         nohup npm run start &
         sleep 3
         npm run test
         npm run coverage
+
