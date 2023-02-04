@@ -4,8 +4,8 @@ const answerServices = require('./answerServices')
 
  module.exports = {
 
-        createQuestion: async function(query){
-           const { question,userUuid } = query.body
+     createQuestion: async function (data) {
+         const { question, userUuid } = data
            const user = await User.findOne({where: {uuid: userUuid}})
            if(!user){
             throw new Error('Are you a registered user?? 😬👀')
@@ -20,8 +20,8 @@ const answerServices = require('./answerServices')
         return askQuestion
         },
 
-        askAI: async function(query){
-            const { question,userUuid, ai_assist ,ai_assist_type } = query.body
+     askAI: async function (data) {
+         const { question, userUuid, ai_assist, ai_assist_type } = data
             let model
             let aiResponse = {
                 data: "Unavailable",
@@ -151,24 +151,20 @@ const answerServices = require('./answerServices')
             return question
         },
 
-        getQuestionsByUser: async function(userId){
-            let fields = ["user"]
+     getQuestionsByUser: async function (userId) {
+         let data
+         const user = await User.findAll({ where: { uuid: userId } });
+         if (!user) {
+             throw new Error("No user with that Id")
+         }
 
-            const user = await User.findAll({where:{uuid:userId}});
-            if(!user){
-                throw new Error("No user with that Id")}
-
-            const question = await Questions.findAll({where: {userId:user.id}})
-                .catch(
-                    err => {
-                        
-                    throw err
-                    })
-            if(!question){
-                throw new Error("This user has no questions")
-            }
-            data = {question,user}
-            return data
+         const question = await Questions.findAll({ where: { userId: user.id } })
+         if (!question) {
+             throw new Error("This user has no questions")
+         }
+         data.questions = question;
+         data.user = user;
+         return data
         }
 
         

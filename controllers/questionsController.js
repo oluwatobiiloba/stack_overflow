@@ -1,11 +1,9 @@
 const questionServices = require('../services/questionServices')
 
 exports.createQuestion = async (req, res) => {
-    const {question,userUuid} = req.body
-    
-    
+    let payload = req.body;
     try {
-       const data = await questionServices.createQuestion(req)
+        const data = await questionServices.createQuestion(payload)
        return res.status(201).json({
         status: "Successful",
         message: `Question posted successfully`,
@@ -70,7 +68,7 @@ exports.getQuestionById = async (req, res) => {
 exports.getQuestionByUserId = async (req, res) => {
     try{
         const data = await questionServices.getQuestionsByUser(req.params.id)
-        if(!data){
+        if (!data.questions) {
             return res.status(404).json({
                 status: 'failed',
                 message: "Sorry, this user apparently doesn't need help. No questions asked! 👀😬",
@@ -92,11 +90,11 @@ exports.getQuestionByUserId = async (req, res) => {
  }
 
 exports.askAI = async (req, res) => {
-    const {question,userUuid} = req.body
+    let payload = req.body
     
     try {
-       let data = await questionServices.askAI(req)
-       return res.status(201).json({
+        let data = await questionServices.askAI(payload)
+        return res.status(201).json({
         status: "Successful",
         message: `Question asked and answered successfully`,
         data:{

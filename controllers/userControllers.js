@@ -2,11 +2,10 @@ const { User } = require('../models')
 const authServices = require('../services/authServices')
 
 exports.signUp = async (req, res) => {
-    const {username ,first_name,last_name,phonenumber,email,password,role} = req.body
-    
+    let data = req.body
     try{
     
-        const newUser = await authServices.registerUser(req) 
+        const newUser = await authServices.registerUser(data) 
         //const token = createSendToken(newUser.newUser,201,res)
         return res.status(201).json({
         status: 'success',

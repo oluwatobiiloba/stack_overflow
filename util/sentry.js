@@ -8,7 +8,7 @@ const { ProfilingIntegration } = require("@sentry/profiling-node")
 
 sentry_init = function () {
     Sentry.init({
-        dsn: process.env.SENTRY_URL,
+        dsn: config.SENTRY_URL,
         integrations: [
             new ProfilingIntegration(),
             new Sentry.Integrations.Http({ tracing: true }),
