@@ -1,6 +1,6 @@
 # Create MochaUser
 drop user root@localhost;
-FLUSH PRIVILEGES;
+flush privileges;
 CREATE USER 'root'@'localhost' IDENTIFIED BY 'password';
 GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON *.* TO 'root'@'localhost';
 

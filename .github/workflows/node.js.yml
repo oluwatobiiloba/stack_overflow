@@ -22,7 +22,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: password
           # MYSQL_DATABASE: test
         ports:
-            - '3306'
+            - '8888:3306'
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -43,7 +43,7 @@ jobs:
       env:
         MYSQL_PWD: ${{ env.MYSQL_ROOT_PASSWORD }}
       run: |
-        mysql -h 127.0.0.1 --port 3306 -u root -ppassword < .github/workflows/travis.sql
+        mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS test;'
 
     - name: Set up Redis
       run: sudo apt-get install redis-server
