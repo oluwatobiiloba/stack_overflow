@@ -32,7 +32,7 @@ jobs:
     - name: Set up MySQL
       run: |
         sudo apt-get install mysql-server mysql-client
-        sudo service mysql start
+        sudo service mysql restart
     - name: Import test data
       run: |
         sudo mysql -u root -p < test/travis.sql
