@@ -32,11 +32,12 @@ jobs:
     - name: Set up MySQL
       run: |
         sudo apt-get install mysql-server mysql-client
+        password | sudo mysql_secure_installation
         sudo service mysql start
         
     - name: Import test data
       run: |
-        sudo mysql < .github/workflows/travis.sql
+        sudo mysql -u root -p password < .github/workflows/travis.sql
 
     - name: Set up Redis
       run: sudo apt-get install redis-server
