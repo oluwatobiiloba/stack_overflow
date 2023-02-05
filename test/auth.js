@@ -8,9 +8,9 @@ let assert = chai.assert;
 
 const authServices = require('../services/authServices'); 
 
-console.log("authServices", authServices);
-describe("Auth Services", async function (done) {
 
+describe("Auth Services", async function (done) {
+    console.log('Auth Services');
     let email = "mocha@mochatest.com"
     let password = "password"
     let username = "mocha"
@@ -222,3 +222,5 @@ describe("Auth Services", async function (done) {
     done()
 
 })
+
+console.log('Test completed');
