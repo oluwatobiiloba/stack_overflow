@@ -17,9 +17,6 @@ jobs:
     strategy:
       matrix:
         node:
-          - 10
-          - 12
-          - 14
           - 16
     environment: dev
     services:
