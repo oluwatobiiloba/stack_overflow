@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
 let assert = chai.assert;
 
-const authServices = require('/services/authServices');
+const authServices = require('../services/authServices'); 
 
-
+console.log("authServices", authServices);
 describe("Auth Services", async function (done) {
 
     let email = "mocha@mochatest.com"
