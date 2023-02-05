@@ -10,7 +10,7 @@ const authServices = require('../services/authServices');
 
 
 describe("Auth Services", async function (done) {
-    console.log('Auth Services');
+
     let email = "mocha@mochatest.com"
     let password = "password"
     let username = "mocha"
@@ -62,9 +62,11 @@ describe("Auth Services", async function (done) {
         //Check for test UserID
         let user = await User.findOne({ where: { email: email, first_name: first_name, last_name: last_name } })
         user_id = user.id
+        console.log(user_id);
     })
 
     it("should have functions (signToken,createSendToken,registerUser,signIn,protect)", async function (done) {
+        console.log(authServices)
         authServices.should.have.property("createSendToken")
         authServices.should.have.property("signToken")
         authServices.should.have.property("registerUser")
@@ -223,4 +225,3 @@ describe("Auth Services", async function (done) {
 
 })
 
-console.log('Test completed');
