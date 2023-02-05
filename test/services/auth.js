@@ -9,7 +9,7 @@ let assert = chai.assert;
 const authServices = require('../../services/authServices');
 
 
-describe("Auth Services", async function () {
+describe("Auth Services", async function (done) {
 
     let email = "mocha@mochatest.com"
     let password = "password"
@@ -218,5 +218,7 @@ describe("Auth Services", async function () {
         User.destroy({ where: { email: regData.email } })
         done()
     })
+
+    done()
 
 })
