@@ -53,8 +53,7 @@ jobs:
         MYSQL_PWD: ${{ env.MYSQL_ROOT_PASSWORD }}
       run: |
         mysql -h 127.0.0.1 --port 8888 -u root -ppassword < .github/workflows/travis.sql
-        mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e "show databases;"
-        mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e "USE database_test;SELECT * FROM users" ;
+      
     - name: Set up Redis
       run: sudo apt-get install redis-server
 
@@ -69,6 +68,8 @@ jobs:
 
     - name: Run   Tests
       run: |
+        mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e "show databases;"
+        mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e "USE database_test;SELECT * FROM users" ;
         sleep 3
         npm run test
   # test:
