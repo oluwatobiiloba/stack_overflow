@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@datadog/datadog-ci": "^2.4.0",
+    "babel-root-slash-import": "^1.1.0",
     "chai": "^4.3.7",
     "coveralls": "^3.1.1",
     "dd-trace": "^3.13.1",
