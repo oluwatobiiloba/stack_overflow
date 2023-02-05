@@ -87,6 +87,7 @@ jobs:
     - name: Run  Tests
       run: |
         npm test -- --inspect --debug-brk
+        
     - name: Run coverage
       run: npm run coverage
   # test:
