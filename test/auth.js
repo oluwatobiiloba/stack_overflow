@@ -5,6 +5,7 @@ const { sequelize, User } = require('../models')
 const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
 let assert = chai.assert;
+console.log("here")
 
 const authServices = require('../services/authServices');
 
