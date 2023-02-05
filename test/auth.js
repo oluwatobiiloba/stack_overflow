@@ -1,12 +1,12 @@
 'use strict';
 let chai = require('chai');
 const { where } = require('sequelize');
-const { sequelize, User } = require('../../models')
+const { sequelize, User } = require('../models')
 const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
 let assert = chai.assert;
 
-const authServices = require('../../services/authServices');
+const authServices = require('../services/authServices');
 
 
 describe("Auth Services", async function (done) {
@@ -56,11 +56,11 @@ describe("Auth Services", async function (done) {
     data.password = password
     data.username = username
 
-    let loginData = data 
+    let loginData = data
 
     before(async function () {
         //Check for test UserID
-        let user = await User.findOne({ where: { email: email, first_name: first_name, last_name: last_name } }) 
+        let user = await User.findOne({ where: { email: email, first_name: first_name, last_name: last_name } })
         user_id = user.id
     })
 
@@ -99,7 +99,7 @@ describe("Auth Services", async function (done) {
 
             }).then(function () {
                 let authSresp = authServices.protect(req)
-                
+
             })
             .catch(async function (error) {
                 done(error)
@@ -186,7 +186,7 @@ describe("Auth Services", async function (done) {
         loginData.username = username + "test"
         authServices.signIn(loginData)
             .then(function (payload) {
-                
+
                 assert.equal(payload, 1);
             })
             .catch(err => {
