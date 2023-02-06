@@ -156,8 +156,6 @@ describe("Auth Services", async function (done) {
                 result.respObj.sendToken.should.be.a("object")
                 result.respObj.sendToken.should.have.property("cookieOptions")
                 result.respObj.sendToken.should.have.property("token")
-
-
                 done()
             })
             .catch(function (error) {

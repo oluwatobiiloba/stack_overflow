@@ -36,5 +36,5 @@ ALTER TABLE `users`
 # Add Data
 INSERT INTO `users` (`uuid`, `id`, `username`, `password`, `first_name`, `last_name`, `phonenumber`, `email`, `role`, `stack`, `age`, `nationality`, `createdAt`, `updatedAt`, `userId`)
 VALUES
-	(X'62333838346231392D353331342D346631622D616265332D326236646564616534316632', 19, 'Mocha', '$2a$10$ad1nSUmBhIm.4nTUfCIO2OUnWOmawajTOaZ2ItaxtSX3QLr9PoX1u', 'Mocha', 'Chai', 823322528, 'mocha@mochatest.com', 2, NULL, NULL, NULL, '2022-10-25 15:31:08', '2022-10-25 15:31:08', NULL);
+	(X'62333838346231392D353331342D346631622D616265332D326236646564616534316632', 1, 'Mocha', '$2a$10$ad1nSUmBhIm.4nTUfCIO2OUnWOmawajTOaZ2ItaxtSX3QLr9PoX1u', 'Mocha', 'Chai', 823322528, 'mocha@mochatest.com', 2, NULL, NULL, NULL, '2022-10-25 15:31:08', '2022-10-25 15:31:08', NULL);
 
