@@ -7,6 +7,7 @@ let expect = chai.expect;
 let assert = chai.assert;
 
 const authServices = require('../services/authServices'); 
+console.log(authServices);
 
 describe("Auth Services", async function (done) {
 
