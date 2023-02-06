@@ -1,12 +1,14 @@
 'use strict';
 let chai = require('chai');
-const { where } = require('sequelize');
-const { sequelize, User } = require('../models')
+const { User } = require('../../models');
 const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
 let assert = chai.assert;
 
-const authServices = require('../services/authServices'); 
+
+const authServices = require('../../services/authServices');
+
+
 
 describe("Auth Services", async function (done) {
 
@@ -18,9 +20,7 @@ describe("Auth Services", async function (done) {
     let phonenumber = "08103234202"
     let role = "1"
     let user_id
-    let loginData = {
-        email, password, username
-    }
+    let data = {}
     let regData = {
         email: email + "test",
         password: password + "test",
@@ -30,39 +30,36 @@ describe("Auth Services", async function (done) {
         phonenumber: phonenumber + "1"
 
     }
-    let test_user = { id: 19 }
+
+    let req = {}
+    let test_user = {}
+    test_user.id = 19
     let token = await authServices.createSendToken(test_user)
-    let req = {
-        headers: {
 
-            authorization: `Bearer ${token.token}`,
-            'content-type': 'application/json',
-            'user-agent': 'PostmanRuntime/7.30.0',
-            accept: '*/*',
-            'postman-token': '29844342-3233-4c56-b3cf-7b085960dff3',
-            host: '127.0.0.1:3535',
-            'accept-encoding': 'gzip, deflate, br',
-            connection: 'keep-alive',
-            'content-length': '118',
-            cookies: {
-                jwt: token.token,
-                cookieOptions: token.cookieOptions,
-            }
+    req.headers = {
 
+        authorization: `Bearer ${token.token}`,
+        'content-type': 'application/json',
+        'user-agent': 'PostmanRuntime/7.30.0',
+        accept: '*/*',
+        'postman-token': '29844342-3233-4c56-b3cf-7b085960dff3',
+        host: '127.0.0.1:3535',
+        'accept-encoding': 'gzip, deflate, br',
+        connection: 'keep-alive',
+        'content-length': '118',
+        cookies: {
+            jwt: token.token,
+            cookieOptions: token.cookieOptions,
         }
+
     }
+    data.email = email
+    data.password = password
+    data.username = username
 
-    before(async function () {
-        //Check for test UserID
-        if (process.env.NODE_ENV === "development") {
-            user_id = 19
-        } else {
-            user_id = 1
-        }
-    })
+    let loginData = data
 
     it("should have functions (signToken,createSendToken,registerUser,signIn,protect)", async function (done) {
-        console.log(authServices)
         authServices.should.have.property("createSendToken")
         authServices.should.have.property("signToken")
         authServices.should.have.property("registerUser")
@@ -84,7 +81,7 @@ describe("Auth Services", async function (done) {
 
 
 
-    it("should protect a route", async function () {
+    it("should protect a route", function () {
 
         authServices.protect(req)
             .then(function (result) {
@@ -95,18 +92,14 @@ describe("Auth Services", async function (done) {
                 result.user.id.should.be.a("number")
                 result.user.id.should.equal(19)
 
-            }).then(function () {
-                let authSresp = authServices.protect(req)
-
-            })
-            .catch(async function (error) {
+            }).catch(async function (error) {
                 done(error)
             })
 
 
     });
 
-    it("should test route protection errors", async function () {
+    it("should test route protection errors", function () {
         req.headers.authorization = null
         authServices.protect(req)
             .catch(async function (error) {
@@ -116,7 +109,7 @@ describe("Auth Services", async function (done) {
 
     });
 
-    it("should test route protection errors", async function () {
+    it("should test route protection errors", function () {
         req.headers.cookies.jwt = null;
         req.headers.authorization = null;
         authServices.protect(req)
@@ -140,8 +133,6 @@ describe("Auth Services", async function (done) {
         verif.id.should.be.equal(id)
         done()
     })
-
-
 
     it("should login a user", function (done) {
 
@@ -194,8 +185,7 @@ describe("Auth Services", async function (done) {
     })
 
     it("should register a user", function (done) {
-        let query = regData
-        authServices.registerUser(query)
+        authServices.registerUser(regData)
             .then(function (result) {
                 result.should.be.a('object')
                 result.respObj.should.have.property("email")
@@ -217,7 +207,4 @@ describe("Auth Services", async function (done) {
         done()
     })
 
-    done()
-
 })
-
