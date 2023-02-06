@@ -34,7 +34,7 @@ describe("Auth Services", async function (done) {
     let req = {}
     let test_user = {}
     test_user.id = 19
-    let token = await authServices.createSendToken(test_user)
+    let token = authServices.createSendToken(test_user)
 
     req.headers = {
 
