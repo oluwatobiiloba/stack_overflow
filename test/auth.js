@@ -9,7 +9,7 @@ let assert = chai.assert;
 const authServices = require('../services/authServices'); 
 console.log("before describe", authServices);
 
-describe("Auth Services", async function (done) {
+describe("Auth Services", function (done) {
     console.log("here", authServices);
     console.log(token);
     console.log(authServices);
@@ -37,7 +37,7 @@ describe("Auth Services", async function (done) {
 
     }
     let test_user = { id: 19 }
-    let token = await authServices.createSendToken(test_user)
+    //let token = await authServices.createSendToken(test_user)
     let req = {
         headers: {
 
