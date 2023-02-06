@@ -64,6 +64,29 @@ describe("Auth Services", async function (done) {
     console.log(token);
     console.log(authServices);
 
+    describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', function (done) {
+        it('should have a function signToken', function (done) {
+            expect(authServices.signToken).to.be.a('function');
+            done();
+        });
+        it('should have a function createSendToken', function (done) {
+            expect(authServices.createSendToken).to.be.a('function');
+            done();
+        });
+        it('should have a function registerUser', function (done) {
+            expect(authServices.registerUser).to.be.a('function');
+            done();
+        });
+        it('should have a function signIn', function (done) {
+            expect(authServices.signIn).to.be.a('function');
+            done();
+        });
+        it('should have a function protect', function (done) {
+            expect(authServices.protect).to.be.a('function');
+            done();
+        });
+    });
+
     it("should have functions (signToken,createSendToken,registerUser,signIn,protect)", async function (done) {
         console.log(authServices)
         authServices.should.have.property("createSendToken")
