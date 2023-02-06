@@ -10,7 +10,7 @@ const authServices = require('../services/authServices');
 console.log(authServices);
 
 describe("Auth Services", async function (done) {
-
+    console.log(authServices);
     let email = "mocha@mochatest.com"
     let password = "password"
     let username = "mocha"
@@ -53,14 +53,13 @@ describe("Auth Services", async function (done) {
         }
     }
 
-    before(async function () {
         //Check for test UserID
         if (process.env.NODE_ENV === "development") {
             user_id = 19
         } else {
             user_id = 1
         }
-    })
+
 
     console.log(token);
     console.log(authServices);
