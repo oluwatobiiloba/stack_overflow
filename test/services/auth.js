@@ -101,8 +101,6 @@ describe("Auth Services", async function (done) {
             }).catch(async function (error) {
                 done(error)
             })
-
-
     });
 
     it("should test route protection errors", function () {
@@ -131,6 +129,7 @@ describe("Auth Services", async function (done) {
     it("should signToken", function (done) {
         let id = 10
         let result = authServices.signToken(id)
+        console.log(config.JWT_SECRET)
         let verif = jwt.verify(result, config.JWT_SECRET)
         verif.should.be.a('object')
         verif.should.have.property('id')
