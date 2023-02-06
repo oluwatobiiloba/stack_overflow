@@ -63,25 +63,31 @@ describe("Auth Services", async function (done) {
 
     console.log(token);
     console.log(authServices);
+    console.log(test_user);
 
     describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', function (done) {
         it('should have a function signToken', function (done) {
+            console.log('signToken');
             expect(authServices.signToken).to.be.a('function');
             done();
         });
         it('should have a function createSendToken', function (done) {
+            console.log('createSendToken');
             expect(authServices.createSendToken).to.be.a('function');
             done();
         });
         it('should have a function registerUser', function (done) {
+            console.log('registerUser');
             expect(authServices.registerUser).to.be.a('function');
             done();
         });
         it('should have a function signIn', function (done) {
+            console.log('signIn');
             expect(authServices.signIn).to.be.a('function');
             done();
         });
         it('should have a function protect', function (done) {
+            console.log('protect');
             expect(authServices.protect).to.be.a('function');
             done();
         });
