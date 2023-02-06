@@ -67,7 +67,7 @@ module.exports = {
         if (!user || !password_check) { 
             throw new Error('Incorrect username or password')
         }
-        let sendToken = await this.createSendToken(user)
+        let sendToken = this.createSendToken(user)
         let respObj = {
             id: user.id,
             uuid: user.uuid,
