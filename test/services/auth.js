@@ -72,12 +72,13 @@ describe("Auth Services", async function (done) {
         done()
     })
 
+
     it('test auth.createSendToken', async function () {
         // call the function
         let user = { id: 1 };
         let statusCode = null;
         let res = null;
-        let result = await authServices.createSendToken(user, statusCode, res);
+        let result = authServices.createSendToken(user, statusCode, res);
         result.should.be.a('object')
         result.should.have.property("cookieOptions")
         result.should.have.property("token")
