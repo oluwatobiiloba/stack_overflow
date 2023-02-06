@@ -45,8 +45,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Set environment variables
-
+    - name: Start Mysql Service
       run: |
         sudo /etc/init.d/mysql start
     - name: Import test data
