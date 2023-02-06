@@ -52,23 +52,23 @@ describe("Auth Services", async function (done) {
 
     //     }
     // }
-    console.log('req', req);
-    beforeAll(async function () {
-        await sequelize.sync({ force: true });
-        let user = await User.create(regData);
-        user_id = user.id;
-        console.log(user_id);
-    })
-        //Check for test UserID
-        if (process.env.NODE_ENV === "development") {
-            user_id = 19
-        } else {
-            user_id = 1
-        }
+    // console.log('req', req);
+    // beforeAll(async function () {
+    //     await sequelize.sync({ force: true });
+    //     let user = await User.create(regData);
+    //     user_id = user.id;
+    //     console.log(user_id);
+    // })
+    //     //Check for test UserID
+    //     if (process.env.NODE_ENV === "development") {
+    //         user_id = 19
+    //     } else {
+    //         user_id = 1
+    //     }
 
 
     console.log(token);
-    console.log(authServices);
+    console.log("here too", authServices);
     console.log(test_user);
 
     describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', function (done) {
