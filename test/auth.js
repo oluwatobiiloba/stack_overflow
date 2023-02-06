@@ -7,10 +7,10 @@ let expect = chai.expect;
 let assert = chai.assert;
 
 const authServices = require('../services/authServices'); 
-console.log(authServices);
+console.log("before describe", authServices);
 
 describe("Auth Services", async function (done) {
-    console.log(authServices);
+    console.log("here", authServices);
     let email = "mocha@mochatest.com"
     let password = "password"
     let username = "mocha"
@@ -52,7 +52,7 @@ describe("Auth Services", async function (done) {
 
         }
     }
-
+    console.log('req', req);
     beforeAll(async function () {
         await sequelize.sync({ force: true });
         let user = await User.create(regData);
