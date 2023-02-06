@@ -72,8 +72,7 @@ module.exports = {
     DD_CIVISIBILITY_AGENTLESS_ENABLED:
       process.env.DD_CIVISIBILITY_AGENTLESS_ENABLED,
     DD_API_KEY: process.env.DD_API_KEY,
-    DD_SITE: process.env.DD_SITE,
-    NODE_OPTIONS: process.env.NODE_OPTIONS,
+    DD_SITE: process.env.DD_SITE
   },
 
   production: {
