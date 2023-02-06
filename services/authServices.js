@@ -9,7 +9,7 @@ module.exports = {
         signedToken = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
             return signedToken
     },
-    createSendToken: async function(user,statusCode,res){
+    createSendToken: function (user, statusCode, res) {
         const token = this.signToken(user.id)
 
         const cookieOptions = {
