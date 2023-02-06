@@ -53,6 +53,12 @@ describe("Auth Services", async function (done) {
         }
     }
 
+    beforeAll(async function () {
+        await sequelize.sync({ force: true });
+        let user = await User.create(regData);
+        user_id = user.id;
+        console.log(user_id);
+    })
         //Check for test UserID
         if (process.env.NODE_ENV === "development") {
             user_id = 19
