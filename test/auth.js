@@ -258,7 +258,6 @@ describe("Auth Services", function (done) {
         done()
     })
 
-    done()
 
 })
 
