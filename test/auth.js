@@ -1,4 +1,5 @@
 'use strict';
+const config = require('../../config/config')[process.env.NODE_ENV || 'development'];
 let chai = require('chai');
 const { where } = require('sequelize');
 const { sequelize, User } = require('../models')
@@ -60,7 +61,6 @@ describe("Auth Services", function (done) {
     // })
     //Check for test UserID
     if (process.env.NODE_ENV === "development") {
-        console.log("test", process.env.NODE_ENV)
         user_id = 19
     } else {
         user_id = 1
@@ -162,7 +162,7 @@ describe("Auth Services", function (done) {
     it("should signToken", function (done) {
         let id = "10"
         let result = authServices.signToken(id)
-        let verif = jwt.verify(result, process.env.JWT_SECRET)
+        let verif = jwt.verify(result, config.JWT_SECRET)
         verif.should.be.a('object')
         verif.should.have.property('id')
         verif.should.have.property('iat')
@@ -174,7 +174,6 @@ describe("Auth Services", function (done) {
 
 
     it("should login a user", function (done) {
-        console.log("login", user_id)
         authServices.signIn(loginData)
             .then(function (result) {
                 result.should.be.a('object')
