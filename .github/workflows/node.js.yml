@@ -9,8 +9,6 @@ on:
 env:
   NODE_ENV: test_github_actions
   MYSQL_ROOT_PASSWORD: password
-  DD_ENV: ${{ env.DD_ENV }}
-  DD_SERVICE: ${{ env.DD_SERVICE }}
   DD_CIVISIBILITY_AGENTLESS_ENABLED: ${{vars.DD_CIVISIBILITY_AGENTLESS_ENABLED}}
   AI_KEY: ${{secrets.AI_KEY}}
   AI_ORG: ${{secrets.AI_ORG}}
