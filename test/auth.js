@@ -11,9 +11,8 @@ console.log("before describe", authServices);
 
 describe("Auth Services", function (done) {
     console.log("here", authServices);
-    console.log(token);
     console.log(authServices);
-    console.log(test_user);
+
 
     let email = "mocha@mochatest.com"
     let password = "password"
