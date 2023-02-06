@@ -11,64 +11,69 @@ console.log("before describe", authServices);
 
 describe("Auth Services", async function (done) {
     console.log("here", authServices);
-    // let email = "mocha@mochatest.com"
-    // let password = "password"
-    // let username = "mocha"
-    // let first_name = "Mocha"
-    // let last_name = "Chai"
-    // let phonenumber = "08103234202"
-    // let role = "1"
-    // let user_id
-    // let loginData = {
-    //     email, password, username
-    // }
-    // let regData = {
-    //     email: email + "test",
-    //     password: password + "test",
-    //     username: username + "test",
-    //     first_name: first_name + "test",
-    //     last_name: last_name + "test",
-    //     phonenumber: phonenumber + "1"
+    console.log(token);
+    console.log(authServices);
+    console.log(test_user);
 
-    // }
-    // let test_user = { id: 19 }
-    // let token = await authServices.createSendToken(test_user)
-    // let req = {
-    //     headers: {
+    let email = "mocha@mochatest.com"
+    let password = "password"
+    let username = "mocha"
+    let first_name = "Mocha"
+    let last_name = "Chai"
+    let phonenumber = "08103234202"
+    let role = "1"
+    let user_id
+    let loginData = {
+        email, password, username
+    }
+    console.log(loginData);
+    let regData = {
+        email: email + "test",
+        password: password + "test",
+        username: username + "test",
+        first_name: first_name + "test",
+        last_name: last_name + "test",
+        phonenumber: phonenumber + "1"
 
-    //         authorization: `Bearer ${token.token}`,
-    //         'content-type': 'application/json',
-    //         'user-agent': 'PostmanRuntime/7.30.0',
-    //         accept: '*/*',
-    //         'postman-token': '29844342-3233-4c56-b3cf-7b085960dff3',
-    //         host: '127.0.0.1:3535',
-    //         'accept-encoding': 'gzip, deflate, br',
-    //         connection: 'keep-alive',
-    //         'content-length': '118',
-    //         cookies: {
-    //             jwt: token.token,
-    //             cookieOptions: token.cookieOptions,
-    //         }
+    }
+    let test_user = { id: 19 }
+    let token = await authServices.createSendToken(test_user)
+    let req = {
+        headers: {
 
-    //     }
-    // }
-    // console.log('req', req);
-    // beforeAll(async function () {
-    //     await sequelize.sync({ force: true });
-    //     let user = await User.create(regData);
-    //     user_id = user.id;
-    //     console.log(user_id);
-    // })
-    //     //Check for test UserID
-    //     if (process.env.NODE_ENV === "development") {
-    //         user_id = 19
-    //     } else {
-    //         user_id = 1
-    //     }
+            authorization: `Bearer ${token.token}`,
+            'content-type': 'application/json',
+            'user-agent': 'PostmanRuntime/7.30.0',
+            accept: '*/*',
+            'postman-token': '29844342-3233-4c56-b3cf-7b085960dff3',
+            host: '127.0.0.1:3535',
+            'accept-encoding': 'gzip, deflate, br',
+            connection: 'keep-alive',
+            'content-length': '118',
+            cookies: {
+                jwt: token.token,
+                cookieOptions: token.cookieOptions,
+            }
+
+        }
+    }
+    console.log('req', req);
+    beforeAll(async function () {
+        await sequelize.sync({ force: true });
+        let user = await User.create(regData);
+        user_id = user.id;
+        console.log(user_id);
+    })
+    //Check for test UserID
+    if (process.env.NODE_ENV === "development") {
+        user_id = 19
+    } else {
+        user_id = 1
+    }
 
 
     console.log(token);
-    console.log("here too", authServices);
+    console.log(authServices);
     console.log(test_user);
 
     describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', function (done) {
