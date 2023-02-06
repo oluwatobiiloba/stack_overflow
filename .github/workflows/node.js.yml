@@ -18,7 +18,6 @@ env:
   SENTRY_URL: ${{secrets.SENTRY_URL}}
   DD_API_KEY: ${{secrets.DD_API_KEY}}
   DD_SITE: ${{secrets.DD_SITE}}
-  NODE_OPTIONS: ${{vars.NODE_OPTIONS}}
   JWT_SECRET: ${{secrets.JWT_SECRET}}
   JWT_EXPIRES: ${{vars.JWT_EXPIRES}}
   JWT_COOKIE_EXPIRES_IN: ${{vars.JWT_COOKIE_EXPIRES_IN}}
