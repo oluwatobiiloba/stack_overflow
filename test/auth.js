@@ -1,5 +1,5 @@
 'use strict';
-const config = require('../../config/config')[process.env.NODE_ENV || 'development'];
+const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 let chai = require('chai');
 const { where } = require('sequelize');
 const { sequelize, User } = require('../models')
