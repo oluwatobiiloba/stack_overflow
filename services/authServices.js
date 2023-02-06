@@ -1,7 +1,7 @@
 const { User } = require('../models')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const config = require('../config/config')[process.env.NODE_ENV || 'development';];
+const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 
 
 
