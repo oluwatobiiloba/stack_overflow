@@ -8,8 +8,6 @@ let assert = chai.assert;
 
 const authServices = require('../../services/authServices');
 
-
-
 describe("Auth Services", async function (done) {
 
     let email = "mocha@mochatest.com"
@@ -33,7 +31,13 @@ describe("Auth Services", async function (done) {
 
     let req = {}
     let test_user = {}
-    test_user.id = 19
+    if (process.env.NODE_ENV === "development") {
+        console.log("test", process.env.NODE_ENV)
+        user_id = 19
+    } else {
+        user_id = 1
+    }
+    test_user.id = user_id
     let token = authServices.createSendToken(test_user)
 
     req.headers = {
@@ -90,7 +94,7 @@ describe("Auth Services", async function (done) {
                 result.headers.should.have.property("cookies")
                 result.should.have.property("user")
                 result.user.id.should.be.a("number")
-                result.user.id.should.equal(19)
+                result.user.id.should.equal(user_id)
 
             }).catch(async function (error) {
                 done(error)
