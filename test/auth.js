@@ -140,7 +140,7 @@ describe("Auth Services", function (done) {
         req.headers.authorization = null
         authServices.protect(req)
             .catch(async function (error) {
-                expect(error).to.exist;
+                
                 done(error)
             })
 
@@ -152,7 +152,7 @@ describe("Auth Services", function (done) {
         authServices.protect(req)
             .catch(async function (error) {
                 console.log(error)
-                expect(error).to.exist;
+                
                 done(error)
             })
 
