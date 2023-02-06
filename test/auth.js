@@ -61,6 +61,9 @@ describe("Auth Services", async function (done) {
         }
     })
 
+    console.log(token);
+    console.log(authServices);
+
     it("should have functions (signToken,createSendToken,registerUser,signIn,protect)", async function (done) {
         console.log(authServices)
         authServices.should.have.property("createSendToken")
@@ -73,6 +76,7 @@ describe("Auth Services", async function (done) {
 
     it('test auth.createSendToken', async function () {
         // call the function
+        console.log("here")
         let user = { id: 1 };
         let statusCode = null;
         let res = null;
@@ -95,11 +99,9 @@ describe("Auth Services", async function (done) {
                 result.user.id.should.be.a("number")
                 result.user.id.should.equal(19)
 
-            }).then(function () {
-                let authSresp = authServices.protect(req)
-
             })
             .catch(async function (error) {
+                console.log(error);
                 done(error)
             })
 
