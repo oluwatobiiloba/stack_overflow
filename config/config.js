@@ -53,7 +53,7 @@ module.exports = {
   },
   test_github_actions: {
     username: 'root',
-    password: process.env.DB_PASSWORD, 
+    password: 'password',
     database: 'database_test',
     host: '127.0.0.1',
     dialect: 'mysql',
