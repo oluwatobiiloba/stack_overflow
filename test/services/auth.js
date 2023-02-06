@@ -1,4 +1,5 @@
 'use strict';
+const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 let chai = require('chai');
 const { User } = require('../../models');
 const jwt = require('jsonwebtoken');;
@@ -128,9 +129,9 @@ describe("Auth Services", async function (done) {
 
 
     it("should signToken", function (done) {
-        let id = "10"
+        let id = 10
         let result = authServices.signToken(id)
-        let verif = jwt.verify(result, process.env.JWT_SECRET)
+        let verif = jwt.verify(result, config.JWT_SECRET)
         verif.should.be.a('object')
         verif.should.have.property('id')
         verif.should.have.property('iat')
@@ -140,10 +141,8 @@ describe("Auth Services", async function (done) {
     })
 
     it("should login a user", function (done) {
-
         authServices.signIn(loginData)
             .then(function (result) {
-                console.log(result)
                 result.should.be.a('object')
                 result.respObj.id.should.equal(user_id)
                 result.respObj.should.have.property("email")
