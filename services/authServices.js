@@ -6,7 +6,8 @@ const bcrypt = require('bcryptjs');
 
 module.exports = {
     signToken:function(id) {
-        signedToken = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
+        console.log('signToken', process.env.JWT_SECRET);
+        let signedToken = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
             return signedToken
     },
     createSendToken: function (user, statusCode, res) {
@@ -17,7 +18,7 @@ module.exports = {
             httpOnly:false
         }
         
-        payload = {cookieOptions,token}
+        let payload = { cookieOptions, token }
 
         return payload
     },
