@@ -60,7 +60,7 @@ module.exports = {
     port: 8888,
     JWT_SECRET: "stackoverflow",
     JWT_EXPIRES: "10m",
-    JWT_COOKIE_EXPIRES_IN: "10",
+    JWT_COOKIE_EXPIRES_IN: 10,
     BCRYPT_STRING: process.env.BCRYPT_STRING,
     AI_KEY: process.env.AI_KEY,
     AI_ORG: process.env.AI_ORG,
