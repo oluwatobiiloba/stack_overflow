@@ -143,6 +143,7 @@ describe("Auth Services", async function (done) {
 
         authServices.signIn(loginData)
             .then(function (result) {
+                console.log(result)
                 result.should.be.a('object')
                 result.respObj.id.should.equal(user_id)
                 result.respObj.should.have.property("email")
@@ -180,7 +181,6 @@ describe("Auth Services", async function (done) {
         loginData.username = username + "test"
         authServices.signIn(loginData)
             .then(function (payload) {
-
                 assert.equal(payload, 1);
             })
             .catch(err => {
