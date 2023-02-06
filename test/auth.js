@@ -60,16 +60,11 @@ describe("Auth Services", function (done) {
     // })
     //Check for test UserID
     if (process.env.NODE_ENV === "development") {
-        console.log(process.env.NODE_ENV)
+        console.log("test", process.env.NODE_ENV)
         user_id = 19
     } else {
         user_id = 1
     }
-
-
-    console.log(token);
-    console.log(user_id);
-    console.log(test_user);
 
     describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', function (done) {
         it('should have a function signToken', function (done) {
@@ -100,7 +95,6 @@ describe("Auth Services", function (done) {
     });
 
     it("should have functions (signToken,createSendToken,registerUser,signIn,protect)", async function (done) {
-        console.log(authServices)
         authServices.should.have.property("createSendToken")
         authServices.should.have.property("signToken")
         authServices.should.have.property("registerUser")
@@ -180,7 +174,7 @@ describe("Auth Services", function (done) {
 
 
     it("should login a user", function (done) {
-
+        console.log("login", user_id)
         authServices.signIn(loginData)
             .then(function (result) {
                 result.should.be.a('object')
@@ -195,8 +189,6 @@ describe("Auth Services", function (done) {
                 result.respObj.sendToken.should.be.a("object")
                 result.respObj.sendToken.should.have.property("cookieOptions")
                 result.respObj.sendToken.should.have.property("token")
-
-
                 done()
             })
             .catch(function (error) {

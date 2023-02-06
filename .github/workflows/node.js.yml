@@ -49,8 +49,6 @@ jobs:
       run: |
         sudo /etc/init.d/mysql start
     - name: Import test data
-      env:
-        MYSQL_PWD: ${{ env.MYSQL_ROOT_PASSWORD }}
       run: |
         mysql -h 127.0.0.1 --port 8888 -u root -ppassword < .github/workflows/travis.sql
       
