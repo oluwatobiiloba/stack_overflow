@@ -1,20 +1,22 @@
 const { User } = require('../models')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/config/config.js')[env];
 
 
 
 module.exports = {
-    signToken:function(id) {
-        console.log('signToken', process.env.JWT_SECRET);
-        let signedToken = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
+    signToken: function (id) {
+        console.log(config.JWT_SECRET)
+        let signedToken = jwt.sign({ id }, config.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
             return signedToken
     },
     createSendToken: function (user, statusCode, res) {
         const token = this.signToken(user.id)
 
         const cookieOptions = {
-            expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 60 * 1000),
+            expires: new Date(Date.now() + config.JWT_COOKIE_EXPIRES_IN * 60 * 1000),
             httpOnly:false
         }
         
