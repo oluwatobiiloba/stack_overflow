@@ -9,6 +9,10 @@ const config = require('../config/config')[env];
 module.exports = {
     signToken: function (id) {
         console.log(config.JWT_SECRET, config.database)
+        console.log(process.env.JWT_EXPIRES)
+        console.log(process.env.JWT_SECRET)
+        console.log(process.env.JWT_COOKIE_EXPIRES_IN)
+        console.log(process.env.CODECOV_TOKEN)
         let signedToken = jwt.sign({ id }, config.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
             return signedToken
     },
