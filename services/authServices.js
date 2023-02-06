@@ -8,7 +8,7 @@ const config = require('../config/config')[env];
 
 module.exports = {
     signToken: function (id) {
-        console.log(config.JWT_SECRET, config.JWT_EXPIRES, config.test_github_actions.JWT_SECRET, config.test_github_actions.JWT_EXPIRES))
+        console.log(config.JWT_SECRET, config.JWT_EXPIRES, config.test_github_actions.JWT_SECRET, config.test_github_actions.JWT_EXPIRES)
         let signedToken = jwt.sign({ id }, config.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
             return signedToken
     },
