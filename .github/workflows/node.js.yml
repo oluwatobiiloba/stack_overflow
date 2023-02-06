@@ -9,6 +9,22 @@ on:
 env:
   NODE_ENV: test_github_actions
   MYSQL_ROOT_PASSWORD: password
+  DD_ENV: ${{ env.DD_ENV }}
+  DD_SERVICE: ${{ env.DD_SERVICE }}
+  DD_CIVISIBILITY_AGENTLESS_ENABLED: ${{vars.DD_CIVISIBILITY_AGENTLESS_ENABLED}}
+  AI_KEY: ${{secrets.AI_KEY}}
+  AI_ORG: ${{secrets.AI_ORG}}
+  AI_UUID: ${{secrets.AI_UUID}}
+  HONEYBADGER_KEY: ${{secrets.HONEYBADGER_KEY}}
+  CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+  SENTRY_URL: ${{secrets.SENTRY_URL}}
+  DD_API_KEY: ${{secrets.DD_API_KEY}}
+  DD_SITE: ${{secrets.DD_SITE}}
+  NODE_OPTIONS: ${{vars.NODE_OPTIONS}}
+  JWT_SECRET: ${{secrets.JWT_SECRET}}
+  JWT_EXPIRES: ${{vars.JWT_EXPIRES}}
+  JWT_COOKIE_EXPIRES_IN: ${{vars.JWT_COOKIE_EXPIRES_IN}}
+  BCRYPT_STRING: ${{secrets.BCRYPT_STRING}}
 
 jobs:
   test:
@@ -33,23 +49,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Set environment variables
-      env:
-        DD_ENV: ${{ env.DD_ENV }}
-        DD_SERVICE: ${{ env.DD_SERVICE }}
-        DD_CIVISIBILITY_AGENTLESS_ENABLED: ${{vars.DD_CIVISIBILITY_AGENTLESS_ENABLED}}
-        AI_KEY: ${{secrets.AI_KEY}}
-        AI_ORG: ${{secrets.AI_ORG}}
-        AI_UUID: ${{secrets.AI_UUID}}
-        HONEYBADGER_KEY: ${{secrets.HONEYBADGER_KEY}}
-        CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
-        SENTRY_URL: ${{secrets.SENTRY_URL}}
-        DD_API_KEY: ${{secrets.DD_API_KEY}}
-        DD_SITE: ${{secrets.DD_SITE}}
-        NODE_OPTIONS: ${{vars.NODE_OPTIONS}}
-        JWT_SECRET: ${{secrets.JWT_SECRET}}
-        JWT_EXPIRES: ${{vars.JWT_EXPIRES}}
-        JWT_COOKIE_EXPIRES_IN: ${{vars.JWT_COOKIE_EXPIRES_IN}}
-        BCRYPT_STRING: ${{secrets.BCRYPT_STRING}}
 
       run: |
         sudo /etc/init.d/mysql start
