@@ -7,12 +7,8 @@ let expect = chai.expect;
 let assert = chai.assert;
 
 const authServices = require('../services/authServices'); 
-console.log("before describe", authServices);
 
 describe("Auth Services", function (done) {
-    console.log("here", authServices);
-    console.log(authServices);
-
 
     let email = "mocha@mochatest.com"
     let password = "password"
@@ -25,7 +21,7 @@ describe("Auth Services", function (done) {
     let loginData = {
         email, password, username
     }
-    console.log(loginData);
+
     let regData = {
         email: email + "test",
         password: password + "test",
@@ -56,15 +52,15 @@ describe("Auth Services", function (done) {
 
         }
     }
-    console.log('req', req);
-    before(async function () {
-        await sequelize.sync({ force: true });
-        let user = await User.create(regData);
-        user_id = user.id;
-        console.log(user_id);
-    })
+    // before(async function () {
+    //     await sequelize.sync({ force: true });
+    //     let user = await User.create(regData);
+    //     user_id = user.id;
+    //     console.log(user_id);
+    // })
     //Check for test UserID
     if (process.env.NODE_ENV === "development") {
+        console.log(process.env.NODE_ENV)
         user_id = 19
     } else {
         user_id = 1
@@ -72,7 +68,7 @@ describe("Auth Services", function (done) {
 
 
     console.log(token);
-    console.log(authServices);
+    console.log(user_id);
     console.log(test_user);
 
     describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', function (done) {
@@ -115,11 +111,10 @@ describe("Auth Services", function (done) {
 
     it('test auth.createSendToken', async function () {
         // call the function
-        console.log("here")
         let user = { id: 1 };
         let statusCode = null;
         let res = null;
-        let result = await authServices.createSendToken(user, statusCode, res);
+        let result = authServices.createSendToken(user, statusCode, res);
         result.should.be.a('object')
         result.should.have.property("cookieOptions")
         result.should.have.property("token")
@@ -127,25 +122,25 @@ describe("Auth Services", function (done) {
 
 
 
-    // it("should protect a route", async function () {
+    it("should protect a route", async function () {
 
-    //     authServices.protect(req)
-    //         .then(function (result) {
-    //             result.should.be.a('object')
-    //             result.should.have.property("headers")
-    //             result.headers.should.have.property("cookies")
-    //             result.should.have.property("user")
-    //             result.user.id.should.be.a("number")
-    //             result.user.id.should.equal(19)
+        authServices.protect(req)
+            .then(function (result) {
+                result.should.be.a('object')
+                result.should.have.property("headers")
+                result.headers.should.have.property("cookies")
+                result.should.have.property("user")
+                result.user.id.should.be.a("number")
+                result.user.id.should.equal(19)
 
-    //         })
-    //         .catch(async function (error) {
-    //             console.log(error);
-    //             done(error)
-    //         })
+            })
+            .catch(async function (error) {
+                console.log(error);
+                done(error)
+            })
 
 
-    // });
+    });
 
     it("should test route protection errors", async function () {
         req.headers.authorization = null
@@ -205,6 +200,7 @@ describe("Auth Services", function (done) {
                 done()
             })
             .catch(function (error) {
+                console.log("login error", error);
                 done(error)
             })
 
@@ -249,6 +245,7 @@ describe("Auth Services", function (done) {
                 done()
             })
             .catch(function (error) {
+                console.log(error)
                 done(error)
             })
     })
