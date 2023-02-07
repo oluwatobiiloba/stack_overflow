@@ -55,27 +55,27 @@ describe("Auth Services", (done) => {
         it('should have a function signToken', () => {
             console.log('signToken');
             expect(authServices.signToken).to.be.a('function');
-            done();
+
         });
         it('should have a function createSendToken', () => {
             console.log('createSendToken');
             expect(authServices.createSendToken).to.be.a('function');
-            done();
+
         });
         it('should have a function registerUser', () => {
             console.log('registerUser');
             expect(authServices.registerUser).to.be.a('function');
-            done();
+
         });
         it('should have a function signIn', () => {
             console.log('signIn');
             expect(authServices.signIn).to.be.a('function');
-            done();
+
         });
         it('should have a function protect', () => {
             console.log('protect');
             expect(authServices.protect).to.be.a('function');
-            done();
+
         });
     });
 
@@ -147,7 +147,7 @@ describe("Auth Services", (done) => {
         expect(data).to.be.an('object');
         expect(data).to.have.property('id');
         expect(data.id).to.equal(id);
-        done();
+
     })
 
     it("should login a user", () => {
@@ -211,7 +211,7 @@ describe("Auth Services", (done) => {
 
     after(() => {
         User.destroy({ where: { email: regData.email } })
-        done()
+
     })
 })
 
