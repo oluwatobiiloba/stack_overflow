@@ -1,12 +1,9 @@
-const { sequelize, User, Questions , Answers, Votes } = require('../models')
 const answersServices = require('../services/answerServices')
-const { promisify } = require('util');
-const jwt = require('jsonwebtoken')
 
-exports.createAnswer = async (req,res,next)=>{
-    
+exports.createAnswer = async (req, res) => {
+    let payload = req.body;
     try{
-        const data = await answersServices.createAnswer(req);
+        const data = await answersServices.createAnswer(payload);
         return res.status(201).json({
           status: 'success',
           message:  "Answer Created",
@@ -22,9 +19,11 @@ exports.createAnswer = async (req,res,next)=>{
   
 }
 
-exports.vote = async (req,res,next)=>{
+exports.vote = async (req, res) => {
+    let payload = req.body;
+    let user = req.user
     try{
-        const data = await answersServices.voteAnswer(req);
+        const data = await answersServices.voteAnswer(payload, user);
         return res.status(201).json({
           status: 'success',
           message: `Vote logged`,
@@ -42,7 +41,7 @@ exports.vote = async (req,res,next)=>{
     
 }
 
-exports.getAllAnswers = async (req,res,next) => {
+exports.getAllAnswers = async (res) => {
 
     try{
       const data = await answersServices.getAllAnswers();
@@ -61,7 +60,7 @@ exports.getAllAnswers = async (req,res,next) => {
     }
  }
 
- exports.getAnswerById = async (req,res,next) => {
+exports.getAnswerById = async (req, res) => {
     try{
         
         //uuid
@@ -84,11 +83,10 @@ exports.getAllAnswers = async (req,res,next) => {
     }
  }
 
- exports.getAnswerByUserIdandQuestionId = async (req,res,next) => {
-    
-    try{
-        //uuid
-        const data = await answersServices.getAnswerByUserIdandQuestionId(req);
+exports.getAnswerByUserIdandQuestionId = async (req, res) => {
+    let payload = req.body
+    try {
+        const data = await answersServices.getAnswerByUserIdandQuestionId(payload);
         return res.status(201).json({
             status: 'success',
             message: `${data.length} Answer(s) found`,

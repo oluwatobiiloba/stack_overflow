@@ -1,4 +1,4 @@
-const { Users , Answers ,Voters } = require('../models');
+const { Answers, Voters } = require('../models');
 
 
 module.exports = {

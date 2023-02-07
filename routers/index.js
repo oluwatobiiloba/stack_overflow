@@ -12,7 +12,7 @@ router.use("/answers",answersRouter);
 router.use("/comments",commentsRouter);
 router.use("/votes",voteRouter)
 
-router.all('*', (req, res, next) => {
+router.all('*', (req, res) => {
     res.status(400).json({
         status: 'fail',
         message: `Can't find ${req.originalUrl} on this server`

@@ -1,29 +1,11 @@
-const { sequelize, User, Roles} = require('../models')
-const bcrypt = require('bcryptjs')
+const { User } = require('../models')
 const authServices = require('../services/authServices')
-const { promisify } = require('util');
-const jwt = require('jsonwebtoken');
-// const createSendToken =(user, statusCode, res) => {
 
-//     const payload = authServices.createSendToken(user)
-//     console.log(payload.token)
-//     user.password = undefined
-//     res.cookie('jwt', payload.token, payload.cookieOptions)
-//     res.status(statusCode).json({
-//         status: 'success',
-//         payload,
-//         data: {
-//             user
-//         }
-//     });
-// }
-
-exports.signUp = async (req,res,next)=>{
-    const {username ,first_name,last_name,phonenumber,email,password,role} = req.body
-    
+exports.signUp = async (req, res) => {
+    let data = req.body
     try{
     
-        const newUser = await authServices.registerUser(req) 
+        const newUser = await authServices.registerUser(data) 
         //const token = createSendToken(newUser.newUser,201,res)
         return res.status(201).json({
         status: 'success',
@@ -40,7 +22,7 @@ exports.signUp = async (req,res,next)=>{
     }
 }
 
-exports.getAllUsers = async (req,res,next) => {
+exports.getAllUsers = async (_req, res) => {
 
    try{
     const users = await User.findAll({include: ['questions']})
@@ -57,10 +39,13 @@ exports.getAllUsers = async (req,res,next) => {
    }
 }
 
-exports.signIn = async (req,res,next) => {
-    try{
-        let payload = await authServices.signIn(req)
-        
+
+exports.signIn = async (req, res) => {
+    const data = req.body
+    try {
+        let payload = await authServices.signIn(data)
+
+
         const { token, cookieOptions } = payload.respObj.sendToken
         let user = payload.respObj
         res.cookie('jwt', token, cookieOptions)
@@ -73,6 +58,8 @@ exports.signIn = async (req,res,next) => {
                 }
             })
        }catch(err){
+        console.log(err)
+
 
         return res.status(401).json({
             status: 'failed',
@@ -84,7 +71,7 @@ exports.signIn = async (req,res,next) => {
        }
 }
 
-exports.signout = async(req,res,next) => {
+exports.signout = async (_req, res) => {
     res.cookie('jwt','loggedout',{
         expires: new Date(Date.now() + 10 + 1000),
         httpOnly:true

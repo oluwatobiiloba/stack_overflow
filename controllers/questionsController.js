@@ -1,12 +1,11 @@
-const { sequelize, User, Questions , } = require('../models')
 const questionServices = require('../services/questionServices')
 
-exports.createQuestion = async (req,res,next)=>{
-    const {question,userUuid} = req.body
-    
-    
+
+exports.createQuestion = async (req, res) => {
+    let payload = req.body;
+
     try {
-       const data = await questionServices.createQuestion(req)
+        const data = await questionServices.createQuestion(payload)
        return res.status(201).json({
         status: "Successful",
         message: `Question posted successfully`,
@@ -27,7 +26,7 @@ exports.createQuestion = async (req,res,next)=>{
     }
 }
 
-exports.getAllQuestions = async (req,res,next) => {
+exports.getAllQuestions = async (_req, res) => {
 
     try{
      const questions = await questionServices.getAllQuestions();
@@ -44,7 +43,7 @@ exports.getAllQuestions = async (req,res,next) => {
     }
  }
 
- exports.getQuestionById = async (req,res,next) => {
+exports.getQuestionById = async (req, res) => {
     try{
         const data = await questionServices.getQuestionById(req.params.id);
         if(!data){
@@ -68,10 +67,10 @@ exports.getAllQuestions = async (req,res,next) => {
     }
  }
 
- exports.getQuestionByUserId = async (req,res,next) => {
+exports.getQuestionByUserId = async (req, res) => {
     try{
         const data = await questionServices.getQuestionsByUser(req.params.id)
-        if(!data){
+        if (!data.questions) {
             return res.status(404).json({
                 status: 'failed',
                 message: "Sorry, this user apparently doesn't need help. No questions asked! 👀😬",
@@ -92,12 +91,12 @@ exports.getAllQuestions = async (req,res,next) => {
     }
  }
 
- exports.askAI = async(req,res,next) => {
-    const {question,userUuid} = req.body
+exports.askAI = async (req, res) => {
+    let payload = req.body
     
     try {
-       let data = await questionServices.askAI(req)
-       return res.status(201).json({
+        let data = await questionServices.askAI(payload)
+        return res.status(201).json({
         status: "Successful",
         message: `Question asked and answered successfully`,
         data:{

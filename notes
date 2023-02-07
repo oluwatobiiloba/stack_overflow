@@ -1,0 +1,2 @@
+HONEYBADGER_ENV=production node app.js
+travis encrypt SOMEVAR="secretvalue" --add

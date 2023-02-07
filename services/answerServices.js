@@ -1,16 +1,13 @@
-const { sequelize, User, Questions , Answers, Voters } = require('../models');
-const util = require('util')
-const redis = require('redis')
+const { sequelize, User, Questions, Answers, Voters } = require('../models');
 const redisClient = require('../util/redis_helper');
 const voteServices = require('./voteServices');
 //Answers Services(logic)
 
 module.exports = {
-    getAllAnswers: async function(){
+    async getAllAnswers() {
         let fields =   ["user",'question','comments','votes'];
         let isCached = false;
         let answers;
-        let cachedAnswers;
         let key = 'answers:all'
         
         await sequelize.transaction(async (t) => { 
@@ -40,10 +37,9 @@ module.exports = {
     return {answers,isCached}
 },
 
-    getAnswerById: async function(uuid){
+    async getAnswerById(uuid) {
         let fields = ["user",'question','comments','votes']
         let resobj = {}
-        let answer = {}
 
         await sequelize.transaction(async(t) => {
 
@@ -67,13 +63,12 @@ module.exports = {
                return resobj
     },
 
-    createAnswer: async function(query){
-       const { answer,userUuid,questionUuid} = query.body
+    async createAnswer(data) {
+        const { answer, userUuid, questionUuid } = data
        let fields =   ["user",'question','comments','votes'];
        let newAnswer = {}
        let newVote = {}
-       let user = {}
-       let question = {}
+        let user = {}
 
         await sequelize.transaction(async (t) => {
             Questions.findOne({where : {uuid:questionUuid}},{ transaction: t })
@@ -100,10 +95,9 @@ module.exports = {
 
     },
 
-    voteAnswer: async function(query){
-        const {answerUuid,upVote,downVote} = query.body
-        let { uuid , id } = query.user
-        let answer =  {}
+    async voteAnswer(data, user) {
+        const { answerUuid, upVote, downVote } = data
+        const { uuid, id } = user
         let vote = {}
         let cast
 
@@ -134,7 +128,8 @@ module.exports = {
                     }
                     if (upVote === true && downVote === true) {
                         throw new Error('You can only upvote or downvote at a time')
-                    }else{
+                    }
+                    if (typeof upVote !== 'boolean' && typeof downVote !== 'boolean') {
                         throw new Error('Please pass a valid vote')
                     }
                     savedVote = await vote.save()
@@ -156,8 +151,8 @@ module.exports = {
         return cast
     },
 
-    getAnswerByUserIdandQuestionId: async function(query){
-        const {userUuid,questionUuid} = query.body
+    async getAnswerByUserIdandQuestionId(data) {
+        const { userUuid, questionUuid } = data
 
         let question = {}
         let answer = {}
