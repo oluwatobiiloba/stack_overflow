@@ -95,7 +95,6 @@ describe("Auth Services", function (done) {
     it("should protect a route", function () {
         return authServices.protect(req)
             .then(function (result) {
-                console.log(result);
                 expect(result).to.be.an("object");
                 expect(result).to.have.property("headers");
                 expect(result.headers).to.have.property("cookies");
@@ -103,24 +102,8 @@ describe("Auth Services", function (done) {
                 expect(result.user.id).to.be.a("number");
             })
             .catch(error => {
-                console.log(error);
             });
     });
-    it("should test route protection errors", function () {
-        let test_user = { id: 100 }
-        let token = authServices.createSendToken(test_user)
-        req.headers.authorization = `Bearer ${token.token}`;
-        req.headers.cookies.jwt = token.token;
-
-        req.headers.authorization = null
-        return authServices.protect(req)
-            .catch(function (error) {
-                expect(error).to.be.an("error");
-                expect(error.message).to.equal("Not Authorized");
-                done(error)
-            })
-
-    });
 
     it("should test route protection errors", function () {
         req.headers.authorization = null
@@ -128,7 +111,7 @@ describe("Auth Services", function (done) {
             .catch(function (error) {
                 expect(error).to.be.an("error");
                 expect(error.message).to.equal("Not Authorized");
-                done(error)
+
             })
 
     });
@@ -141,6 +124,22 @@ describe("Auth Services", function (done) {
             expect(error.message).to.equal("Not Authorized");
         })
     });
+
+    it("should test route protection errors", function () {
+        test_user = { id: 100 }
+        token = authServices.createSendToken(test_user)
+        req.headers.authorization = `Bearer ${token.token}`;
+        req.headers.cookies.jwt = token.token;
+
+        return authServices.protect(req)
+            .catch(function (error) {
+                expect(error).to.be.an("error");
+                expect(error.message).to.equal("This user does not exist anymore");
+
+            })
+
+    });
+
 
     it("should signToken", function (done) {
         let id = "10"
