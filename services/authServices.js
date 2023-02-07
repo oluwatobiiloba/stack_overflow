@@ -1,27 +1,26 @@
 const { User } = require('../models')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
-
+const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 
 module.exports = {
-    signToken:function(id) {
-        signedToken = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
+    signToken(id) {
+        const signedToken = jwt.sign({ id }, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRES })
             return signedToken
     },
-    createSendToken: async function(user,statusCode,res){
+    createSendToken(user, _statusCode, _res) {
         const token = this.signToken(user.id)
 
         const cookieOptions = {
-            expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 60 * 1000),
+            expires: new Date(Date.now() + config.JWT_COOKIE_EXPIRES_IN * 60 * 1000),
             httpOnly:false
         }
         
-        payload = {cookieOptions,token}
+        const payload = { cookieOptions, token }
 
         return payload
     },
-    registerUser: async function (data) {
+    async registerUser(data) {
         const { username, first_name, last_name, phonenumber, email, password, role } = data
         const user = await User.create({
             username ,
@@ -52,7 +51,7 @@ module.exports = {
         payload = { respObj }
         return payload
     },
-    signIn: async function (data) {
+    async signIn(data) {
         const { username, password } = data
         let password_check 
         if (!username || !password) {
@@ -68,7 +67,7 @@ module.exports = {
         if (!user || !password_check) { 
             throw new Error('Incorrect username or password')
         }
-        let sendToken = await this.createSendToken(user)
+        let sendToken = this.createSendToken(user)
         let respObj = {
             id: user.id,
             uuid: user.uuid,
@@ -89,23 +88,36 @@ module.exports = {
         return payload
     },
 
-    protect: async function(req){
-
-        let token;
-        let decoded
+    async protect(req) {
+        let decoded = null;
+        let token = null;
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token = req.headers.authorization.split(' ')[1];
         } else if (req.headers.cookies.jwt) {
             token = req.headers.cookies.jwt
         }
         try {
-            decoded = jwt.verify(token, process.env.JWT_SECRET)
+            decoded = jwt.verify(token, config.JWT_SECRET)
         } catch (error) {
-            throw new Error('Not Authorized');
+            throw new Error('Not Authorized')
         }
-        const userExist = await User.findOne({ where: { id: decoded.id } }).catch((err) => { throw new Error('This user does not exist anymore') })
-
-        req.user = userExist
+        const userExist = await User.findOne({ where: { id: decoded.id } })
+        if (!userExist) {
+            throw new Error('This user does not exist anymore')
+        }
+        req.user = {
+            id: userExist.id,
+            username: userExist.username,
+            first_name: userExist.first_name,
+            last_name: userExist.last_name,
+            phonenumber: userExist.phonenumber,
+            email: userExist.email,
+            role: userExist.role,
+            stack: userExist.stack,
+            nationality: userExist.nationality,
+            age: userExist.age,
+            uuid: userExist.uuid
+        };
         return req
         
     }

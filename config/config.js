@@ -28,7 +28,7 @@ module.exports = {
   },
   test: {
     username: 'root',
-    password: "password",
+    password: 'password',
     database: 'database_test',
     host: '127.0.0.1',
     dialect: 'mysql',
@@ -51,6 +51,30 @@ module.exports = {
     DD_SITE: process.env.DD_SITE,
     NODE_OPTIONS: process.env.NODE_OPTIONS,
   },
+  test_github_actions: {
+    username: 'root',
+    password: 'password',
+    database: 'database_test',
+    host: '127.0.0.1',
+    dialect: 'mysql',
+    port: 8888,
+    JWT_SECRET: process.env.JWT_SECRET,
+    JWT_EXPIRES: process.env.JWT_EXPIRES,
+    JWT_COOKIE_EXPIRES_IN: process.env.JWT_COOKIE_EXPIRES_IN,
+    BCRYPT_STRING: process.env.BCRYPT_STRING,
+    AI_KEY: process.env.AI_KEY,
+    AI_ORG: process.env.AI_ORG,
+    AI_UUID: process.env.AI_UUID,
+    app_port: 3000,
+    HONEYBADGER_KEY: process.env.HONEYBADGER_KEY,
+    CODECOV_TOKEN: process.env.CODECOV_TOKEN,
+    SENTRY_URL: process.env.SENTRY_URL,
+    DD_CIVISIBILITY_AGENTLESS_ENABLED:
+      process.env.DD_CIVISIBILITY_AGENTLESS_ENABLED,
+    DD_API_KEY: process.env.DD_API_KEY,
+    DD_SITE: process.env.DD_SITE
+  },
+
   production: {
     username: 'root',
     password: null,

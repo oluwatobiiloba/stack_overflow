@@ -5,9 +5,8 @@
   "scripts": {
     "start": "node -r newrelic app.js",
     "dev_start": "nodemon app.js",
-    "test": "nyc mocha test/services --reporter spec --timeout 60000 --exit",
-    "coverage": "nyc report --reporter=text-lcov | coveralls curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov -t ${CODECOV_TOKEN} -r codecov/stack_overflow",
-    "coverage_local": " "
+    "test": "nyc mocha test/services/*.js --timeout 60000 --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov -t ${CODECOV_TOKEN} -r codecov/stack_overflow"
   },
   "author": "oluwatobiiloba",
   "license": "ISC",
@@ -31,6 +30,7 @@
   },
   "devDependencies": {
     "@datadog/datadog-ci": "^2.4.0",
+    "babel-root-slash-import": "^1.1.0",
     "chai": "^4.3.7",
     "coveralls": "^3.1.1",
     "dd-trace": "^3.13.1",
