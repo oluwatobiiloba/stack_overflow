@@ -28,11 +28,10 @@ describe("Auth Services", function (done) {
         phonenumber: phonenumber + "1"
 
     }
-    let test_user = { id: 19 }
+    let test_user = { id: 1 }
     let token = authServices.createSendToken(test_user)
     let req = {
         headers: {
-
             authorization: `Bearer ${token.token}`,
             'content-type': 'application/json',
             'user-agent': 'PostmanRuntime/7.30.0',
@@ -106,6 +105,21 @@ describe("Auth Services", function (done) {
             .catch(error => {
                 console.log(error);
             });
+    });
+    it("should test route protection errors", function () {
+        let test_user = { id: 100 }
+        let token = authServices.createSendToken(test_user)
+        req.headers.authorization = `Bearer ${token.token}`;
+        req.headers.cookies.jwt = token.token;
+
+        req.headers.authorization = null
+        return authServices.protect(req)
+            .catch(function (error) {
+                expect(error).to.be.an("error");
+                expect(error.message).to.equal("Not Authorized");
+                done(error)
+            })
+
     });
 
     it("should test route protection errors", function () {

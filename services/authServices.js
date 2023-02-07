@@ -103,9 +103,23 @@ module.exports = {
         } catch (error) {
             throw new Error('Not Authorized');
         }
-        const userExist = await User.findOne({ where: { id: decoded.id } }).catch((err) => { throw new Error('This user does not exist anymore') })
-
-        req.user = userExist
+        const userExist = await User.findOne({ where: { id: decoded.id } })
+        if (!userExist) {
+            throw new Error('This user does not exist anymore')
+        }
+        req.user = {
+            id: userExist.id,
+            username: userExist.username,
+            first_name: userExist.first_name,
+            last_name: userExist.last_name,
+            phonenumber: userExist.phonenumber,
+            email: userExist.email,
+            role: userExist.role,
+            stack: userExist.stack,
+            nationality: userExist.nationality,
+            age: userExist.age,
+            uuid: userExist.uuid
+        };
         return req
         
     }
