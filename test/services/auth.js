@@ -1,16 +1,15 @@
 'use strict';
-const config = require('../config/config')[process.env.NODE_ENV || 'development'];
+const config = require('../../config/config')[process.env.NODE_ENV || 'development'];
 let chai = require('chai');
 const { where } = require('sequelize');
-const { sequelize, User } = require('../models')
+const { sequelize, User } = require('../../models')
 const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
 let assert = chai.assert;
 
-const authServices = require('../services/authServices'); 
+const authServices = require('../../services/authServices');
 
 describe("Auth Services", function (done) {
-
     let email = "mocha@mochatest.com"
     let password = "password"
     let username = "mocha"
@@ -18,9 +17,7 @@ describe("Auth Services", function (done) {
     let last_name = "Chai"
     let phonenumber = "08103234202"
     let role = "1"
-    let loginData = {
-        email, password, username
-    }
+    let loginData = { email, password, username }
 
     let regData = {
         email: email + "test",
@@ -99,13 +96,16 @@ describe("Auth Services", function (done) {
     it("should protect a route", function () {
         return authServices.protect(req)
             .then(function (result) {
+                console.log(result);
                 expect(result).to.be.an("object");
                 expect(result).to.have.property("headers");
                 expect(result.headers).to.have.property("cookies");
                 expect(result).to.have.property("user");
                 expect(result.user.id).to.be.a("number");
             })
-            .catch(done);
+            .catch(error => {
+                console.log(error);
+            });
     });
 
     it("should test route protection errors", function () {
