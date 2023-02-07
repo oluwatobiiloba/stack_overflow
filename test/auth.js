@@ -18,7 +18,6 @@ describe("Auth Services", function (done) {
     let last_name = "Chai"
     let phonenumber = "08103234202"
     let role = "1"
-    let user_id
     let loginData = {
         email, password, username
     }
@@ -53,18 +52,8 @@ describe("Auth Services", function (done) {
 
         }
     }
-    // before(async function () {
-    //     await sequelize.sync({ force: true });
-    //     let user = await User.create(regData);
-    //     user_id = user.id;
-    //     console.log(user_id);
-    // })
-    //Check for test UserID
-    if (process.env.NODE_ENV === "development") {
-        user_id = 19
-    } else {
-        user_id = 1
-    }
+    let user_id = process.env.NODE_ENV === "development" ? 19 : 1
+
 
     describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', function (done) {
         it('should have a function signToken', function (done) {
@@ -94,87 +83,63 @@ describe("Auth Services", function (done) {
         });
     });
 
-    it("should have functions (signToken,createSendToken,registerUser,signIn,protect)", async function (done) {
-        authServices.should.have.property("createSendToken")
-        authServices.should.have.property("signToken")
-        authServices.should.have.property("registerUser")
-        authServices.should.have.property("signIn")
-        authServices.should.have.property("protect")
-        done()
-    })
-
-    it('test auth.createSendToken', async function () {
+    it('test auth.createSendToken', function () {
         // call the function
         let user = { id: 1 };
         let statusCode = null;
         let res = null;
-        let result = authServices.createSendToken(user, statusCode, res);
-        result.should.be.a('object')
-        result.should.have.property("cookieOptions")
-        result.should.have.property("token")
+        let sendToken = authServices.createSendToken(user, statusCode, res);
+        // check the result
+        expect(sendToken).to.be.an('object');
+        expect(sendToken).to.have.property('token');
+        expect(sendToken).to.have.property('cookieOptions');
+
     })
 
-
-
-    it("should protect a route", async function () {
-
-        authServices.protect(req)
+    it("should protect a route", function () {
+        return authServices.protect(req)
             .then(function (result) {
-                result.should.be.a('object')
-                result.should.have.property("headers")
-                result.headers.should.have.property("cookies")
-                result.should.have.property("user")
-                result.user.id.should.be.a("number")
-                result.user.id.should.equal(19)
-
+                expect(result).to.be.an("object");
+                expect(result).to.have.property("headers");
+                expect(result.headers).to.have.property("cookies");
+                expect(result).to.have.property("user");
+                expect(result.user.id).to.be.a("number");
             })
-            .catch(async function (error) {
-                console.log(error);
-                done(error)
-            })
-
-
+            .catch(done);
     });
 
-    it("should test route protection errors", async function () {
+    it("should test route protection errors", function () {
         req.headers.authorization = null
-        authServices.protect(req)
-            .catch(async function (error) {
-                
+        return authServices.protect(req)
+            .catch(function (error) {
+                expect(error).to.be.an("error");
+                expect(error.message).to.equal("Not Authorized");
                 done(error)
             })
 
     });
 
-    it("should test route protection errors", async function () {
+    it("should test route protection errors", function () {
         req.headers.cookies.jwt = null;
         req.headers.authorization = null;
-        authServices.protect(req)
-            .catch(async function (error) {
-                console.log(error)
-                
-                done(error)
-            })
-
+        return authServices.protect(req).catch(function (error) {
+            expect(error).to.be.an("error");
+            expect(error.message).to.equal("Not Authorized");
+        })
     });
-
 
     it("should signToken", function (done) {
         let id = "10"
         let result = authServices.signToken(id)
-        let verif = jwt.verify(result, config.JWT_SECRET)
-        verif.should.be.a('object')
-        verif.should.have.property('id')
-        verif.should.have.property('iat')
-        verif.should.have.property('exp')
-        verif.id.should.be.equal(id)
-        done()
+        let data = jwt.verify(result, config.JWT_SECRET)
+        expect(data).to.be.an('object');
+        expect(data).to.have.property('id');
+        expect(data.id).to.equal(id);
+        done();
     })
 
-
-
-    it("should login a user", function (done) {
-        authServices.signIn(loginData)
+    it("should login a user", function () {
+        return authServices.signIn(loginData)
             .then(function (result) {
                 result.should.be.a('object')
                 result.respObj.id.should.equal(user_id)
@@ -188,10 +153,8 @@ describe("Auth Services", function (done) {
                 result.respObj.sendToken.should.be.a("object")
                 result.respObj.sendToken.should.have.property("cookieOptions")
                 result.respObj.sendToken.should.have.property("token")
-                done()
             })
             .catch(function (error) {
-                console.log("login error", error);
                 done(error)
             })
 
@@ -212,12 +175,10 @@ describe("Auth Services", function (done) {
         loginData.username = username + "test"
         authServices.signIn(loginData)
             .then(function (payload) {
-
                 assert.equal(payload, 1);
             })
             .catch(err => {
                 assert.equal(err.message, "Incorrect username or password");
-
             })
     })
 
@@ -234,9 +195,7 @@ describe("Auth Services", function (done) {
                 result.respObj.last_name.should.equal(regData.last_name)
                 result.respObj.should.have.property("token")
                 done()
-            })
-            .catch(function (error) {
-                console.log(error)
+            }).catch(function (error) {
                 done(error)
             })
     })
@@ -245,7 +204,5 @@ describe("Auth Services", function (done) {
         User.destroy({ where: { email: regData.email } })
         done()
     })
-
-
 })
 
