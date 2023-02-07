@@ -79,6 +79,7 @@ describe("Auth Services", (done) => {
         });
     });
 
+
     it('test auth.createSendToken', () => {
         const user = { id: 1 };
         const statusCode = null;
@@ -98,6 +99,7 @@ describe("Auth Services", (done) => {
                 expect(result.headers).to.have.property("cookies");
                 expect(result).to.have.property("user");
                 expect(result.user.id).to.be.a("number");
+
             })
             .catch(error => {
                 console.log(error)
@@ -123,6 +125,7 @@ describe("Auth Services", (done) => {
             expect(error.message).to.equal("Not Authorized");
         })
     });
+
 
     it("should test route protection errors", () => {
         test_user = { id: 100 }
@@ -183,7 +186,9 @@ describe("Auth Services", (done) => {
     it('test Invalid username Error ', () => {
         loginData.username = username + "test"
         authServices.signIn(loginData)
+
             .then((payload) => {
+
                 assert.equal(payload, 1);
             })
             .catch(err => {

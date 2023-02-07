@@ -1,7 +1,9 @@
 const questionServices = require('../services/questionServices')
 
+
 exports.createQuestion = async (req, res) => {
     let payload = req.body;
+
     try {
         const data = await questionServices.createQuestion(payload)
        return res.status(201).json({

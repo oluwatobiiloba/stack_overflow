@@ -39,10 +39,12 @@ exports.getAllUsers = async (_req, res) => {
    }
 }
 
+
 exports.signIn = async (req, res) => {
     const data = req.body
     try {
         let payload = await authServices.signIn(data)
+
 
         const { token, cookieOptions } = payload.respObj.sendToken
         let user = payload.respObj

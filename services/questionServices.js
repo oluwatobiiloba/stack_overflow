@@ -151,6 +151,7 @@ const answerServices = require('./answerServices')
             return question
         },
 
+
      getQuestionsByUser: async function (userId) {
          let data = {}
          const user = await User.findAll({ where: { uuid: userId } });
@@ -165,6 +166,7 @@ const answerServices = require('./answerServices')
          data.questions = question;
          data.user = user;
          return data
+
         }
 
         
