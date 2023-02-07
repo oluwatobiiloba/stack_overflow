@@ -51,7 +51,7 @@ describe("Auth Services", (done) => {
     const user_id = process.env.NODE_ENV === "development" ? 19 : 1
 
 
-    describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', (done) => {
+    describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', () => {
         it('should have a function signToken', () => {
             console.log('signToken');
             expect(authServices.signToken).to.be.a('function');
@@ -80,9 +80,9 @@ describe("Auth Services", (done) => {
     });
 
     it('test auth.createSendToken', () => {
-        let user = { id: 1 };
-        let statusCode = null;
-        let res = null;
+        const user = { id: 1 };
+        const statusCode = null;
+        const res = null;
         const sendToken = authServices.createSendToken(user, statusCode, res);
         expect(sendToken).to.be.an('object');
         expect(sendToken).to.have.property('token');
