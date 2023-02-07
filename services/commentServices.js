@@ -2,7 +2,7 @@ const { Answers, User, Comments } = require('../models');
 const logger = require('../util/logger');
 
 module.exports ={
-    getAllComments: async function(){
+    async getAllComments(){
         let fields = ["user","answers"]
       
         const comment = await Comments.findAll({include:fields}).catch(
