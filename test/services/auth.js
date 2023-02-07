@@ -9,7 +9,7 @@ let assert = chai.assert;
 
 const authServices = require('../../services/authServices');
 
-describe("Auth Services", function (done) {
+describe("Auth Services", (done) => {
     let email = "mocha@mochatest.com"
     let password = "password"
     let username = "mocha"
@@ -17,7 +17,7 @@ describe("Auth Services", function (done) {
     let last_name = "Chai"
     let phonenumber = "08103234202"
     let role = "1"
-    let loginData = { email, password, username }
+    const loginData = { email, password, username }
 
     let regData = {
         email: email + "test",
@@ -30,7 +30,7 @@ describe("Auth Services", function (done) {
     }
     let test_user = { id: 1 }
     let token = authServices.createSendToken(test_user)
-    let req = {
+    const req = {
         headers: {
             authorization: `Bearer ${token.token}`,
             'content-type': 'application/json',
@@ -48,53 +48,51 @@ describe("Auth Services", function (done) {
 
         }
     }
-    let user_id = process.env.NODE_ENV === "development" ? 19 : 1
+    const user_id = process.env.NODE_ENV === "development" ? 19 : 1
 
 
-    describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', function (done) {
-        it('should have a function signToken', function (done) {
+    describe('should have functions (signToken,createSendToken,registerUser,signIn,protect)', (done) => {
+        it('should have a function signToken', () => {
             console.log('signToken');
             expect(authServices.signToken).to.be.a('function');
             done();
         });
-        it('should have a function createSendToken', function (done) {
+        it('should have a function createSendToken', () => {
             console.log('createSendToken');
             expect(authServices.createSendToken).to.be.a('function');
             done();
         });
-        it('should have a function registerUser', function (done) {
+        it('should have a function registerUser', () => {
             console.log('registerUser');
             expect(authServices.registerUser).to.be.a('function');
             done();
         });
-        it('should have a function signIn', function (done) {
+        it('should have a function signIn', () => {
             console.log('signIn');
             expect(authServices.signIn).to.be.a('function');
             done();
         });
-        it('should have a function protect', function (done) {
+        it('should have a function protect', () => {
             console.log('protect');
             expect(authServices.protect).to.be.a('function');
             done();
         });
     });
 
-    it('test auth.createSendToken', function () {
-        // call the function
+    it('test auth.createSendToken', () => {
         let user = { id: 1 };
         let statusCode = null;
         let res = null;
-        let sendToken = authServices.createSendToken(user, statusCode, res);
-        // check the result
+        const sendToken = authServices.createSendToken(user, statusCode, res);
         expect(sendToken).to.be.an('object');
         expect(sendToken).to.have.property('token');
         expect(sendToken).to.have.property('cookieOptions');
 
     })
 
-    it("should protect a route", function () {
+    it("should protect a route", () => {
         return authServices.protect(req)
-            .then(function (result) {
+            .then((result) => {
                 expect(result).to.be.an("object");
                 expect(result).to.have.property("headers");
                 expect(result.headers).to.have.property("cookies");
@@ -102,13 +100,14 @@ describe("Auth Services", function (done) {
                 expect(result.user.id).to.be.a("number");
             })
             .catch(error => {
+                console.log(error)
             });
     });
 
-    it("should test route protection errors", function () {
+    it("should test route protection errors", () => {
         req.headers.authorization = null
         return authServices.protect(req)
-            .catch(function (error) {
+            .catch((error) => {
                 expect(error).to.be.an("error");
                 expect(error.message).to.equal("Not Authorized");
 
@@ -116,23 +115,23 @@ describe("Auth Services", function (done) {
 
     });
 
-    it("should test route protection errors", function () {
+    it("should test route protection errors", () => {
         req.headers.cookies.jwt = null;
         req.headers.authorization = null;
-        return authServices.protect(req).catch(function (error) {
+        return authServices.protect(req).catch((error) => {
             expect(error).to.be.an("error");
             expect(error.message).to.equal("Not Authorized");
         })
     });
 
-    it("should test route protection errors", function () {
+    it("should test route protection errors", () => {
         test_user = { id: 100 }
         token = authServices.createSendToken(test_user)
         req.headers.authorization = `Bearer ${token.token}`;
         req.headers.cookies.jwt = token.token;
 
         return authServices.protect(req)
-            .catch(function (error) {
+            .catch((error) => {
                 expect(error).to.be.an("error");
                 expect(error.message).to.equal("This user does not exist anymore");
 
@@ -141,19 +140,19 @@ describe("Auth Services", function (done) {
     });
 
 
-    it("should signToken", function (done) {
+    it("should signToken", () => {
         let id = "10"
         let result = authServices.signToken(id)
-        let data = jwt.verify(result, config.JWT_SECRET)
+        const data = jwt.verify(result, config.JWT_SECRET)
         expect(data).to.be.an('object');
         expect(data).to.have.property('id');
         expect(data.id).to.equal(id);
         done();
     })
 
-    it("should login a user", function () {
+    it("should login a user", () => {
         return authServices.signIn(loginData)
-            .then(function (result) {
+            .then((result) => {
                 result.should.be.a('object')
                 result.respObj.id.should.equal(user_id)
                 result.respObj.should.have.property("email")
@@ -167,27 +166,24 @@ describe("Auth Services", function (done) {
                 result.respObj.sendToken.should.have.property("cookieOptions")
                 result.respObj.sendToken.should.have.property("token")
             })
-            .catch(function (error) {
+            .catch((error) => {
                 done(error)
             })
 
     })
 
-    it('test No username or password', function () {
+    it('test No username or password', () => {
         delete loginData.username
-        authServices.signIn(loginData)
-            .then(function (payload) {
-            })
-            .catch(err => {
+        authServices.signIn(loginData).catch(err => {
                 assert.equal(err.message, 'Please provide username and password');
             })
 
     })
 
-    it('test Invalid username Error ', function () {
+    it('test Invalid username Error ', () => {
         loginData.username = username + "test"
         authServices.signIn(loginData)
-            .then(function (payload) {
+            .then((payload) => {
                 assert.equal(payload, 1);
             })
             .catch(err => {
@@ -195,10 +191,10 @@ describe("Auth Services", function (done) {
             })
     })
 
-    it("should register a user", function (done) {
+    it("should register a user", () => {
         let query = regData
         authServices.registerUser(query)
-            .then(function (result) {
+            .then((result) => {
                 result.should.be.a('object')
                 result.respObj.should.have.property("email")
                 result.respObj.email.should.equal(regData.email)
@@ -208,12 +204,12 @@ describe("Auth Services", function (done) {
                 result.respObj.last_name.should.equal(regData.last_name)
                 result.respObj.should.have.property("token")
                 done()
-            }).catch(function (error) {
+            }).catch((error) => {
                 done(error)
             })
     })
 
-    after(function (done) {
+    after(() => {
         User.destroy({ where: { email: regData.email } })
         done()
     })

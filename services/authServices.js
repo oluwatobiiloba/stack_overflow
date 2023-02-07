@@ -4,12 +4,11 @@ const bcrypt = require('bcryptjs');
 const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 
 module.exports = {
-    signToken: function (id) {
-        console.log("function", config.JWT_SECRET)
-        let signedToken = jwt.sign({ id }, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRES })
+    signToken(id) {
+        const signedToken = jwt.sign({ id }, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRES })
             return signedToken
     },
-    createSendToken: function (user, statusCode, res) {
+    createSendToken(user, _statusCode, _res) {
         const token = this.signToken(user.id)
 
         const cookieOptions = {
@@ -17,11 +16,11 @@ module.exports = {
             httpOnly:false
         }
         
-        let payload = { cookieOptions, token }
+        const payload = { cookieOptions, token }
 
         return payload
     },
-    registerUser: async function (data) {
+    async registerUser(data) {
         const { username, first_name, last_name, phonenumber, email, password, role } = data
         const user = await User.create({
             username ,
@@ -52,7 +51,7 @@ module.exports = {
         payload = { respObj }
         return payload
     },
-    signIn: async function (data) {
+    async signIn(data) {
         const { username, password } = data
         let password_check 
         if (!username || !password) {
@@ -89,10 +88,9 @@ module.exports = {
         return payload
     },
 
-    protect: async function(req){
-
-        let token;
+    async protect(req) {
         let decoded
+        let token;
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token = req.headers.authorization.split(' ')[1];
         } else if (req.headers.cookies.jwt) {
@@ -101,7 +99,7 @@ module.exports = {
         try {
             decoded = jwt.verify(token, config.JWT_SECRET)
         } catch (error) {
-            throw new Error('Not Authorized');
+            throw new Error('Not Authorized')
         }
         const userExist = await User.findOne({ where: { id: decoded.id } })
         if (!userExist) {
