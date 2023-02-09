@@ -41,6 +41,7 @@ const db_init = async function main() {
 }
 
 
+//Initialize redis
 const redis_init = async () => {
   redisClient.on('error', err => console.error('Redis Client Error', err))
   await redisClient.connect().then(
