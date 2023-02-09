@@ -7,27 +7,10 @@ const aiClient = require('./util/ai_helper')
 const redisClient = require('./util/redis_helper')
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/config/config.js')[env];
-const Honeybadger = require('@honeybadger-io/js');
+const Honeybadger = require('./util/logger');
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 const { ProfilingIntegration } = require("@sentry/profiling-node")
-
-let db_init;
-let logger;
-let redis_init;
-let ai_init;
-
-
-app.use(express.json())
-
-const port = config.app_port;
-
-db_init = async function main(){
-   //await sequelize.sync({ alter: true })
-    await sequelize.authenticate()
-    console.log("table initialized")
-}
-
 
 Sentry.init({
   dsn: process.env.SENTRY_URL,
@@ -42,13 +25,22 @@ Sentry.init({
   tracesSampleRate: 1.0,
 })
 
+//Sentry Monitoring
+const transaction = Sentry.startTransaction({
+  op: "App.js",
+  name: "Server Initialization",
+});
 
+let db_init;
+let redis_init;
+let ai_init;
 
-logger = function main() {
-  Honeybadger.configure({
-    apiKey: process.env.HONEYBADGER_API_KEY,
-  });
-  console.log("Honey badger Configured")
+const port = config.app_port;
+
+db_init = async function main() {
+  //await sequelize.sync({ alter: true })
+  await sequelize.authenticate()
+  console.log("table initialized")
 }
 
 
@@ -74,27 +66,31 @@ redis_init = async ()=>{
     }
   }
 
-
+app.use(Honeybadger.requestHandler)
+app.use(express.json())
 app.use('/api/v1/', index);
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 app.use(Sentry.Handlers.errorHandler());
 
+
+
 app.get('/',(req,res)=>{
     return res.status(200).json({
-      message: 'stackoverflow_lite API',
+      message: 'stack_lite API',
     })
   })
-
+app.use(Honeybadger.errorHandler)
 
 
 app.listen(port, ()=>{
-  db_init(),
-    redis_init(),
-    ai_init(),
-    logger()
+  db_init();
+  redis_init();
+  ai_init();
   console.log(`server started on port: ${port}`);
 })
+
+transaction.finish();
 
 
 
