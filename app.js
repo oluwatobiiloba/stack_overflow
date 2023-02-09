@@ -31,20 +31,17 @@ const transaction = Sentry.startTransaction({
   name: "Server Initialization",
 });
 
-let db_init;
-let redis_init;
-let ai_init;
 
 const port = config.app_port;
 
-db_init = async function main() {
+const db_init = async function main() {
   //await sequelize.sync({ alter: true })
   await sequelize.authenticate()
   console.log("table initialized")
 }
 
 
-redis_init = async ()=>{
+const redis_init = async () => {
   redisClient.on('error', err => console.error('Redis Client Error', err))
   await redisClient.connect().then(
     console.log('Redis server connected')
@@ -56,7 +53,7 @@ redis_init = async ()=>{
 }
 //INITIALIZE OPEN AI
 
-  ai_init = async () => {
+const ai_init = async () => {
 
     const response = await aiClient.listEngines()
     if(response.status === 200){
