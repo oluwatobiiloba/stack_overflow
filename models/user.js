@@ -104,8 +104,13 @@ module.exports = (sequelize, DataTypes) => {
     stack: DataTypes.STRING,
     age: DataTypes.STRING,
     nationality: DataTypes.STRING
-  }, {
-    sequelize,
+    }, {
+      defaultScope: {
+        attributes: {
+          exclude: ['password']
+        }
+      },
+      sequelize,
     tableName:'users',
     modelName: 'User',
   });

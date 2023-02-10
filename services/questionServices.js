@@ -138,13 +138,9 @@ const answerServices = require('./answerServices')
         },
 
         getQuestionById: async function(uuid){
-            let fields = ["user",'answers'];
+            const fields = ['user', 'answers'];
+            const question = await Questions.findOne({ where: { uuid: uuid }, include: fields })
 
-            const question = await Questions.findOne({where:{uuid:uuid}, include:fields})
-                .catch(err=> {
-                    
-                throw err
-                });
             if(!question){
                     throw new Error('No qestions found 😔😔, nobody seems to need help')
             }
@@ -152,20 +148,13 @@ const answerServices = require('./answerServices')
         },
 
 
-     async getQuestionsByUser(userId) {
-         let data = {}
-         const user = await User.findAll({ where: { uuid: userId } });
-         if (!user) {
-             throw new Error("No user with that Id")
-         }
-
-         const question = await Questions.findAll({ where: { userId: user.id } })
+     async getQuestionsByUser(id) {
+         const question = await Questions.findAll({ where: { userId: id }, include: ['user'] })
          if (!question) {
              throw new Error("This user has no questions")
          }
-         data.questions = question;
-         data.user = user;
-         return data
+
+         return question
 
         }
 

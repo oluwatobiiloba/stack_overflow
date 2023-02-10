@@ -44,8 +44,6 @@ exports.signIn = async (req, res) => {
     const data = req.body
     try {
         let payload = await authServices.signIn(data)
-
-
         const { token, cookieOptions } = payload.respObj.sendToken
         let user = payload.respObj
         res.cookie('jwt', token, cookieOptions)
@@ -80,20 +78,4 @@ exports.signout = async (_req, res) => {
         status: 'success',
         message: "Bye!"})
 }
-
-exports.protect = async(req,res,next) => {
-    try{req.user = await authServices.protect(req)
-    }catch(err){
-        console.log(err)
-        return res.status(401).json({
-            status: 'failed',
-            message: "Sorry, You need to be logged in",
-            data: {
-               message: err.message
-            }
-            })
-    }
-    next()
-}
-
 

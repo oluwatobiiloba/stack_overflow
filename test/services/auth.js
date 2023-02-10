@@ -41,11 +41,7 @@ describe("Auth Services", (done) => {
             'accept-encoding': 'gzip, deflate, br',
             connection: 'keep-alive',
             'content-length': '118',
-            cookies: {
-                jwt: token.token,
-                cookieOptions: token.cookieOptions,
-            }
-
+            cookie: `jwt=${token.token}`
         }
     }
     const user_id = process.env.NODE_ENV === "development" ? 19 : 1
@@ -118,7 +114,7 @@ describe("Auth Services", (done) => {
     });
 
     it("should test route protection errors", () => {
-        req.headers.cookies.jwt = null;
+        req.headers.cookie = null;
         req.headers.authorization = null;
         return authServices.protect(req).catch((error) => {
             expect(error).to.be.an("error");
@@ -131,7 +127,7 @@ describe("Auth Services", (done) => {
         test_user = { id: 100 }
         token = authServices.createSendToken(test_user)
         req.headers.authorization = `Bearer ${token.token}`;
-        req.headers.cookies.jwt = token.token;
+        req.headers.cookie = `jwt=${token.token}`;
 
         return authServices.protect(req)
             .catch((error) => {
@@ -166,7 +162,7 @@ describe("Auth Services", (done) => {
                 result.respObj.last_name.should.equal(last_name)
                 result.respObj.should.have.property("sendToken")
                 result.respObj.sendToken.should.be.a("object")
-                result.respObj.sendToken.should.have.property("cookieOptions")
+                result.respObj.sendToken.should.have.property("cookieptions")
                 result.respObj.sendToken.should.have.property("token")
             })
             .catch((error) => {

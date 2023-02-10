@@ -2,35 +2,21 @@ const { Answers, Voters } = require('../models');
 
 
 module.exports = {
-    getVotes: async function(){
-        const votes = Voters.findAll().catch(
-            err => {
-                throw new Error("No votes available")
-            })
+    async getVotes() {
+        const votes = Voters.findAll()
+        if (!votes) {
+            throw new Error('No Votes Found')
+        }
         return votes
     },
 
-    getVotesByAnswer: async function(uuid, answer = null, votes = null ){
+    async getVotesByAnswer(uuid, answer = null, votes = null) {
         if(!answer){ answer = await Answers.findOne({where: {uuid}})}
-        votes = await Voters.findAll({where: {answerid:answer.id}})
-        // const {upvotes , downvotes} = votes
-        // console.log(votes[2].dataValues)
-        // console.log(upvotes)
-        let upvotes = []
-        let downvotes = []
-        let voters = []
-        votes.forEach(function(vote){
-            upvotes.push([vote.dataValues.upvotes,vote.dataValues.userId])
-            downvotes.push([vote.dataValues.downvotes,vote.dataValues.userId])
-            voters.push(vote.dataValues.userId)
-        })
-        upvotes = upvotes.filter(function(vote){
-            return vote[0] ;
-        })
-        downvotes = downvotes.filter(function(vote){
-            return vote[0];
-        })
-       
+        if (!votes) { votes = await Voters.findAll({ where: { answerid: answer.id } }) }
+        let upvotes = votes.filter(vote => vote.upvotes).map(vote => [vote.upvotes, vote.userId]);
+        let downvotes = votes.filter(vote => vote.downvotes).map(vote => [vote.downvotes, vote.userId]);
+        let voters = votes.map(vote => vote.userId);
+
         const payload = {
             Upvotes:upvotes.length,
             Downvotes: downvotes.length,
@@ -43,4 +29,5 @@ module.exports = {
         }
         return payload
     }
+
 }

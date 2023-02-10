@@ -58,7 +58,7 @@ module.exports = {
             throw new Error('Please provide username and password');
         }
         
-        let user = await User.findOne({ where: { username } })
+        let user = await User.unscoped().findOne({ where: { username } })
 
         if (user) {
             password_check = await bcrypt.compare(password, user.password)
@@ -88,14 +88,8 @@ module.exports = {
         return payload
     },
 
-    async protect(req) {
+    async protect(token) {
         let decoded = null;
-        let token = null;
-        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-            token = req.headers.authorization.split(' ')[1];
-        } else if (req.headers.cookies.jwt) {
-            token = req.headers.cookies.jwt
-        }
         try {
             decoded = jwt.verify(token, config.JWT_SECRET)
         } catch (error) {
@@ -105,21 +99,7 @@ module.exports = {
         if (!userExist) {
             throw new Error('This user does not exist anymore')
         }
-        req.user = {
-            id: userExist.id,
-            username: userExist.username,
-            first_name: userExist.first_name,
-            last_name: userExist.last_name,
-            phonenumber: userExist.phonenumber,
-            email: userExist.email,
-            role: userExist.role,
-            stack: userExist.stack,
-            nationality: userExist.nationality,
-            age: userExist.age,
-            uuid: userExist.uuid
-        };
-        return req
-        
+        return userExist
     }
 
 

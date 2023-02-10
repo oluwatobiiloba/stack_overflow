@@ -2,6 +2,7 @@ const answersController = require('../controllers/answersController');
 const express = require('express');
 const userControllers = require('../controllers/userControllers')
 const router = express.Router();
+const middleware = require('../middleware')
 
 router
     .route('/answer')
@@ -12,7 +13,7 @@ router
     .get(answersController.getAllAnswers)
 
 router
-    .use(userControllers.protect)
+    .use(middleware.auth)
     .route('/getAnswerByUseridandQuestionId')
     .get(answersController.getAnswerByUserIdandQuestionId)
     
@@ -22,7 +23,7 @@ router
     .get(answersController.getAnswerById)
     
 router
-    .use(userControllers.protect)
+    .use(middleware.auth)
     .route('/vote')
     .put(answersController.vote)
     

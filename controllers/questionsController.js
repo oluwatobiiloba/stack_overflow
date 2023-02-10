@@ -46,6 +46,7 @@ exports.getAllQuestions = async (_req, res) => {
 exports.getQuestionById = async (req, res) => {
     try{
         const data = await questionServices.getQuestionById(req.params.id);
+
         if(!data){
             return res.status(404).json({
                 status: 'failed',
@@ -68,9 +69,11 @@ exports.getQuestionById = async (req, res) => {
  }
 
 exports.getQuestionByUserId = async (req, res) => {
+    let id = req.params.id ? req.params.id : req.body.id
+
     try{
-        const data = await questionServices.getQuestionsByUser(req.params.id)
-        if (!data.questions) {
+        const data = await questionServices.getQuestionsByUser(id)
+        if (!data) {
             return res.status(404).json({
                 status: 'failed',
                 message: "Sorry, this user apparently doesn't need help. No questions asked! 👀😬",
@@ -78,13 +81,12 @@ exports.getQuestionByUserId = async (req, res) => {
         }
         return res.status(201).json({
             status: 'success',
-            message: `${data.user.username} has posted ${data.question.length} Questions found 🙋🏽‍♂️🙋‍♀️`,
+            message: `${data[0].user.username} has posted ${data.length} Questions  🙋🏽‍♂️🙋‍♀️`,
             data: {
                data
             }
             })
-    }catch(err){
-        console.log(err.message)
+    } catch (err) {
         return res.status(500).json({
             message: err.message
         })
