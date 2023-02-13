@@ -16,7 +16,7 @@ const answerServices = require('./answerServices')
          })
         },
 
-     async askAI(data) {
+     askAI(data) {
          const { question, user, ai_assist, ai_assist_type } = data
          let model = null
             let aiResponse = {
@@ -24,10 +24,8 @@ const answerServices = require('./answerServices')
                 status: "not used"
             }
 
-            let ai_status = {}
-            let ai_answer = {}
 
-         return sequelize.transaction(async (t) => {
+         return sequelize.transaction((t) => {
              return User.findOne({ where: { id: user.id } }, { transaction: t })
                  .then(
                      (user) => {
@@ -101,9 +99,9 @@ const answerServices = require('./answerServices')
 
          }).then(async ([respdata, respstatus, question_id, ai_assist, question]) => {
 
-             ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
+             let ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
 
-             ai_status = (respstatus === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
+             let ai_status = (respstatus === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
            //save AI answer
 
              const save_params = {
