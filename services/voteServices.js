@@ -2,7 +2,7 @@ const { Answers, Voters } = require('../models');
 
 
 module.exports = {
-    getVotes: async function () {
+    async getVotes() {
         const votes = Voters.findAll().catch(
             err => {
                 throw new Error("No votes available")
@@ -10,8 +10,8 @@ module.exports = {
         return votes
     },
 
-    getVotesByAnswer: async function (uuid, answer = null, votes = null) {
-        if (!answer) { answer = await Answers.findOne({ where: { uuid } }) }
+    async getVotesByAnswer(id, answer = null, votes = null) {
+        if (!answer) { answer = await Answers.findOne({ where: { id } }) }
         votes = await Voters.findAll({ where: { answerid: answer.id } })
 
         // Variables for storing the values of upvotes and downvotes

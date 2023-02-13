@@ -80,7 +80,7 @@ module.exports = {
     },
 
     async voteAnswer(data, user) {
-        const { answerUuid, upVote, downVote } = data;
+        const { answer_id, upVote, downVote } = data;
         const { uuid, id } = user;
         let vote = {};
         let cast;
@@ -90,7 +90,7 @@ module.exports = {
         }
 
         await sequelize.transaction(async (t) => {
-            return Answers.findOne({ where: { uuid: answerUuid } }, { transaction: t })
+            return Answers.findOne({ where: { id: id } }, { transaction: t })
                 .then(
                     async (answer) => {
                         if (!answer) {
@@ -127,7 +127,7 @@ module.exports = {
                     throw err.message;
                 });
         }).then(async ([answer, vote]) => {
-            let votecalc = await voteServices.getVotesByAnswer(answerUuid, answer);
+            let votecalc = await voteServices.getVotesByAnswer(answer_id, answer);
             answer.upvotes = votecalc.Upvotes;
             answer.downvotes = votecalc.Downvotes;
             savedAnswer = await answer.save();
