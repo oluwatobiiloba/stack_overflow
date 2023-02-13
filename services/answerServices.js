@@ -30,13 +30,13 @@ module.exports = {
         return respObj;
 },
 
-    getAnswerById(uuid) {
+    getAnswerById(id) {
         const fields = ["user", 'question', 'comments', 'votes'];
         let resobj = {};
 
         return sequelize.transaction(async (t) => {
             const answer = await Answers.findOne({
-                where: { uuid },
+                where: { id },
                 include: fields,
                 transaction: t,
             });

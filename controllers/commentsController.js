@@ -2,8 +2,11 @@ const commentServices = require('../services/commentServices')
 
 module.exports = {
     async createComment(req, res) {
+        const { comment, answerId } = req.body
+        const payload = { comment, answerId, userId: req.user.id }
+
         try {
-            const data = await commentServices.creatComment(req)
+            const data = await commentServices.creatComment(payload)
 
             return res.status(201).json({
                 status: 'success',
@@ -19,7 +22,7 @@ module.exports = {
         }
     },
 
-    async getAllComments(res) {
+    async getAllComments(_req, res) {
         try {
             const data = await commentServices.getAllComments();
             if (!data) {
@@ -42,8 +45,10 @@ module.exports = {
     },
 
     async getCommentsByUserId(req, res) {
+        const id = req.params.id
+
         try {
-            const data = await commentServices.getCommentsByUserId(req.params.id);
+            const data = await commentServices.getCommentsByUserId(id);
             if (!data) {
                 return res.status(404).json({
                     status: 'failed',
@@ -70,8 +75,9 @@ module.exports = {
     },
 
     async getCommentsByAnswerId(req, res) {
+        const id = req.params.id
         try {
-            const data = await commentServices.getCommentsByAnswerId(req.params.id);
+            const data = await commentServices.getCommentsByAnswerId(id);
             return res.status(201).json({
                 status: "success",
                 message: `${data.length} comments found`,

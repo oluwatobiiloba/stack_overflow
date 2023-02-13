@@ -15,21 +15,18 @@ module.exports ={
       return comment
     },
 
-    getCommentsByUserId: async function(uuid){
-       
-        const user = await User.findOne({where: { uuid:uuid } })
-        if(!user){
-            throw new Error("No user with that Id")}
-        
-        const comment = await Comments.findAll({where:{userId:user.id}})
+    getCommentsByUserId: async function (id) {
+
+        const comment = await Comments.findAll({ where: { userId: id } })
         if(comment.length === 0){
             throw new Error("This user has no comments, perhaps they're shy🤓")}
         return comment
     },
 
-    getCommentsByAnswerId: async function(uuid){
+    getCommentsByAnswerId: async function (id) {
+        console.log(id)
 
-        const answer = await Answers.findOne({where: { uuid:uuid }}).catch(
+        const answer = await Answers.findOne({ where: { id } }).catch(
             err => {
                 throw err
             }
@@ -37,7 +34,7 @@ module.exports ={
         if(!answer){
             throw new Error("This answer does not exist 🤔")}
 
-        const comment = await Comments.findAll({where:{answerId:answer.id}}).catch(
+        const comment = await Comments.findAll({ where: { answerId: id } }).catch(
             () => {
                 throw  new Error("This answer has no comments 🤥")
             }
@@ -45,30 +42,14 @@ module.exports ={
         return comment
     },
 
-    creatComment: async function(query){
-        const { comment,userUuid,answerUuid } = query.body;
+    creatComment: async function (payload) {
+        const { comment, answerId, userId } = payload;
 
-        const user = await User.findOne({where: {uuuid:userUuid}}).catch(
-            () => {
-                throw new Error("No user found")
-            }
-        )
-        if(!user){
-            throw new Error("No user with that Id")}
-
-        const answer = await Answers.findOne({where: {uuid:answerUuid}}).catch(
-            () => {
-                throw new Error("No answers found")
-            }
-        )
+        const answer = await Answers.findOne({ where: { id: answerId } })
         if(!answer){
             throw new Error("This answer does not exist 🤔")}
 
-        const newComment = await Comments.create({ comment: comment , userId:user.id , answerId:answer.id}).catch(
-            err => {
-                throw err
-            }
-        )
+        const newComment = await Comments.create({ comment: comment, userId: userId, answerId: answer.id })
 
         return newComment
     }
