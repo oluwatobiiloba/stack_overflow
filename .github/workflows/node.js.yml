@@ -79,7 +79,10 @@ jobs:
 
     - name: Run  Tests
       run: |
-        npm run test 
+        nohup npm run start &
+        sleep 3
+        npm run test
+       
         
     - name: Run coverage
       run: npm run coverage
@@ -90,9 +93,9 @@ jobs:
 
   #   - name: Run tests
   #     run: |
-  #       nohup npm run start &
-  #       sleep 3
-  #       npm run test
+        # nohup npm run start &
+        # sleep 3
+        # npm run test
 
   # coverage:
   #   runs-on: ubuntu-latest
