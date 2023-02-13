@@ -2,45 +2,58 @@ const { Answers, Voters } = require('../models');
 
 
 module.exports = {
-    getVotes: async function(){
-        const votes = Voters.findAll().catch(
-            err => {
+    getVotes() {
+        return Voters.findAll().then((votes) => {
+            if (!votes) {
                 throw new Error("No votes available")
+            }
+            return votes
+        }).catch(
+            err => {
+                console.log(err)
+
             })
-        return votes
+
     },
 
-    getVotesByAnswer: async function(uuid, answer = null, votes = null ){
-        if(!answer){ answer = await Answers.findOne({where: {uuid}})}
-        votes = await Voters.findAll({where: {answerid:answer.id}})
-        // const {upvotes , downvotes} = votes
-        // console.log(votes[2].dataValues)
-        // console.log(upvotes)
-        let upvotes = []
-        let downvotes = []
-        let voters = []
-        votes.forEach(function(vote){
-            upvotes.push([vote.dataValues.upvotes,vote.dataValues.userId])
-            downvotes.push([vote.dataValues.downvotes,vote.dataValues.userId])
-            voters.push(vote.dataValues.userId)
+    async getVotesByAnswer(id, answer = null, votes = null) {
+        if (!answer) { answer = await Answers.findOne({ where: { id } }) }
+        votes = await Voters.findAll({ where: { answerid: answer.id } })
+
+        // Variables for storing the values of upvotes and downvotes
+        let upvotes_array = []
+        let downvotes_array = []
+        const voters_array = []
+
+        // Looping through the elements of the "votes" array 
+        // and extracting the required votes and userIds
+        votes.forEach((vote) => {
+            const { upvotes, downvotes, userId } = vote
+            upvotes_array.push([upvotes, userId])
+            downvotes_array.push([downvotes, userId])
+            voters_array.push(userId)
         })
-        upvotes = upvotes.filter(function(vote){
-            return vote[0] ;
-        })
-        downvotes = downvotes.filter(function(vote){
-            return vote[0];
-        })
-       
+
+        // Filtering out unnecessary values
+        upvotes_array = upvotes_array.filter(vote =>
+            vote[0]
+        )
+        downvotes_array = downvotes_array.filter(vote =>
+            vote[0]
+        )
+
+           // Returning the calculated values
         const payload = {
-            Upvotes:upvotes.length,
-            Downvotes: downvotes.length,
-            Voters: voters.length,
+            Upvotes: upvotes_array.length,
+            Downvotes: downvotes_array.length,
+            Voters: upvotes_array.length + downvotes_array.length,
             AnswerUuid: answer.uuid,
             Answer: answer.answer,
             Accepted: answer.Accepted,
             Postedby: answer.userId,
-            VotersId: voters
+            VotersId: voters_array
         }
         return payload
     }
+
 }

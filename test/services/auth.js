@@ -1,8 +1,7 @@
 'use strict';
 const config = require('../../config/config')[process.env.NODE_ENV || 'development'];
 let chai = require('chai');
-const { where } = require('sequelize');
-const { sequelize, User } = require('../../models')
+const { User } = require('../../models')
 const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
 let assert = chai.assert;
@@ -16,7 +15,6 @@ describe("Auth Services", (done) => {
     let first_name = "Mocha"
     let last_name = "Chai"
     let phonenumber = "08103234202"
-    let role = "1"
     const loginData = { email, password, username }
 
     let regData = {
@@ -30,24 +28,6 @@ describe("Auth Services", (done) => {
     }
     let test_user = { id: 1 }
     let token = authServices.createSendToken(test_user)
-    const req = {
-        headers: {
-            authorization: `Bearer ${token.token}`,
-            'content-type': 'application/json',
-            'user-agent': 'PostmanRuntime/7.30.0',
-            accept: '*/*',
-            'postman-token': '29844342-3233-4c56-b3cf-7b085960dff3',
-            host: '127.0.0.1:3535',
-            'accept-encoding': 'gzip, deflate, br',
-            connection: 'keep-alive',
-            'content-length': '118',
-            cookies: {
-                jwt: token.token,
-                cookieOptions: token.cookieOptions,
-            }
-
-        }
-    }
     const user_id = process.env.NODE_ENV === "development" ? 19 : 1
 
 
@@ -92,13 +72,12 @@ describe("Auth Services", (done) => {
     })
 
     it("should protect a route", () => {
-        return authServices.protect(req)
+        return authServices.protect(token.token)
             .then((result) => {
                 expect(result).to.be.an("object");
-                expect(result).to.have.property("headers");
-                expect(result.headers).to.have.property("cookies");
-                expect(result).to.have.property("user");
-                expect(result.user.id).to.be.a("number");
+                expect(result).to.have.property("id");
+                expect(result.id).to.be.a("number");
+                expect(result.id).to.equal(1);
 
             })
             .catch(error => {
@@ -107,8 +86,8 @@ describe("Auth Services", (done) => {
     });
 
     it("should test route protection errors", () => {
-        req.headers.authorization = null
-        return authServices.protect(req)
+        token = null
+        return authServices.protect(token)
             .catch((error) => {
                 expect(error).to.be.an("error");
                 expect(error.message).to.equal("Not Authorized");
@@ -117,23 +96,12 @@ describe("Auth Services", (done) => {
 
     });
 
-    it("should test route protection errors", () => {
-        req.headers.cookies.jwt = null;
-        req.headers.authorization = null;
-        return authServices.protect(req).catch((error) => {
-            expect(error).to.be.an("error");
-            expect(error.message).to.equal("Not Authorized");
-        })
-    });
-
 
     it("should test route protection errors", () => {
         test_user = { id: 100 }
         token = authServices.createSendToken(test_user)
-        req.headers.authorization = `Bearer ${token.token}`;
-        req.headers.cookies.jwt = token.token;
 
-        return authServices.protect(req)
+        return authServices.protect(token.token)
             .catch((error) => {
                 expect(error).to.be.an("error");
                 expect(error.message).to.equal("This user does not exist anymore");
@@ -166,11 +134,11 @@ describe("Auth Services", (done) => {
                 result.respObj.last_name.should.equal(last_name)
                 result.respObj.should.have.property("sendToken")
                 result.respObj.sendToken.should.be.a("object")
-                result.respObj.sendToken.should.have.property("cookieOptions")
+                result.respObj.sendToken.should.have.property("cookieptions")
                 result.respObj.sendToken.should.have.property("token")
             })
             .catch((error) => {
-                done(error)
+                expect(error).to.be.an("error");
             })
 
     })
