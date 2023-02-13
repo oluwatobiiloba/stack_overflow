@@ -1,4 +1,4 @@
-const { Questions, User, sequelize } = require('../models')
+const { Questions, sequelize } = require('../models')
 const aiClient = require('../util/ai_helper')
 const answerServices = require('./answerServices')
 
