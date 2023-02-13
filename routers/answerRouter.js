@@ -3,29 +3,23 @@ const express = require('express');
 const userControllers = require('../controllers/userControllers')
 const router = express.Router();
 const middleware = require('../middleware')
+router.use(middleware.auth)
 
 router
-    .route('/answer')
-    .post(answersController.createAnswer)
+    .post('/answer', answersController.createAnswer)
 
 router
-    .route('/all_answers')
-    .get(answersController.getAllAnswers)
+    .get('/all_answers', answersController.getAllAnswers)
 
 router
-    .use(middleware.auth)
-    .route('/getAnswerByUseridandQuestionId')
-    .get(answersController.getAnswerByUserIdandQuestionId)
+    .get('/:user_id/:question_id', answersController.getAnswerByUserIdandQuestionId)
     
     
 router
-    .route('/:id')
-    .get(answersController.getAnswerById)
+    .get('/:id', answersController.getAnswerById)
     
 router
-    .use(middleware.auth)
-    .route('/vote')
-    .put(answersController.vote)
+    .put('/vote', answersController.vote)
     
 
 

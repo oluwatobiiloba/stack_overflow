@@ -80,7 +80,6 @@ module.exports = {
     },
 
     async voteAnswer(data, user) {
-
         const { answerUuid, upVote, downVote } = data;
         const { uuid, id } = user;
         let vote = {};
@@ -97,72 +96,66 @@ module.exports = {
                         if (!answer) {
                             throw new Error("No answer with that Id");
                         }
-                        vote = await Voters.findOne(
-                            { where: { answerId: answer.id, userId: id } },
-                            { transaction: t }
-                        );
+
+                        vote = await Voters.findOne({ where: { answerId: answer.id, userId: id } }, { transaction: t });
 
                         if (!vote) {
-                            vote = await Voters.create(
-                                { answerId: answer.id, userId: id },
-                                { transaction: t }
-                            );
+                            vote = await Voters.create({ answerId: answer.id, userId: id }, { transaction: t });
                         }
+
                         switch (true) {
-                            case upVote === true:
+                            case upVote === true && downVote !== true:
                                 vote.upvotes = true;
                                 vote.downvotes = false;
                                 break;
-                            case downVote === true:
+                            case downVote === true && upVote !== true:
                                 vote.downvotes = true;
                                 vote.upvotes = false;
                                 break;
                             case upVote === true && downVote === true:
                                 throw new Error("You can only upvote or downvote at a time");
-                            case upVote === false || downVote === false:
-                                throw new Error("Invalid vote");
-                            case typeof upVote !== "boolean" && typeof downVote !== "boolean":
-                                throw new Error("Please pass a valid vote");
                             default:
+                                vote.upvotes = false;
+                                vote.downvotes = false;
                                 break;
                         }
 
                         let savedVote = await vote.save({ transaction: t });
                         return [answer, savedVote];
-                    }).then(async ([answer, vote]) => {
-                        let votecalc = await voteServices.getVotesByAnswer(answerUuid, answer)
-                        console.log("calc", votecalc)
-                        answer.upvotes = votecalc.Upvotes
-                        answer.downvotes = votecalc.Downvotes
-                        answer = await answer.save()
-                        savedAnswer = await answer.save()
-                        cast = [savedAnswer, vote]
                     })
                 .catch((err) => {
-                    console.log(err)
                     throw err.message;
                 });
-        });
-
+        }).then(async ([answer, vote]) => {
+            let votecalc = await voteServices.getVotesByAnswer(answerUuid, answer);
+            answer.upvotes = votecalc.Upvotes;
+            answer.downvotes = votecalc.Downvotes;
+            savedAnswer = await answer.save();
+            cast = [savedAnswer, vote];
+        }).catch(
+            (err) => {
+                throw err.message;
+            }
+        );
         return cast;
-    }
-    ,
+
+    },
 
     async getAnswerByUserIdandQuestionId(data) {
-        const { userUuid, questionUuid } = data
+        const { user_id, question_id } = data
 
         let question = {}
         let answer = {}
         let resp = []
         await sequelize.transaction(async (t) => {
 
-            return User.findOne({ where: { uuid: userUuid } }, { transaction: t })
+            return User.findOne({ where: { id: user_id } }, { transaction: t })
         .then(
             async (user)=>{
                 if(!user){
                     throw new Error('No user with that id')
                    }
-               question = await Questions.findOne({where: {uuid:questionUuid}}, { transaction: t })
+                question = await Questions.findOne({ where: { id: question_id } }, { transaction: t })
                if(!question){
                 throw new Error('No question with that id')
                }

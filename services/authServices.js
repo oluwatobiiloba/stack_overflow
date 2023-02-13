@@ -101,8 +101,6 @@ module.exports = {
         }
         return userExist
     }
-
-
 }
 
 

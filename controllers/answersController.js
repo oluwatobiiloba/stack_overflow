@@ -87,7 +87,11 @@ exports.getAnswerById = async (req, res) => {
 }
 
 exports.getAnswerByUserIdandQuestionId = async (req, res) => {
-    let payload = req.body
+    console.log(req.params)
+    let payload = {
+        user_id: req.params.user_id,
+        question_id: req.params.question_id
+    }
     try {
         const data = await answersServices.getAnswerByUserIdandQuestionId(payload);
         return res.status(201).json({

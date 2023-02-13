@@ -1,6 +1,8 @@
 const commentsController = require('../controllers/commentsController');
 const express = require('express');
 const router = express.Router();
+const middleware = require('../middleware')
+router.use(middleware.auth)
 
 router
     .route('/comment')
