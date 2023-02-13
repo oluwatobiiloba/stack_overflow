@@ -60,13 +60,13 @@ module.exports = {
         return sequelize.transaction((t) => {
             return Questions.findOne({ where: { id: questionId } }, { transaction: t })
                 .then(async (question) => {
-                    let user = await User.findOne({ where: { id: userId } }, { transaction: t });
+                    const user = await User.findOne({ where: { id: userId } }, { transaction: t });
                     return { user, question };
                 })
                 .then(async ({ user, question }) => {
 
-                    let newAnswer = await Answers.create({ answer, questionId: question.id, userId: user.id }, { transaction: t });
-                    let newVote = await Voters.create({ answerId: newAnswer.id, userId: user.id }, { transaction: t });
+                    const newAnswer = await Answers.create({ answer, questionId: question.id, userId: user.id }, { transaction: t });
+                    const newVote = await Voters.create({ answerId: newAnswer.id, userId: user.id }, { transaction: t });
                     return { newAnswer, newVote };
                 })
                 .then(async (resp) => {
@@ -104,7 +104,7 @@ module.exports = {
                             vote_obj = await Voters.create({ answerId: answer.id, userId: id }, { transaction: t });
                         }
 
-                        let vote = vote_obj
+                        const vote = vote_obj
                         switch (true) {
                             case upVote === true && downVote !== true:
                                 vote.upvotes = true;
@@ -133,7 +133,7 @@ module.exports = {
             answer.upvotes = votecalc.Upvotes;
             answer.downvotes = votecalc.Downvotes;
             const savedAnswer = await answer.save();
-            let cast = [savedAnswer, vote];
+            const cast = [savedAnswer, vote];
             return cast
         }).catch(
             (err) => {

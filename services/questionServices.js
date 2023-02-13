@@ -99,9 +99,9 @@ const answerServices = require('./answerServices')
 
          }).then(async ([respdata, respstatus, question_id, ai_assist, question]) => {
 
-             let ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
+             const ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
 
-             let ai_status = (respstatus === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
+             const ai_status = (respstatus === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
            //save AI answer
 
              const save_params = {
