@@ -5,6 +5,9 @@ on:
     branches:
       - dev
       - main
+  push:
+    branches:
+      - dev
 
 env:
   NODE_ENV: test_github_actions
