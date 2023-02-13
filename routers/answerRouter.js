@@ -1,6 +1,5 @@
 const answersController = require('../controllers/answersController');
 const express = require('express');
-const userControllers = require('../controllers/userControllers')
 const router = express.Router();
 const middleware = require('../middleware')
 router.use(middleware.auth)

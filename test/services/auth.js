@@ -86,7 +86,7 @@ describe("Auth Services", (done) => {
     });
 
     it("should test route protection errors", () => {
-        let token = null
+        const token = null
         return authServices.protect(token)
             .catch((error) => {
                 expect(error).to.be.an("error");
@@ -137,8 +137,8 @@ describe("Auth Services", (done) => {
                 result.respObj.sendToken.should.have.property("cookieptions")
                 result.respObj.sendToken.should.have.property("token")
             })
-            .catch(() => {
-
+            .catch((error) => {
+                expect(error).to.be.an("error");
             })
 
     })

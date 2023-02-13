@@ -3,7 +3,7 @@ const authServices = require('../services/authServices')
 
 module.exports = {
     async signUp(req, res) {
-        let data = req.body
+        const data = req.body
         try {
 
             const newUser = await authServices.registerUser(data)
@@ -44,9 +44,9 @@ module.exports = {
     async signIn(req, res) {
         const data = req.body
         try {
-            let payload = await authServices.signIn(data)
+            const payload = await authServices.signIn(data)
             const { token, cookieOptions } = payload.respObj.sendToken
-            let user = payload.respObj
+            const user = payload.respObj
             res.cookie('jwt', token, cookieOptions)
             return res.status(201).json({
                 status: "success",
@@ -70,7 +70,7 @@ module.exports = {
         }
     },
 
-    async signout(_req, res) {
+    signout(_req, res) {
         res.cookie('jwt', 'loggedout', {
             expires: new Date(Date.now() + 10 + 1000),
             httpOnly: true

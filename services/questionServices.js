@@ -4,9 +4,9 @@ const answerServices = require('./answerServices')
 
  module.exports = {
 
-     async createQuestion(data) {
+     createQuestion(data) {
          const { question, user } = data
-         return sequelize.transaction(async (t) => {
+         return sequelize.transaction((t) => {
              return Questions.create({ question, userId: user.id }, { transaction: t })
                  .then(
                      (question) => {
@@ -23,14 +23,14 @@ const answerServices = require('./answerServices')
                 data: "Unavailable",
                 status: "not used"
             }
-            let askQuestion = {}
+
             let ai_status = {}
             let ai_answer = {}
 
-         await sequelize.transaction(async (t) => {
+         return sequelize.transaction(async (t) => {
              return User.findOne({ where: { id: user.id } }, { transaction: t })
                  .then(
-                     async (user) => {
+                     (user) => {
                          if (!user) {
                              throw new Error('Are you a registered user?? 😬👀')
                          }
@@ -40,8 +40,9 @@ const answerServices = require('./answerServices')
                      }
                  ).then(
                      async (askQuestion) => {
-                         let uuid = askQuestion.uuid
-                         let ai_models = {
+
+                         const question_id = askQuestion.id
+                         const ai_models = {
                              fastcodegen: {
                                  model: "code-cushman-001",
                                  prompt: question,
@@ -90,38 +91,39 @@ const answerServices = require('./answerServices')
                         }
                         let respdata = aiResponse.data
                         let respstatus = aiResponse.status
-                         return [respdata, respstatus, uuid, ai_assist, askQuestion]
+                         return [respdata, respstatus, question_id, ai_assist, askQuestion]
                      }
 
-             ).then(async (data) => {
-                 ai_answer = (data[3]) ? data[0].choices[0].text : "Not availabale or selected";
+             ).catch(
+                 err => {
+                     throw err
+                 });
 
-                ai_status = (data[1] === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
-                //save AI answer
-                askQuestion = data[4]
+         }).then(async ([respdata, respstatus, question_id, ai_assist, question]) => {
 
-                 let save_params = {
-                     body: {
-                         answer: ai_answer,
-                         userUuid: process.env.AI_UUID,
-                         questionUuid: data[2]
-                     }
-                 }
-                    // Save Ai answere to db
-                 if (data[3]) {
-                     await answerServices.createAnswer(save_params)
-                 }
+             ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
 
-             }).catch(
-                err => {
-                    throw err
-                });
+             ai_status = (respstatus === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
+           //save AI answer
 
+             const save_params = {
+                 answer: ai_answer,
+                 userId: process.env.AI_UUID || 0,
+                 questionId: question_id
+
+             }
+               // Save Ai answere to db
+             if (ai_assist) {
+                 await answerServices.createAnswer(save_params)
+             }
+             return { question, ai_answer, ai_status }
+
+         }).catch((err) => {
+             console.log(err)
          })
-            return {askQuestion,ai_answer,ai_status}
         },
 
-     async getAllQuestions() {
+     getAllQuestions() {
             const fields = ['user'];
          return sequelize.transaction(async (t) => {
              try {
@@ -137,10 +139,10 @@ const answerServices = require('./answerServices')
          })
         },
 
-     async getQuestionById(uuid) {
+     getQuestionById(uuid) {
          const fields = ['user', 'answers'];
 
-         return sequelize.transaction(async (t) => {
+         return sequelize.transaction((t) => {
              return Questions.findOne({ where: { uuid: uuid }, include: fields }, { transaction: t }).then((question) => {
                  if (!question) {
                      throw new Error('No qestions found 😔😔, nobody seems to need help')

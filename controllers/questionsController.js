@@ -2,7 +2,7 @@ const questionServices = require('../services/questionServices')
 
 module.exports = {
     async createQuestion(req, res) {
-        let payload = req.body;
+        const payload = req.body;
         payload.user = req.user
 
         try {
@@ -70,7 +70,7 @@ module.exports = {
     },
 
     async getQuestionByUserId(req, res) {
-        let id = req.params.id ? req.params.id : req.body.id;
+        const id = req.params.id ? req.params.id : req.body.id;
 
         try {
             const data = await questionServices.getQuestionsByUser(id);
@@ -95,10 +95,10 @@ module.exports = {
     },
 
     async askAI(req, res) {
-        let payload = req.body;
+        const payload = req.body;
         payload.user = req.user;
         try {
-            let data = await questionServices.askAI(payload);
+            const data = await questionServices.askAI(payload);
             return res.status(201).json({
                 status: "Successful",
                 message: `Question asked and answered successfully`,

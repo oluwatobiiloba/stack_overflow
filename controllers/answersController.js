@@ -1,9 +1,10 @@
-const { object } = require('promisify');
 const answersServices = require('../services/answerServices')
 
 module.exports = {
     async createAnswer(req, res) {
-        let payload = req.body;
+        // const { answer, userId, questionId } = data;
+        const payload = req.body;
+        payload.userId = req.user.id
         try {
             const data = await answersServices.createAnswer(payload);
             return res.status(201).json({
@@ -22,8 +23,8 @@ module.exports = {
     },
 
     async vote(req, res) {
-        let payload = req.body;
-        let user = req.user
+        const payload = req.body;
+        const user = req.user
 
         try {
             const data = await answersServices.voteAnswer(payload, user);
@@ -89,7 +90,7 @@ module.exports = {
 
     async getAnswerByUserIdandQuestionId(req, res) {
 
-        let payload = {
+        const payload = {
             user_id: req.params.user_id,
             question_id: req.params.question_id
         }
