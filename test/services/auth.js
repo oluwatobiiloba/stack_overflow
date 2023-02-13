@@ -86,7 +86,7 @@ describe("Auth Services", (done) => {
     });
 
     it("should test route protection errors", () => {
-        const token = null
+        token = null
         return authServices.protect(token)
             .catch((error) => {
                 expect(error).to.be.an("error");

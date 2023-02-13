@@ -9,8 +9,8 @@ const answerServices = require('./answerServices')
          return sequelize.transaction((t) => {
              return Questions.create({ question, userId: user.id }, { transaction: t })
                  .then(
-                     (question) => {
-                         return question
+                     (question_asked) => {
+                         return question_asked
                      }
              )
          })
@@ -26,17 +26,8 @@ const answerServices = require('./answerServices')
 
 
          return sequelize.transaction((t) => {
-             return User.findOne({ where: { id: user.id } }, { transaction: t })
+             return Questions.create({ question, userId: user.id }, { transaction: t })
                  .then(
-                     (user) => {
-                         if (!user) {
-                             throw new Error('Are you a registered user?? 😬👀')
-                         }
-                         //log Question in db
-
-                         return Questions.create({ question, userId: user.id }, { transaction: t })
-                     }
-                 ).then(
                      async (askQuestion) => {
 
                          const question_id = askQuestion.id
@@ -97,7 +88,7 @@ const answerServices = require('./answerServices')
                      throw err
                  });
 
-         }).then(async ([respdata, respstatus, question_id, ai_assist, question]) => {
+         }).then(async ([respdata, respstatus, question_id, ai_assist_required, question_asked]) => {
 
              const ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
 
@@ -111,10 +102,10 @@ const answerServices = require('./answerServices')
 
              }
                // Save Ai answere to db
-             if (ai_assist) {
+             if (ai_assist_required) {
                  await answerServices.createAnswer(save_params)
              }
-             return { question, ai_answer, ai_status }
+             return { question_asked, ai_answer, ai_status }
 
          }).catch((err) => {
              console.log(err)
