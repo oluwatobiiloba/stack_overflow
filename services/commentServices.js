@@ -1,4 +1,4 @@
-const { Answers, User, Comments } = require('../models');
+const { Answers, Comments } = require('../models');
 const logger = require('../util/logger');
 
 module.exports ={
