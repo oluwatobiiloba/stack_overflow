@@ -128,11 +128,11 @@ const answerServices = require('./answerServices')
          })
         },
 
-     getQuestionById(uuid) {
+     getQuestionById(id) {
          const fields = ['user', 'answers'];
 
          return sequelize.transaction((t) => {
-             return Questions.findOne({ where: { uuid: uuid }, include: fields }, { transaction: t }).then((question) => {
+             return Questions.findOne({ where: { id }, include: fields }, { transaction: t }).then((question) => {
                  if (!question) {
                      throw new Error('No qestions found 😔😔, nobody seems to need help')
                  }
