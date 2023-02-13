@@ -1,8 +1,7 @@
 'use strict';
 const config = require('../../config/config')[process.env.NODE_ENV || 'development'];
 let chai = require('chai');
-const { where } = require('sequelize');
-const { sequelize, User } = require('../../models')
+const { User } = require('../../models')
 const jwt = require('jsonwebtoken');;
 let expect = chai.expect;
 let assert = chai.assert;
@@ -16,7 +15,6 @@ describe("Auth Services", (done) => {
     let first_name = "Mocha"
     let last_name = "Chai"
     let phonenumber = "08103234202"
-    let role = "1"
     const loginData = { email, password, username }
 
     let regData = {
