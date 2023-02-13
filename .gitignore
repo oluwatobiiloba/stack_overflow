@@ -5,3 +5,5 @@ config.json
 models/stack_overflow.code-workspace
 .gitignore
 /.nyc_output
+wallaby.js
+newrelic_agent.log
