@@ -15,7 +15,7 @@ module.exports ={
       return comment
     },
 
-    getCommentsByUserId: async function (id) {
+    async getCommentsByUserId(id) {
 
         const comment = await Comments.findAll({ where: { userId: id } })
         if(comment.length === 0){
@@ -23,7 +23,7 @@ module.exports ={
         return comment
     },
 
-    getCommentsByAnswerId: async function (id) {
+    async getCommentsByAnswerId(id) {
         console.log(id)
 
         const answer = await Answers.findOne({ where: { id } }).catch(
@@ -42,7 +42,7 @@ module.exports ={
         return comment
     },
 
-    creatComment: async function (payload) {
+    async creatComment(payload) {
         const { comment, answerId, userId } = payload;
 
         const answer = await Answers.findOne({ where: { id: answerId } })
