@@ -10,7 +10,7 @@ on:
       - dev
 
 env:
-  NODE_ENV: test_github_actions
+  NODE_ENV: development
   MYSQL_ROOT_PASSWORD: password
   DD_CIVISIBILITY_AGENTLESS_ENABLED: ${{vars.DD_CIVISIBILITY_AGENTLESS_ENABLED}}
   AI_KEY: ${{secrets.AI_KEY}}
