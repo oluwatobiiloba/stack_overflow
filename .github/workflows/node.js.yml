@@ -27,7 +27,7 @@ env:
   BCRYPT_STRING: ${{secrets.BCRYPT_STRING}}
 
 jobs:
-  test:
+  Unit_Test:
     name: 'Node.js v${{ matrix.node }}'
     runs-on: ubuntu-latest
     strategy:
@@ -96,21 +96,59 @@ jobs:
   
     - name: Run coverage
       run: npm run coverage
-  test_rerun:
+  Postman_Test:
     runs-on: ubuntu-latest
     needs: setup
-    steps:
+    environment: dev
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          # MYSQL_DATABASE: test
+        ports:
+            - '8888:3306'
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-    - name: Run tests
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Start Mysql Service
+      run: |
+        sudo /etc/init.d/mysql start
+    - name: Import test data
+      run: |
+        mysql -h 127.0.0.1 --port 8888 -u root -ppassword < .github/workflows/travis.sql
+      
+    - name: Set up Redis
+      run: sudo apt-get install redis-server
+    - name: 'Install Node'
+      uses: actions/setup-node@v3
+      with:
+        node-version: '${{ matrix.node }}'
+        cache: 'npm'
+    - name: Install Postman CLI
+      run: |
+        curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install --save sequelize
+        npm install --save mysql2
+
+    - name: Run migrations
+      run: npx sequelize db:migrate
+
+    - name: Run  Tests
       run: |
         nohup npm run start &
         sleep 3
-        npm run test
+   
+    - name: Login to Postman CLI
+      run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+    - name: Run API tests
+      run: |
+        postman collection run "${{ github.workspace }}/postman/collections/Noob Community.json" -e "23034417-16f64787-aeec-4958-872a-1df3aa0d8494"
+  
 
-  coverage:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-    - name: Report coverage
-      run: npm run coverage
 # ///
