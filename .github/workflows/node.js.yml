@@ -98,7 +98,7 @@ jobs:
       run: npm run coverage
   Postman_Test:
     runs-on: ubuntu-latest
-    needs: test
+    needs: Unit_Test
     environment: dev
     services:
       mysql:
