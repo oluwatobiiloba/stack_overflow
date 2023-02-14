@@ -1,4 +1,4 @@
-name: Node.js Workflow
+name: Continous Test Workflow
 
 on:
   pull_request:
@@ -96,21 +96,21 @@ jobs:
   
     - name: Run coverage
       run: npm run coverage
-  # test:
-  #   runs-on: ubuntu-latest
-  #   needs: setup
-  #   steps:
+  test_rerun:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
 
-  #   - name: Run tests
-  #     run: |
-        # nohup npm run start &
-        # sleep 3
-        # npm run test
+    - name: Run tests
+      run: |
+        nohup npm run start &
+        sleep 3
+        npm run test
 
-  # coverage:
-  #   runs-on: ubuntu-latest
-  #   needs: test
-  #   steps:
-  #   - name: Report coverage
-  #     run: npm run coverage
+  coverage:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - name: Report coverage
+      run: npm run coverage
 # ///
