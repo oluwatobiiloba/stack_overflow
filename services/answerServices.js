@@ -54,7 +54,7 @@ module.exports = {
     createAnswer(data) {
         const { answer, userId, questionId } = data;
         const fields = ["user", 'question', 'comments', 'votes'];
-        console.log(answer, userId, questionId)
+
 
         return sequelize.transaction((t) => {
             return Questions.findOne({ where: { id: questionId } }, { transaction: t })

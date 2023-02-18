@@ -95,20 +95,30 @@ ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 # Add Data
-INSERT INTO `users` (`uuid`, `id`, `username`, `password`, `first_name`, `last_name`, `phonenumber`, `email`, `role`, `stack`, `age`, `nationality`, `createdAt`, `updatedAt`, `userId`)
+# Add Data
+INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `phonenumber`, `email`, `role`, `stack`, `age`, `nationality`, `createdAt`, `updatedAt`, `userId`)
 VALUES
-	(X'62333838346231392D353331342D346631622D616265332D326236646564616534316632', 1, 'Mocha', '$2a$10$ad1nSUmBhIm.4nTUfCIO2OUnWOmawajTOaZ2ItaxtSX3QLr9PoX1u', 'Mocha', 'Chai', 823322528, 'mocha@mochatest.com', 2, NULL, NULL, NULL, NOW(), NOW(), NULL);
+	( 1, 'Mocha', '$2a$10$ad1nSUmBhIm.4nTUfCIO2OUnWOmawajTOaZ2ItaxtSX3QLr9PoX1u', 'Mocha', 'Chai', 823322528, 'mocha@mochatest.com', 2, NULL, NULL, NULL, NOW(), NOW(), NULL);
 
-INSERT INTO `questions` (`uuid`, `question`, `status`, `userId`, `createdAt`, `updatedAt`)
+INSERT INTO `questions` ( `id`,`question`, `status`, `userId`, `createdAt`, `updatedAt`)
 VALUES
-	(X'65623831346238332D343338302D346264662D613332302D636131353366333765623961', 'Hell, yeah!', 1, 1, NOW(), NOW());
+	(1, 'Hell, yeah!', 1, 1, NOW(), NOW());
 
-INSERT INTO `answers` (`uuid`, `answer`, `downvotes`, `upvotes`, `accepted`, `userId`, `questionId`, `createdAt`, `updatedAt`)
+INSERT INTO `answers` ( `id`,`answer`, `downvotes`, `upvotes`, `accepted`, `userId`, `questionId`, `createdAt`, `updatedAt`)
 VALUES
-	(X'31373763333838642D326365342D346134322D616236642D666464643030323934663761', 'yes !', 1, 0, 0, 1, 1,  NOW(), NOW());
+	( 1,'yes !', 1, 0, 0, 1, 1,  NOW(), NOW());
 
-
-INSERT INTO `voters` (`userId`, `answerId`, `upvotes`, `downvotes`, `createdAt`, `updatedAt`)
+INSERT INTO `comments` (`id`, `uuid`, `userId`, `answerId`, `comment`, `createdAt`, `updatedAt`)
 VALUES
-	(1, 1, 1, 0, NOW(), NOW()),
-	(1, 1, 1, 1, NOW(), NOW());
+	(1, X'30633664663432342D323738342D343166342D623662652D323061363264346636613137', 1, 1, 'retry,bro', NOW(), NOW());
+
+
+INSERT INTO `voters` (`id`,`userId`, `answerId`, `upvotes`, `downvotes`, `createdAt`, `updatedAt`)
+VALUES
+	(1,1, 1, 1, 0, NOW(), NOW()),
+	(1,1, 1, 1, 1, NOW(), NOW());
+
+  SELECT * FROM users
+  SELECT * FROM questions
+  SELECT * FROM answers
+  SELECT * FROM voters
