@@ -1,11 +1,11 @@
 'use strict';
-let chai = require('chai');
-let expect = chai.expect;
-let assert = require('assert');
+const chai = require('chai');
+const expect = chai.expect;
+const assert = require('assert');
 const questionServices = require('../../services/questionServices')
 const aiClient = require('../../util/ai_helper')
 
-let question_id = 1
+const question_id = 1
 
 before(async () => {
     //Initialize redis

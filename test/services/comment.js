@@ -1,8 +1,8 @@
 'use strict';
-let chai = require('chai');
+const chai = require('chai');
 const { Comments } = require('../../models')
-let expect = chai.expect;
-let assert = require('assert');
+const expect = chai.expect;
+const assert = require('assert');
 const commentServices = require('../../services/commentServices')
 
 

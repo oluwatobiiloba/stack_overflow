@@ -8,7 +8,7 @@ let assert = chai.assert;
 
 const authServices = require('../../services/authServices');
 
-describe("Auth Services", (done) => {
+describe("Auth Services", () => {
     let email = "mocha@mochatest.com"
     let password = "password"
     let username = "mocha"

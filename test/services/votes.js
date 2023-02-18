@@ -1,6 +1,6 @@
 'use strict';
-let chai = require('chai');
-let expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
 const voteServices = require('../../services/voteServices')
 

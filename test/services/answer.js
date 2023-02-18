@@ -1,14 +1,14 @@
 'use strict';
-let chai = require('chai');
+const chai = require('chai');
 const { Voters, Answers } = require('../../models')
 
-let expect = chai.expect;
-let assert = require('assert');
-let redisClient = require('../../util/redis_helper')
+const expect = chai.expect;
+const assert = require('assert');
+const redisClient = require('../../util/redis_helper')
 
 const answerServices = require('../../services/answerServices')
 
-let answer_id = 1
+const answer_id = 1
 before(() => {
     //Initialize redis
     const redis_init = async () => {
@@ -107,7 +107,7 @@ describe("Test All Answer Functionality", () => {
 
 
     it('should vote an answer', () => {
-        let vote_payload = {
+        const vote_payload = {
             upVote: true,
             answer_id: 1
         }
