@@ -104,13 +104,13 @@ VALUES
 	(X'31373763333838642D326365342D346134322D616236642D666464643030323934663761', 'yes !', 3, 0, 0, 1, 1, '2022-10-18 20:45:57', '2023-02-18 17:11:23'),
 
 
-INSERT INTO `comments` (`uuid`, `userId`, `answerId`, `comment`, `createdAt`, `updatedAt`)
-VALUES
-	(X'30633664663432342D323738342D343166342D623662652D323061363264346636613137', 20, 10, 'retry,bro', '2023-02-13 14:16:09', '2023-02-13 14:16:09');
-
 INSERT INTO `questions` (`uuid`, `question`, `status`, `userId`, `createdAt`, `updatedAt`)
 VALUES
 	(X'65623831346238332D343338302D346264662D613332302D636131353366333765623961', 'Hell, yeah!', 1, 1, '2022-10-18 20:39:53', '2022-10-18 20:39:53'),
+
+INSERT INTO `comments` (`uuid`, `userId`, `answerId`, `comment`, `createdAt`, `updatedAt`)
+VALUES
+	(X'30633664663432342D323738342D343166342D623662652D323061363264346636613137', 1, 1, 'retry,bro', '2023-02-13 14:16:09', '2023-02-13 14:16:09');
 
 
 INSERT INTO `voters` (`userId`, `answerId`, `upvotes`, `downvotes`, `createdAt`, `updatedAt`)
