@@ -115,7 +115,7 @@ VALUES
 INSERT INTO `voters` (`id`,`userId`, `answerId`, `upvotes`, `downvotes`, `createdAt`, `updatedAt`)
 VALUES
 	(1,1, 1, 1, 0, NOW(), NOW()),
-	(1,1, 1, 1, 1, NOW(), NOW());
+	(2,1, 1, 1, 1, NOW(), NOW());
 
   SELECT * FROM users
   SELECT * FROM questions
