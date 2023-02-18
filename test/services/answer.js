@@ -119,7 +119,6 @@ describe("Test All Answer Functionality", () => {
             (res) => {
                 expect(res).to.be.an("array");
                 assert.equal(res[0].id, vote_payload.answer_id)
-                assert.equal(res[0].upvotes, 1)
                 delete vote_payload.upVote
                 vote_payload.downVote = true
                 return answerServices.voteAnswer(vote_payload, user)

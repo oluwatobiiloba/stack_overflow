@@ -59,17 +59,17 @@ module.exports = {
         return sequelize.transaction((t) => {
             return Questions.findOne({ where: { id: questionId } }, { transaction: t })
                 .then(async (question) => {
-                    console.log(question)
+
                     const user = await User.findOne({ where: { id: userId } }, { transaction: t });
                     if (!user) {
                         throw new Error("User does not exist")
                     }
-                    console.log(user)
+
                     return { user, question };
                 })
                 .then(async ({ user, question }) => {
                     const newAnswer = await Answers.create({ answer, questionId: question.id, userId: user.id }, { transaction: t });
-                    console.log(newAnswer)
+
                     return { newAnswer };
                 })
                 .then(async (resp) => {
