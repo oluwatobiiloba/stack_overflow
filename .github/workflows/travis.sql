@@ -99,7 +99,16 @@ INSERT INTO `users` (`uuid`, `id`, `username`, `password`, `first_name`, `last_n
 VALUES
 	(X'62333838346231392D353331342D346631622D616265332D326236646564616534316632', 1, 'Mocha', '$2a$10$ad1nSUmBhIm.4nTUfCIO2OUnWOmawajTOaZ2ItaxtSX3QLr9PoX1u', 'Mocha', 'Chai', 823322528, 'mocha@mochatest.com', 2, NULL, NULL, NULL, NOW(), NOW(), NULL);
 
-
 INSERT INTO `questions` (`uuid`, `question`, `status`, `userId`, `createdAt`, `updatedAt`)
 VALUES
 	(X'65623831346238332D343338302D346264662D613332302D636131353366333765623961', 'Hell, yeah!', 1, 1, NOW(), NOW());
+
+INSERT INTO `answers` (`uuid`, `answer`, `downvotes`, `upvotes`, `accepted`, `userId`, `questionId`, `createdAt`, `updatedAt`)
+VALUES
+	(X'31373763333838642D326365342D346134322D616236642D666464643030323934663761', 'yes !', 1, 0, 0, 1, 1,  NOW(), NOW());
+
+
+INSERT INTO `voters` (`userId`, `answerId`, `upvotes`, `downvotes`, `createdAt`, `updatedAt`)
+VALUES
+	(1, 1, 1, 0, NOW(), NOW()),
+	(1, 1, 1, 1, NOW(), NOW());
