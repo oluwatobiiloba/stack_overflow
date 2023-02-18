@@ -122,7 +122,7 @@ const answerServices = require('./answerServices')
                  }
                  return questions
              } catch (err) {
-                 throw err
+                 throw new Error("Error occured while fetching questions"")
              }
          })
         },
