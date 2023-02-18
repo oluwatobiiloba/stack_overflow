@@ -7,7 +7,7 @@ GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON *.* TO 'root'@'localhost';
 # Create DB
 CREATE DATABASE IF NOT EXISTS `database_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `database_test`;
-
+SET FOREIGN_KEY_CHECKS = 0;
 # Create Table
 CREATE TABLE `users` (
   `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
