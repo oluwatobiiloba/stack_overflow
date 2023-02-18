@@ -4,7 +4,7 @@ const { Answers, Voters } = require('../models');
 module.exports = {
     getVotes() {
         return Voters.findAll().then((votes) => {
-            if (!votes) {
+            if (votes.length < 1) {
                 throw new Error("No votes available")
             }
             return votes
