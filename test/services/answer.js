@@ -32,6 +32,7 @@ describe("Test All Answer Functionality", () => {
             questionId: 1,
             userId: 1
         }
+        console.log(answer_payload)
         return answerServices.createAnswer(answer_payload).then(
             (res) => {
                 expect(res).to.be.an("object");
