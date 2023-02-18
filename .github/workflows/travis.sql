@@ -117,7 +117,7 @@ VALUES
 	(1,1, 1, 1, 0, NOW(), NOW()),
 	(2,1, 1, 1, 1, NOW(), NOW());
 
-  SELECT * FROM users
-  SELECT * FROM questions
-  SELECT * FROM answers
-  SELECT * FROM voters
+  SELECT * FROM users;
+  SELECT * FROM questions;
+  SELECT * FROM answers;
+  SELECT * FROM voters;
