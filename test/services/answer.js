@@ -26,6 +26,22 @@ before(() => {
 })
 
 describe("Test All Answer Functionality", () => {
+    it('should create answer', () => {
+        const answer_payload = {
+            answer: 'Mocha test',
+            questionId: 1,
+            userId: 1
+        }
+        return answerServices.createAnswer(answer_payload).then(
+            (res) => {
+                expect(res).to.be.an("object");
+                assert.deepEqual(answer_payload.answer, res.newAnswer.answer)
+                assert.deepEqual(answer_payload.questionId, res.newAnswer.questionId)
+
+            }
+        )
+    })
+
     it('should get all answers', () => {
         return answerServices.getAllAnswers().then(
             (res) => {
@@ -41,28 +57,12 @@ describe("Test All Answer Functionality", () => {
         })
     })
 
+
     it('should get answer by id', () => {
         return answerServices.getAnswerById(answer_id).then(
             (res) => {
                 expect(res).to.be.an("object");
                 assert.equal(res.answer.id, 1)
-            }
-        )
-    })
-
-
-    it('should create answer', () => {
-        const answer_payload = {
-            answer: 'Mocha test',
-            questionId: 1,
-            userId: 1
-        }
-        return answerServices.createAnswer(answer_payload).then(
-            (res) => {
-                expect(res).to.be.an("object");
-                assert.deepEqual(answer_payload.answer, res.newAnswer.answer)
-                assert.deepEqual(answer_payload.questionId, res.newAnswer.questionId)
-
             }
         )
     })

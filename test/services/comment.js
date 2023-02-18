@@ -8,17 +8,6 @@ const commentServices = require('../../services/commentServices')
 
 
 describe("Test Comment Services", () => {
-    it('should get all Comments', () => {
-        return commentServices.getAllComments().then(
-            (res) => {
-                expect(res).to.be.an("array");
-                expect(res.length).to.be.greaterThanOrEqual(1)
-            }
-        ).catch(err => {
-            console.log(err)
-        })
-    })
-
 
     it('should create comment', () => {
         const comment_payload = {
@@ -35,6 +24,20 @@ describe("Test Comment Services", () => {
             }
         )
     })
+
+    it('should get all Comments', () => {
+        return commentServices.getAllComments().then(
+            (res) => {
+                expect(res).to.be.an("array");
+                expect(res.length).to.be.greaterThanOrEqual(1)
+            }
+        ).catch(err => {
+            console.log(err)
+        })
+    })
+
+
+
 
 
     it('should get comments by user id ', () => {

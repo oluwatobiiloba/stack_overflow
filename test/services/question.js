@@ -22,6 +22,23 @@ before(async () => {
 })
 
 describe("Test Question Services", () => {
+    it('should create Question', () => {
+        const question_payload = {
+            question: 'Mocha test',
+            user: {
+                id: 1
+            }
+        }
+
+        return questionServices.createQuestion(question_payload).then(
+            (res) => {
+                expect(res).to.be.an("object");
+                assert.equal(question_payload.question, res.question)
+                assert.equal(question_payload.user.id, res.userId)
+            }
+        )
+    })
+
     it('should get all answers', () => {
         return questionServices.getAllQuestions().then(
             (res) => {
@@ -49,25 +66,6 @@ describe("Test Question Services", () => {
             (res) => {
                 expect(res).to.be.an("object");
                 assert.equal(res.id, 1)
-            }
-        )
-    })
-
-
-
-    it('should create Question', () => {
-        const question_payload = {
-            question: 'Mocha test',
-            user: {
-                id: 1
-            }
-        }
-
-        return questionServices.createQuestion(question_payload).then(
-            (res) => {
-                expect(res).to.be.an("object");
-                assert.equal(question_payload.question, res.question)
-                assert.equal(question_payload.user.id, res.userId)
             }
         )
     })
