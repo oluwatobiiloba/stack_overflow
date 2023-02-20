@@ -142,7 +142,7 @@ jobs:
       run: |
         postman collection run "${{ github.workspace }}/postman/collections/Noob Community.json" -e "23034417-16f64787-aeec-4958-872a-1df3aa0d8494"
   
-Auto_Cannon_Performance_Test:
+  Auto_Cannon_Performance_Test:
     runs-on: ubuntu-latest
     needs: Unit_Test
     environment: dev
