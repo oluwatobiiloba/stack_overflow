@@ -11,6 +11,7 @@ const Honeybadger = require('./util/logger');
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 const { ProfilingIntegration } = require("@sentry/profiling-node")
+const helmet = require("helmet");
 
 Sentry.init({
   dsn: process.env.SENTRY_URL,
@@ -66,6 +67,7 @@ const ai_init = async () => {
 
 app.use(Honeybadger.requestHandler)
 app.use(Sentry.Handlers.requestHandler());
+app.use(helmet());
 app.use(express.json())
 app.use('/api/v1/', index);
 app.use(Sentry.Handlers.tracingHandler());

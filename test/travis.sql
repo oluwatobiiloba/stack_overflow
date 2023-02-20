@@ -1,14 +1,14 @@
-# Create MochaUser
+-- # Create MochaUser
 drop user root@localhost;
 FLUSH PRIVILEGES;
 CREATE USER 'root'@'localhost' IDENTIFIED BY 'password';
 GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON *.* TO 'root'@'localhost';
 
-# Create DB
+-- # Create DB
 CREATE DATABASE IF NOT EXISTS `database_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `database_test`;
 SET FOREIGN_KEY_CHECKS = 0;
-# Create Table
+-- # Create Table
 CREATE TABLE `users` (
   `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,

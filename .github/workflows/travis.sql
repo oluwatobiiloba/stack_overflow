@@ -1,14 +1,14 @@
-# Create MochaUser
+-- Create MochaUser
 drop user root@localhost;
 flush privileges;
 CREATE USER 'root'@'localhost' IDENTIFIED BY 'password';
 GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON *.* TO 'root'@'localhost';
 
-# Create DB
+-- # Create DB
 CREATE DATABASE IF NOT EXISTS `database_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `database_test`;
 SET FOREIGN_KEY_CHECKS = 0;
-# Create Table
+-- # Create Table
 CREATE TABLE `users` (
   `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
@@ -94,7 +94,7 @@ CREATE TABLE `voters` (
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
-# Add Data
+--  Add Data
 INSERT INTO `users` (`id`, `username`, `password`, `first_name`, `last_name`, `phonenumber`, `email`, `role`, `stack`, `age`, `nationality`, `createdAt`, `updatedAt`, `userId`)
 VALUES
 	( 1, 'Mocha', '$2a$10$ad1nSUmBhIm.4nTUfCIO2OUnWOmawajTOaZ2ItaxtSX3QLr9PoX1u', 'Mocha', 'Chai', 823322528, 'mocha@mochatest.com', 2, NULL, NULL, NULL, NOW(), NOW(), NULL);
