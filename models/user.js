@@ -1,8 +1,11 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-const { hashPassword } = require('../hooks/auth_hooks');
+const { Model } = require('sequelize');
+const env = process.env.NODE_ENV || 'development';
+const config = require(`${__dirname}/../config/config.js`)[env];
+//const { hashPassword } = require('../hooks/auth_hooks');
+const worker_pool = require('../worker-pool/init');
+const auth_hooks = require('../hooks/auth_hooks')
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -114,7 +117,10 @@ module.exports = (sequelize, DataTypes) => {
     tableName:'users',
     modelName: 'User',
   });
-    User.beforeCreate(hashPassword)
+    User.beforeCreate(async (user) => {
+      let pool = worker_pool.get_proxy()
+      user.password = pool? await pool.bcryptHashing(user.password) :  auth_hooks.hashPassword(user.password);
+    })
   // User.associate = (models) => {
   //   User.hasOne(models.Roles,{foreignKey: 'role_id'})
   // }
