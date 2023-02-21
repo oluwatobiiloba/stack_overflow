@@ -11,6 +11,11 @@ const Honeybadger = require('./util/logger');
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 const { ProfilingIntegration } = require("@sentry/profiling-node")
+const helmet = require("helmet");
+const OS = require('os');
+
+//Set the number of threads to the number of cores 
+process.env.UV_THREADPOOL_SIZE = config.UV_THREADPOOL_SIZE
 
 Sentry.init({
   dsn: process.env.SENTRY_URL,

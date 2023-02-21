@@ -1,5 +1,6 @@
 
 require('dotenv').config();
+const OS = require('os');
 
 module.exports = {
   development: {
@@ -25,6 +26,7 @@ module.exports = {
     DD_API_KEY: process.env.DD_API_KEY,
     DD_SITE: process.env.DD_SITE,
     NODE_OPTIONS: process.env.NODE_OPTIONS,
+    UV_THREADPOOL_SIZE: OS.cpus().length - 2
   },
   test: {
     username: 'root',
@@ -50,6 +52,7 @@ module.exports = {
     DD_API_KEY: process.env.DD_API_KEY,
     DD_SITE: process.env.DD_SITE,
     NODE_OPTIONS: process.env.NODE_OPTIONS,
+    UV_THREADPOOL_SIZE: OS.cpus().length 
   },
   test_github_actions: {
     username: 'root',
@@ -72,7 +75,8 @@ module.exports = {
     DD_CIVISIBILITY_AGENTLESS_ENABLED:
       process.env.DD_CIVISIBILITY_AGENTLESS_ENABLED,
     DD_API_KEY: process.env.DD_API_KEY,
-    DD_SITE: process.env.DD_SITE
+    DD_SITE: process.env.DD_SITE,
+    UV_THREADPOOL_SIZE: OS.cpus().length 
   },
 
   production: {
@@ -99,6 +103,7 @@ module.exports = {
     DD_API_KEY: process.env.DD_API_KEY,
     DD_SITE: process.env.DD_SITE,
     NODE_OPTIONS: process.env.NODE_OPTIONS,
+    UV_THREADPOOL_SIZE: OS.cpus().length - 2
   },
 };
 
