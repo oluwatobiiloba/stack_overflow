@@ -74,6 +74,7 @@ jobs:
     - name: Install dependencies
       run: |
         npm install
+        npm install pm2 -g
         npm install --save sequelize
         npm install --save mysql2
 
@@ -82,7 +83,7 @@ jobs:
 
     - name: Run  Tests
       run: |
-        nohup npm run start &
+        nohup pm2 start ecosystem.config.js &
         sleep 3
         npm run test
   
@@ -125,6 +126,7 @@ jobs:
     - name: Install dependencies
       run: |
         npm install
+        npm install pm2 -g
         npm install --save sequelize
         npm install --save mysql2
 
@@ -133,7 +135,7 @@ jobs:
 
     - name: Run  Postman Tests
       run: |
-        nohup npm run start &
+        nohup pm2 start ecosystem.config.js &
         sleep 3
    
     - name: Login to Postman CLI
@@ -176,6 +178,7 @@ jobs:
     - name: Install Auto-cannon
       run: |
         npm install -g autocannon
+        npm install pm2 -g
     - name: Install dependencies
       run: |
         npm install
@@ -187,7 +190,7 @@ jobs:
 
     - name: Run  Auto-Cannon Baseline Tests
       run: |
-        nohup npm run start &
+        nohup pm2 start ecosystem.config.js &
         sleep 3
         autocannon -c 2000 -d 5 http://localhost:3535
         autocannon -c 2000 -d 5 http://localhost:3535

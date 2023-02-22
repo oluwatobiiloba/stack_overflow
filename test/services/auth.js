@@ -166,7 +166,7 @@ describe("Auth Services", () => {
 
     it("should register a user", () => {
         let query = regData
-        authServices.registerUser(query)
+        return authServices.registerUser(query)
             .then((result) => {
                 expect(result).to.be.an("object");
                 expect(result.respObj.username).to.equal(regData.username)

@@ -117,8 +117,8 @@ module.exports = (sequelize, DataTypes) => {
   User.beforeCreate((user) => {
     const pool = worker_pool.get_proxy();
     return new Promise((resolve, reject) => {
-      switch (pool) {
-        case pool:
+      switch (true) {
+        case pool !== null:
           pool.bcryptHashing(user.password).then(hashedPw => {
             user.password = hashedPw
             resolve(user);
@@ -132,10 +132,9 @@ module.exports = (sequelize, DataTypes) => {
           resolve(user);
           break;
       }
-      ;
     });
+  })
 
-  });
   // User.associate = (models) => {
   //   User.hasOne(models.Roles,{foreignKey: 'role_id'})
   // }
