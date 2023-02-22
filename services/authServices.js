@@ -21,13 +21,13 @@ module.exports = {
 
         return payload
     },
-    async registerUser(data) {
+    registerUser(data) {
         const { username, first_name, last_name, phonenumber, email, password, role } = data
         return sequelize.transaction((t) => {
             return User.create({ username, first_name, last_name, phonenumber, email, password, role }, { transaction: t })
         }).then((user) => {
-            let token = this.signToken(user.id)
-            let respObj = {
+            const token = this.signToken(user.id)
+            const respObj = {
                 id: user.id,
                 uuid: user.uuid,
                 username: user.username,
