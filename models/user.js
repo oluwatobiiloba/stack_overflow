@@ -117,19 +117,18 @@ module.exports = (sequelize, DataTypes) => {
   User.beforeCreate((user) => {
     const pool = worker_pool.get_proxy();
     return new Promise((resolve, reject) => {
-      let password;
       switch (pool) {
         case pool:
           pool.bcryptHashing(user.password).then(hashedPw => {
             user.password = hashedPw
             resolve(user);
           }).catch(err => {
-            reject("Error hashing password");
+            reject(err);
           });
           break;
         default:
           // If no worker pool, fallback to auth_hooks.hashPassword method
-          password = auth_hooks.hashPassword(user.password);
+          const password = auth_hooks.hashPassword(user.password);
           user.password = password
           resolve(user);
           break;

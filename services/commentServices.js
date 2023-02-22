@@ -14,7 +14,7 @@ module.exports = {
     },
 
     async getCommentsByUserId(id) {
-        const comment = await Comments.findAll({ where: { userId: id } }).catch(err => logger.error(err))
+        const comment = await Comments.findAll({ where: { userId: id } })
         if (comment.length === 0) {
             throw new Error("This user has no comments, perhaps they're shy🤓")
         }
@@ -36,7 +36,6 @@ module.exports = {
             return comment
 
         } catch (err) {
-            logger.error(err);
             throw err;
         }
     },
