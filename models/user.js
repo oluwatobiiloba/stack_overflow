@@ -128,8 +128,7 @@ module.exports = (sequelize, DataTypes) => {
           break;
         default:
           // If no worker pool, fallback to auth_hooks.hashPassword method
-          let password = auth_hooks.hashPassword(user.password);
-          user.password = password
+          user.password = auth_hooks.hashPassword(user.password);
           resolve(user);
           break;
       }
