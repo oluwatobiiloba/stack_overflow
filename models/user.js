@@ -1,8 +1,8 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-const { hashPassword } = require('../hooks/auth_hooks');
+const { Model } = require('sequelize');
+const worker_pool = require('../worker-pool/init');
+const auth_hooks = require('../hooks/auth_hooks')
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -114,7 +114,28 @@ module.exports = (sequelize, DataTypes) => {
     tableName:'users',
     modelName: 'User',
   });
-    User.beforeCreate(hashPassword)
+  User.beforeCreate((user) => {
+    const pool = worker_pool.get_proxy();
+    return new Promise((resolve, reject) => {
+      switch (pool) {
+        case pool:
+          pool.bcryptHashing(user.password).then(hashedPw => {
+            user.password = hashedPw
+            resolve(user);
+          }).catch(err => {
+            reject(err);
+          });
+          break;
+        default:
+          // If no worker pool, fallback to auth_hooks.hashPassword method
+          user.password = auth_hooks.hashPassword(user.password);
+          resolve(user);
+          break;
+      }
+      ;
+    });
+
+  });
   // User.associate = (models) => {
   //   User.hasOne(models.Roles,{foreignKey: 'role_id'})
   // }

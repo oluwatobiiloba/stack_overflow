@@ -1,4 +1,3 @@
-require("newrelic");
 
 const userController = require("./userControllers");
 const questionsController = require('./questionsController');

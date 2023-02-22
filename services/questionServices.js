@@ -23,8 +23,6 @@ const answerServices = require('./answerServices')
                 data: "Unavailable",
                 status: "not used"
             }
-
-
          return sequelize.transaction((t) => {
              return Questions.create({ question, userId: user.id }, { transaction: t })
                  .then(
@@ -63,18 +61,21 @@ const answerServices = require('./answerServices')
 
                         }
 
-                        //AI model selector
+                         //AI model selector
                          if (ai_assist) {
-                             if (ai_assist_type === 'tips') {
-                                model = ai_models.ideas
-                            }
-                            if (ai_assist_type === 'slowcodegen') {
-                                model = ai_models.slowcodegen
-                            }
-                            if (ai_assist_type === 'fastcodegen') {
-                                model = ai_models.fastcodegen
-                            }
-
+                             switch (ai_assist_type) {
+                                 case 'tips':
+                                     model = ai_models.ideas;
+                                     break;
+                                 case 'slowcodegen':
+                                     model = ai_models.slowcodegen;
+                                     break;
+                                 case 'fastcodegen':
+                                     model = ai_models.fastcodegen;
+                                     break;
+                                 default:
+                                     throw new Error("Invalid question type");
+                             }
                             //AI Lookup
                             aiResponse = await aiClient.createCompletion(model);
                         }
@@ -87,7 +88,6 @@ const answerServices = require('./answerServices')
                  err => {
                      throw err
                  });
-
          }).then(async ([respdata, respstatus, question_id, ai_assist_required, question_asked]) => {
 
              const ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";

@@ -1,22 +1,23 @@
 const { Answers, Comments } = require('../models');
-const logger = require('../util/logger');
 
-module.exports ={
-    async getAllComments(){
-        let fields = ["user","answers"]
-      
-        const comment = await Comments.findAll({include:fields}).catch(
+
+module.exports = {
+    async getAllComments() {
+        let fields = ["user", "answers"]
+
+        const comment = await Comments.findAll({ include: fields }).catch(
             err => {
-                logger.error(err);  
-            throw new Error('Something went wrong on our end: 😒')
-        })
-      return comment
+                console.log(err)
+                throw new Error('Something went wrong on our end: 😒')
+            })
+        return comment
     },
 
     async getCommentsByUserId(id) {
-        const comment = await Comments.findAll({ where: { userId: id } }).catch(err => logger.error(err))
-        if(comment.length === 0){
-            throw new Error("This user has no comments, perhaps they're shy🤓")}
+        const comment = await Comments.findAll({ where: { userId: id } })
+        if (comment.length === 0) {
+            throw new Error("This user has no comments, perhaps they're shy🤓")
+        }
         return comment
     },
 
@@ -35,8 +36,7 @@ module.exports ={
             return comment
 
         } catch (err) {
-            logger.error(err);
-            throw err;
+            throw new Error("Something went wrong on our end: 😒");
         }
     },
 
@@ -45,8 +45,9 @@ module.exports ={
         const { comment, answerId, userId } = payload;
 
         const answer = await Answers.findOne({ where: { id: answerId } })
-        if(!answer){
-            throw new Error("This answer does not exist 🤔")}
+        if (!answer) {
+            throw new Error("This answer does not exist 🤔")
+        }
 
         const newComment = await Comments.create({ comment: comment, userId: userId, answerId: answer.id })
 

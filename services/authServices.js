@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 
+
 module.exports = {
     signToken(id) {
         const signedToken = jwt.sign({ id }, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRES })
@@ -30,7 +31,10 @@ module.exports = {
             email,
             password,
             role
+        }).catch(err => {
+            console.log(err)
         });
+      
         token = this.signToken(user.id)
 
         let respObj = {

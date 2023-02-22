@@ -11,7 +11,12 @@ const Honeybadger = require('./util/logger');
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 const { ProfilingIntegration } = require("@sentry/profiling-node")
-const helmet = require("helmet");
+const worker_pool = require('./worker-pool/init')
+const helmet = require('helmet')
+
+//Set the number of threads to the number of cores 
+process.env.UV_THREADPOOL_SIZE = config.UV_THREADPOOL_SIZE
+
 
 Sentry.init({
   dsn: process.env.SENTRY_URL,
@@ -95,13 +100,25 @@ app.get('/',(req,res)=>{
 
 app.use(Honeybadger.errorHandler)
 
+;(async () => {
+  //Initialize worker pool
+  if (config.WORKER_POOL_ENABLED) {
+    const options = { minWorkers: 'max' }
+    await worker_pool.initialize(options)
+  }
 
-app.listen(port, ()=>{
-  db_init();
-  redis_init();
-  ai_init();
-  console.log(`server started on port: ${port}`);
-})
+
+  app.listen(port, ()=>{
+    db_init();
+    redis_init();
+    ai_init();
+    console.log(`server started on port: ${port}`);
+  });
+})()
+
+process.on('beforeExit', () => {
+  worker_pool.terminate();
+});
 
 transaction.finish();
 
