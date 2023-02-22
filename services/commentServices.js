@@ -36,7 +36,7 @@ module.exports = {
             return comment
 
         } catch (err) {
-            throw "Something went wrong on our end: 😒";
+            throw new Error("Something went wrong on our end: 😒");
         }
     },
 
