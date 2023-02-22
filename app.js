@@ -16,6 +16,7 @@ const worker_pool = require('./worker-pool/init')
 //Set the number of threads to the number of cores 
 process.env.UV_THREADPOOL_SIZE = config.UV_THREADPOOL_SIZE
 
+
 Sentry.init({
   dsn: process.env.SENTRY_URL,
   integrations: [
@@ -70,6 +71,7 @@ const ai_init = async () => {
 
 app.use(Honeybadger.requestHandler)
 app.use(Sentry.Handlers.requestHandler());
+app.use(helmet());
 app.use(express.json())
 app.use('/api/v1/', index);
 app.use(Sentry.Handlers.tracingHandler());
