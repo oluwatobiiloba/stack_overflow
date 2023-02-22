@@ -117,13 +117,12 @@ const answerServices = require('./answerServices')
          return sequelize.transaction(async (t) => {
              try {
                  const questions = await Questions.findAll({ include: fields }, { transaction: t })
-                 if (!questions) {
-                     throw new Error('No qestions found 😔😔, nobody seems to need help')
+                 if (!questions || questions.length < 1) {
+                     throw new Error('No questions found 😔😔, nobody seems to need help')
                  }
                  return questions
              } catch (err) {
-                 console.log(err.message);
-                 throw err
+                 throw new Error("Error occured while fetching questions")
              }
          })
         },
@@ -145,7 +144,7 @@ const answerServices = require('./answerServices')
 
      async getQuestionsByUser(id) {
          const question = await Questions.findAll({ where: { userId: id }, include: ['user'] })
-         if (!question) {
+         if (!question || question.length < 1) {
              throw new Error("This user has no questions")
          }
          return question
