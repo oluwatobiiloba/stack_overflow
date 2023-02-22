@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A stackoverflow api clone",
   "scripts": {
-    "start": "node -r newrelic app.js",
+    "start": "node app.js ",
     "dev_start": "nodemon app.js",
     "test": "nyc mocha test/services/*.js --timeout 60000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov -t ${CODECOV_TOKEN} -r codecov/stack_overflow"
@@ -19,10 +19,11 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "helmet": "^6.0.1",
     "jsonwebtoken": "^9.0.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
-    "newrelic": "^9.9.0",
+    "newrelic": "^9.10.2",
     "openai": "^3.1.0",
     "postman": "^0.2.0",
     "postman-to-markdown": "^1.0.7",

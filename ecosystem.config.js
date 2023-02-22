@@ -1,9 +1,18 @@
 module.exports = {
   apps : [{
+    name: 'stack_lite',
     script: 'app.js',
-    watch: '.',
+    env_development: {
+      NODE_ENV: "development",
+    },
+    env_production: {
+      NODE_ENV: "production",
+    },
+    watch: true,
     instances: 0,
-    exec_mode: "cluster"
+    exec_mode: "cluster",
+    ignore_watch: ["node_modules"],
+
   }],
 
   deploy : {
