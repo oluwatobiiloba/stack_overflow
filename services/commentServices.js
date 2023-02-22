@@ -1,5 +1,5 @@
 const { Answers, Comments } = require('../models');
-const logger = require('../util/logger');
+
 
 module.exports ={
     async getAllComments(){
@@ -7,9 +7,7 @@ module.exports ={
       
         const comment = await Comments.findAll({include:fields}).catch(
             err => {
-
-                logger.error(err);  
-
+                console.log(err)
             throw new Error('Something went wrong on our end: 😒')
         })
       return comment

@@ -114,10 +114,30 @@ module.exports = (sequelize, DataTypes) => {
     tableName:'users',
     modelName: 'User',
   });
-    User.beforeCreate(async (user) => {
-      let pool = worker_pool.get_proxy()
-      user.password = pool? await pool.bcryptHashing(user.password) :  auth_hooks.hashPassword(user.password);
-    })
+  User.beforeCreate((user) => {
+    const pool = worker_pool.get_proxy();
+    return new Promise((resolve, reject) => {
+      let password;
+      switch (pool) {
+        case pool:
+          pool.bcryptHashing(user.password).then(hashedPw => {
+            user.password = hashedPw
+            resolve(user);
+          }).catch(err => {
+            reject("Error hashing password");
+          });
+          break;
+        default:
+          // If no worker pool, fallback to auth_hooks.hashPassword method
+          password = auth_hooks.hashPassword(user.password);
+          user.password = password
+          resolve(user);
+          break;
+      }
+      ;
+    });
+
+  });
   // User.associate = (models) => {
   //   User.hasOne(models.Roles,{foreignKey: 'role_id'})
   // }

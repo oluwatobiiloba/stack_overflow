@@ -1,7 +1,12 @@
 const WorkerPool = require('workerpool')
 const {hashPassword} = require('../hooks/auth_hooks')
 
-const bcryptHashing = async (user) => {
+/**
+ * Function to set worker services
+ * @returns corresponding function
+ */
+
+const bcryptHashing = (user) => {
     return hashPassword(user)
 }
 WorkerPool.worker({

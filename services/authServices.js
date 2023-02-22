@@ -33,7 +33,6 @@ module.exports = {
             role
         }).catch(err => {
             console.log(err)
-            logger.error(err)
         });
       
         token = this.signToken(user.id)

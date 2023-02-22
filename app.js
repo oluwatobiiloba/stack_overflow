@@ -11,8 +11,6 @@ const Honeybadger = require('./util/logger');
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 const { ProfilingIntegration } = require("@sentry/profiling-node")
-const helmet = require("helmet");
-const OS = require('os');
 const worker_pool = require('./worker-pool/init')
 
 //Set the number of threads to the number of cores 
