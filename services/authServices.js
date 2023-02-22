@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, sequelize } = require('../models')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('../config/config')[process.env.NODE_ENV || 'development'];
@@ -23,37 +23,28 @@ module.exports = {
     },
     async registerUser(data) {
         const { username, first_name, last_name, phonenumber, email, password, role } = data
-        const user = await User.create({
-            username ,
-            first_name,
-            last_name,
-            phonenumber,
-            email,
-            password,
-            role
-        }).catch(err => {
-            console.log(err)
-        });
-      
-        token = this.signToken(user.id)
-
-        let respObj = {
-            id: user.id,
-            uuid: user.uuid,
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            phonenumber: user.phonenumber,
-            email: user.email,
-            role: user.role,
-            stack: user.stack,
-            nationality: user.nationality,
-            age: user.age
-        }
-        respObj.token = token
-
-        payload = { respObj }
-        return payload
+        return sequelize.transaction((t) => {
+            return User.create({ username, first_name, last_name, phonenumber, email, password, role }, { transaction: t })
+        }).then((user) => {
+            let token = this.signToken(user.id)
+            let respObj = {
+                id: user.id,
+                uuid: user.uuid,
+                username: user.username,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                phonenumber: user.phonenumber,
+                email: user.email,
+                role: user.role,
+                stack: user.stack,
+                nationality: user.nationality,
+                age: user.age
+            }
+            respObj.token = token
+            return { respObj };
+        }).catch((err) => {
+            throw err
+        })
     },
     async signIn(data) {
         const { username, password } = data
