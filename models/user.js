@@ -1,8 +1,5 @@
 'use strict';
 const { Model } = require('sequelize');
-const env = process.env.NODE_ENV || 'development';
-const config = require(`${__dirname}/../config/config.js`)[env];
-//const { hashPassword } = require('../hooks/auth_hooks');
 const worker_pool = require('../worker-pool/init');
 const auth_hooks = require('../hooks/auth_hooks')
 
