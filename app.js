@@ -12,6 +12,7 @@ const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 const { ProfilingIntegration } = require("@sentry/profiling-node")
 const worker_pool = require('./worker-pool/init')
+const helmet = require('helmet')
 
 //Set the number of threads to the number of cores 
 process.env.UV_THREADPOOL_SIZE = config.UV_THREADPOOL_SIZE
