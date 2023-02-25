@@ -69,12 +69,12 @@ module.exports = {
                 })
                 .then(async ({ user, question }) => {
                     const newAnswer = await Answers.create({ answer, questionId: question.id, userId: user.id }, { transaction: t });
-
                     return { newAnswer };
                 })
                 .then(async (resp) => {
                     const key = 'answers:all';
-                    await redisClient.setEx(key, 30, JSON.stringify(await Answers.findAll({ include: fields }, { transaction: t })));
+                    const all_answers = await Answers.findAll({ include: fields }, { transaction: t });
+                    await redisClient.setEx(key, 120, JSON.stringify(all_answers));
                     return resp
                 })
                 .catch(err => {

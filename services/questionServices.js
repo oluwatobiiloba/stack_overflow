@@ -81,7 +81,7 @@ const worker_pool = require('../worker-pool/init')
 
              ).then(async ([pool, model, question_id, ai_assist, askQuestion]) => {
                  if (pool.ai_call) {
-                     return [await pool.ai_call(model), question_id, ai_assist, askQuestion]
+                     return [await pool.ai_call(model), question_id, ai_assist, askQuestion, pool]
                  } else {
                      return [await aiClient.createCompletion(model), question_id, ai_assist, askQuestion]
                  }
@@ -89,7 +89,7 @@ const worker_pool = require('../worker-pool/init')
                  err => {
                      throw err
                  });
-         }).then(async ([aiResponse, question_id, ai_assist_required, question_asked]) => {
+         }).then(async ([aiResponse, question_id, ai_assist_required, question_asked, pool = null]) => {
              const respdata = aiResponse.data
              const respstatus = aiResponse.status
              const ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
@@ -103,7 +103,9 @@ const worker_pool = require('../worker-pool/init')
 
              }
                // Save Ai answere to db
-             if (ai_assist_required) {
+             if (ai_assist_required && pool.save_aiResponse) {
+                 pool.save_aiResponse(save_params)
+             } else {
                  await answerServices.createAnswer(save_params)
              }
              return { question_asked, ai_answer, ai_status }

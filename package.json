@@ -30,7 +30,7 @@
     "postman-to-markdown": "^1.0.7",
     "promisify": "^0.0.3",
     "redis": "^4.5.1",
-    "sequelize": "^6.25.2"
+    "sequelize": "^6.28.2"
   },
   "devDependencies": {
     "@datadog/datadog-ci": "^2.4.0",
