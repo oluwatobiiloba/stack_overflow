@@ -19,8 +19,8 @@ const worker_pool = require('../worker-pool/init')
 
      askAI(data) {
          const { question, user, ai_assist, ai_assist_type } = data
-         let model = null
-         let pool = null
+
+
          return sequelize.transaction((t) => {
              return Questions.create({ question, userId: user.id }, { transaction: t })
                  .then(
@@ -60,6 +60,8 @@ const worker_pool = require('../worker-pool/init')
                         }
 
              //AI model selector
+                         let model = null
+                         let pool = null
                          switch (ai_assist_type) {
                              case 'tips':
                                  model = ai_models.ideas;
@@ -76,20 +78,20 @@ const worker_pool = require('../worker-pool/init')
                          //Pool worker selector
                          pool = await worker_pool.get_proxy();
 
-                         return [pool, model, question_id, ai_assist, askQuestion]
+                         return [pool, model, question_id, askQuestion]
                      }
 
-             ).then(async ([pool, model, question_id, ai_assist, askQuestion]) => {
+             ).then(async ([pool, model, question_id, askQuestion]) => {
                  if (pool.ai_call) {
-                     return [await pool.ai_call(model), question_id, ai_assist, askQuestion, pool]
+                     return [await pool.ai_call(model), question_id, askQuestion, pool]
                  } else {
-                     return [await aiClient.createCompletion(model), question_id, ai_assist, askQuestion]
+                     return [await aiClient.createCompletion(model), question_id, askQuestion]
                  }
              }).catch(
                  err => {
                      throw err
                  });
-         }).then(async ([aiResponse, question_id, ai_assist_required, question_asked, pool = null]) => {
+         }).then(async ([aiResponse, question_id, question_asked, pool]) => {
              const respdata = aiResponse.data
              const respstatus = aiResponse.status
              const ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
@@ -103,7 +105,7 @@ const worker_pool = require('../worker-pool/init')
 
              }
                // Save Ai answere to db
-             if (ai_assist_required && pool.save_aiResponse) {
+             if (ai_assist && pool.save_aiResponse) {
                  pool.save_aiResponse(save_params)
              } else {
                  await answerServices.createAnswer(save_params)

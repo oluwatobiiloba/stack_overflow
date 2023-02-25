@@ -1,4 +1,3 @@
-const { response } = require('express')
 const WorkerPool = require('workerpool')
 const {hashPassword} = require('../hooks/auth_hooks')
 const aiClient = require('../util/ai_helper')
@@ -25,8 +24,8 @@ const bcryptHashing = (user) => {
     return hashPassword(user)
 }
 
-const ai_call = async (model) => {
-    let aiResponse = {}
+const ai_call = (model) => {
+    const aiResponse = {}
 
     return new Promise((resolve, reject) => {
         aiClient.createCompletion(model).then((response) => {
@@ -40,7 +39,7 @@ const ai_call = async (model) => {
 
 }
 
-const save_aiResponse = async (save_params) => {
+const save_aiResponse = (save_params) => {
     return new Promise((resolve, reject) => {
         //initialize redit for worker instance 
         redis_init()
@@ -49,7 +48,7 @@ const save_aiResponse = async (save_params) => {
             redisClient.quit()
             resolve(response)
         }).catch((err) => {
-            console.log("err", err)
+            redisClient.quit()
             reject(err)
         })
     })
