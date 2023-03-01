@@ -218,9 +218,9 @@ jobs:
           run: npx sequelize db:migrate
 
         - name: Import environment variables and secrets
-          uses: Azure/github-actions/keyvault@v1
+          uses: Azure/keyvault@v1
           with:
-            scope: 'my-key-vault'
+            scope: 'env-variables'
             secrets: |
               NODE_ENV=production
               DB_HOST=${{ secrets.DB_HOST }}
