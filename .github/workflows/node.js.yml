@@ -204,7 +204,7 @@ jobs:
         - name: Set up Node.js version
           uses: actions/setup-node@v1
           with:
-            node-version: '18.x'
+            node-version: '16.x'
 
         - name: npm install, build, and test
           run: |
@@ -268,7 +268,7 @@ jobs:
           with:
             app-name: 'stacklite'
             slot-name: 'development'
-            publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_781DB1EF4FBB49E69BFF5C67F8CC887E }}
+            publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_781DB1EF4FBB49E69BFF5C67F8CC887E}}
             package: .
 
   # ///
