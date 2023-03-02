@@ -9,5 +9,5 @@ if (config.NODE_ENV === 'development') {
 } else {
     connection_options = process.env.REDIS_URL
 }
-console.log('connection_options', connection_options)
+
 module.exports = require('redis').createClient(connection_options);
