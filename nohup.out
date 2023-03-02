@@ -1,0 +1,24 @@
+[PM2] Applying action restartProcessId on app [stack_lite](ids: [
+  0, 1, 2, 3,
+  4, 5, 6, 7
+])
+[PM2] [stack_lite](0) ✓
+[PM2] [stack_lite](1) ✓
+[PM2] [stack_lite](2) ✓
+[PM2] [stack_lite](3) ✓
+[PM2] [stack_lite](4) ✓
+[PM2] [stack_lite](5) ✓
+[PM2] [stack_lite](6) ✓
+[PM2] [stack_lite](7) ✓
+┌─────┬───────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id  │ name          │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├─────┼───────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0   │ stack_lite    │ default     │ 1.0.0   │ cluster │ 73844    │ 0s     │ 52   │ online    │ 32%      │ 45.4mb   │ oluwato… │ enabled  │
+│ 1   │ stack_lite    │ default     │ 1.0.0   │ cluster │ 73845    │ 0s     │ 52   │ online    │ 30%      │ 45.5mb   │ oluwato… │ enabled  │
+│ 2   │ stack_lite    │ default     │ 1.0.0   │ cluster │ 73848    │ 0s     │ 50   │ online    │ 30%      │ 44.5mb   │ oluwato… │ enabled  │
+│ 3   │ stack_lite    │ default     │ 1.0.0   │ cluster │ 73849    │ 0s     │ 48   │ online    │ 0%       │ 43.9mb   │ oluwato… │ enabled  │
+│ 4   │ stack_lite    │ default     │ 1.0.0   │ cluster │ 73850    │ 0s     │ 39   │ online    │ 0%       │ 38.1mb   │ oluwato… │ enabled  │
+│ 5   │ stack_lite    │ default     │ 1.0.0   │ cluster │ 73851    │ 0s     │ 38   │ online    │ 0%       │ 37.4mb   │ oluwato… │ enabled  │
+│ 6   │ stack_lite    │ default     │ 1.0.0   │ cluster │ 73852    │ 0s     │ 34   │ online    │ 0%       │ 35.0mb   │ oluwato… │ enabled  │
+│ 7   │ stack_lite    │ default     │ 1.0.0   │ cluster │ 73853    │ 0s     │ 32   │ online    │ 0%       │ 28.8mb   │ oluwato… │ enabled  │
+└─────┴───────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
