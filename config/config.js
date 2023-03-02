@@ -27,7 +27,7 @@ module.exports = {
     DD_API_KEY: process.env.DD_API_KEY,
     DD_SITE: process.env.DD_SITE,
     NODE_OPTIONS: process.env.NODE_OPTIONS,
-    UV_THREADPOOL_SIZE: OS.cpus().length - 2,
+    UV_THREADPOOL_SIZE: OS.cpus().length,
     WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true
   },
   test: {
