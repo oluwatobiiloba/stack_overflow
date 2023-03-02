@@ -28,7 +28,9 @@ module.exports = {
     DD_SITE: process.env.DD_SITE,
     NODE_OPTIONS: process.env.NODE_OPTIONS,
     UV_THREADPOOL_SIZE: OS.cpus().length,
-    WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true
+    WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true,
+    AZURE_CACHE_FOR_REDIS_HOST_NAME: process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME,
+    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY
   },
   test: {
     username: 'root',
