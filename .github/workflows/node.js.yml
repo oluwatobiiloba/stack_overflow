@@ -64,6 +64,12 @@ jobs:
         cache: 'npm'
     - name: Install mocha
       run: npm install -g mocha
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install pm2 -g
+        npm install --save sequelize
+        npm install --save mysql2
     - name: 'Cache node_modules'
       uses: actions/cache@v2
       with:
@@ -71,13 +77,7 @@ jobs:
         key: ${{ runner.os }}-node-v${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
             ${{ runner.os }}-node-v${{ matrix.node }}-
-    - name: Install dependencies
-      run: |
-        npm install
-        npm install pm2 -g
-        npm install --save sequelize
-        npm install --save mysql2
-
+    
     - name: Run migrations
       run: npx sequelize db:migrate
 
@@ -204,7 +204,7 @@ jobs:
         - name: Set up Node.js version
           uses: actions/setup-node@v1
           with:
-            node-version: '16.x'
+            node-version: '18.x'
 
         - name: npm install, build, and test
           run: |
@@ -213,7 +213,7 @@ jobs:
             npm install pm2 -g
             npm install --save sequelize
             npm install --save mysql2
-
+        
         - name: Upload artifact for deployment job
           uses: actions/upload-artifact@v2
           with:
