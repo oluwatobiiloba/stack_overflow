@@ -68,7 +68,7 @@ jobs:
       run: |
         npm install
         npm install pm2 -g
-        npm install --save sequelize
+        npm install --save sequelize 
         npm install --save mysql2
     - name: 'Cache node_modules'
       uses: actions/cache@v2
@@ -226,7 +226,7 @@ jobs:
       runs-on: ubuntu-latest
       needs: Setup_to_dev
       environment:
-        name: 'development'
+        name: 'dev'
         url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
       steps:
@@ -241,7 +241,7 @@ jobs:
           with:
             app-name: 'stacklite'
             slot-name: 'development'
-            publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_781DB1EF4FBB49E69BFF5C67F8CC887E}}
+            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE}}
             package: .
 
   # ///
