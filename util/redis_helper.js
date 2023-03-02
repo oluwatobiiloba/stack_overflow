@@ -1,6 +1,13 @@
 const env = process.env.NODE_ENV || 'development';
 const config = require(`${__dirname}/../config/config.js`)[env];
-module.exports = require('redis').createClient({
-    url: `rediss://${config.AZURE_CACHE_FOR_REDIS_HOST_NAME}:6380`,
-    password: config.AZURE_CACHE_FOR_REDIS_ACCESS_KEY + '=',
-});
+let connection_options = null
+if (config.NODE_ENV === 'development') {
+    connection_options = {
+        url: `rediss://${config.AZURE_CACHE_FOR_REDIS_HOST_NAME}:6380`,
+        password: config.AZURE_CACHE_FOR_REDIS_ACCESS_KEY + '=',
+    }
+} else {
+    connection_options = process.env.REDIS_URL
+}
+console.log('connection_options', connection_options)
+module.exports = require('redis').createClient(connection_options);

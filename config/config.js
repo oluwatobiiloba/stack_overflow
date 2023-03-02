@@ -57,7 +57,9 @@ module.exports = {
     DD_SITE: process.env.DD_SITE,
     NODE_OPTIONS: process.env.NODE_OPTIONS,
     UV_THREADPOOL_SIZE: OS.cpus().length,
-    WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true
+    WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true,
+    AZURE_CACHE_FOR_REDIS_HOST_NAME: process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME,
+    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY
   },
   test_github_actions: {
     username: 'root',
@@ -82,7 +84,9 @@ module.exports = {
     DD_API_KEY: process.env.DD_API_KEY,
     DD_SITE: process.env.DD_SITE,
     UV_THREADPOOL_SIZE: OS.cpus().length,
-    WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true
+    WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true,
+    AZURE_CACHE_FOR_REDIS_HOST_NAME: process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME,
+    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY
   },
 
   production: {
@@ -110,7 +114,9 @@ module.exports = {
     DD_SITE: process.env.DD_SITE,
     NODE_OPTIONS: process.env.NODE_OPTIONS,
     UV_THREADPOOL_SIZE: OS.cpus().length - 2,
-    WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true
+    WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true,
+    AZURE_CACHE_FOR_REDIS_HOST_NAME: process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME,
+    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY
   },
 };
 
