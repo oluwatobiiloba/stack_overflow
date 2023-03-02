@@ -4,7 +4,7 @@
   "description": "A stackoverflow api clone",
   "scripts": {
     "start": "pm2 start ecosystem.config.js --env development",
-    "stop":  "pm2 stop ecosystem.config.js --env development",
+    "stop": "pm2 stop ecosystem.config.js --env development",
     "dev_start": "nodemon app.js",
     "test": "nyc mocha test/services/*.js --timeout 110000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov -t ${CODECOV_TOKEN} -r codecov/stack_overflow"
@@ -12,6 +12,8 @@
   "author": "oluwatobiiloba",
   "license": "ISC",
   "dependencies": {
+    "@azure/identity": "^3.1.3",
+    "@azure/keyvault-secrets": "^4.6.0",
     "@honeybadger-io/js": "^4.9.3",
     "@sentry/node": "^7.36.0",
     "@sentry/profiling-node": "^0.1.0",

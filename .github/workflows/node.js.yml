@@ -217,30 +217,6 @@ jobs:
         - name: Run migrations
           run: npx sequelize db:migrate
 
-        - name: Import environment variables and secrets
-          uses: Azure/keyvault@v1
-          with:
-            scope: 'env-variables'
-            secrets: |
-              NODE_ENV=production
-              DB_HOST=${{ secrets.DB_HOST }}
-              DB_USER=${{ secrets.DB_USER }}
-              DB_PASS=${{ secrets.DB_PASS }}
-              NODE_ENV=development
-              DD_CIVISIBILITY_AGENTLESS_ENABLED=${{vars.DD_CIVISIBILITY_AGENTLESS_ENABLED}}
-              AI_KEY=${{secrets.AI_KEY}}
-              AI_ORG=${{secrets.AI_ORG}}
-              AI_UUID=${{secrets.AI_UUID}}
-              HONEYBADGER_KEY=${{secrets.HONEYBADGER_KEY}}
-              CODECOV_TOKEN=${{secrets.CODECOV_TOKEN}}
-              SENTRY_URL=${{secrets.SENTRY_URL}}
-              DD_API_KEY=${{secrets.DD_API_KEY}}
-              DD_SITE=${{secrets.DD_SITE}}
-              JWT_SECRET=${{secrets.JWT_SECRET}}
-              JWT_EXPIRES=${{vars.JWT_EXPIRES}}
-              JWT_COOKIE_EXPIRES_IN=${{vars.JWT_COOKIE_EXPIRES_IN}}
-              BCRYPT_STRING=${{secrets.BCRYPT_STRING}}
-
         - name: Upload artifact for deployment job
           uses: actions/upload-artifact@v2
           with:
