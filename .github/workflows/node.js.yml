@@ -213,9 +213,6 @@ jobs:
             npm install pm2 -g
             npm install --save sequelize
             npm install --save mysql2
-        
-        - name: Run migrations
-          run: npx sequelize db:migrate
 
         - name: Upload artifact for deployment job
           uses: actions/upload-artifact@v2
