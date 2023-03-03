@@ -20,6 +20,7 @@ if (config.NODE_ENV === "production") {
   sequelize = new Sequelize(config.database, config.username, config.password, {
     dialect: config.dialect,
     logging: false,
+    host: config.host,
     port: config.port
   });
 }

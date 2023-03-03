@@ -5,13 +5,13 @@
 [![DeepSource](https://deepsource.io/gh/oluwatobiiloba/stack_overflow.svg/?label=active+issues&show_trend=true&token=z3yJ6jOpH5l6M6LtBXTwja5a)](https://deepsource.io/gh/oluwatobiiloba/stack_overflow/?ref=repository-badge)
 
 
-# Project: Noob Community
 
-# 📁 Collection: USER
+
+# 📁 Postman Collection: USER
 
 ## End-point: Signup
 
-Register Users
+Register Users with the provided payload.
 
 ### Method: POST
 >

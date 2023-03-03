@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A stackoverflow api clone",
   "scripts": {
-    "start": "node app.js ",
+    "start": "pm2 start ecosystem.config.js --env development & sleep 3 & pm2 monit",
+    "stop": "pm2 stop ecosystem.config.js --env development",
     "dev_start": "nodemon app.js",
     "test": "nyc mocha test/services/*.js --timeout 110000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls curl -Os https://uploader.codecov.io/latest/linux/codecov chmod +x codecov ./codecov -t ${CODECOV_TOKEN} -r codecov/stack_overflow"
@@ -11,6 +12,8 @@
   "author": "oluwatobiiloba",
   "license": "ISC",
   "dependencies": {
+    "@azure/identity": "^3.1.3",
+    "@azure/keyvault-secrets": "^4.6.0",
     "@honeybadger-io/js": "^4.9.3",
     "@sentry/node": "^7.36.0",
     "@sentry/profiling-node": "^0.1.0",
@@ -30,7 +33,8 @@
     "postman-to-markdown": "^1.0.7",
     "promisify": "^0.0.3",
     "redis": "^4.5.1",
-    "sequelize": "^6.28.2"
+    "sequelize": "^6.28.2",
+    "tedious": "^15.1.3"
   },
   "devDependencies": {
     "@datadog/datadog-ci": "^2.4.0",
