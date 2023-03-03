@@ -5,9 +5,9 @@ on:
     branches:
       - dev
       - main
-  push:
-    branches:
-      - dev
+  # push:
+  #   branches:
+  #     - dev
 
 env:
   NODE_ENV: test_github_actions
@@ -198,6 +198,7 @@ jobs:
     
   Setup_to_dev:
       runs-on: ubuntu-20.04
+      needs: Unit_Test
       steps:
         - uses: actions/checkout@v2
 
