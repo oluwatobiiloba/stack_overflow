@@ -2,7 +2,10 @@ require('dotenv').config({path: './.env'});
 const express = require("express");
 const { sequelize } = require('./models');
 const index = require("./routers");
+const rateLimit = require('express-rate-limit');
+const morgan = require('morgan');
 const app = express();
+const cookieParser = require('cookie-parser');
 const aiClient = require('./util/ai_helper')
 const redisClient = require('./util/redis_helper')
 const env = process.env.NODE_ENV || 'development';
@@ -13,10 +16,19 @@ const Tracing = require("@sentry/tracing");
 const { ProfilingIntegration } = require("@sentry/profiling-node")
 const worker_pool = require('./worker-pool/init')
 const helmet = require('helmet')
+const appError = require('./util/app_error')
+const controllers = require('./controllers')
+const sanitizer = require("perfect-express-sanitizer");
+
 
 //Set the number of threads to the number of cores 
 process.env.UV_THREADPOOL_SIZE = config.UV_THREADPOOL_SIZE
 
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: "Too many requets from this IP,please try again in an hour"
+})
 
 Sentry.init({
   dsn: process.env.SENTRY_URL,
@@ -73,10 +85,29 @@ const ai_init = async () => {
 app.use(Honeybadger.requestHandler)
 app.use(Sentry.Handlers.requestHandler());
 app.use(helmet());
-app.use(express.json())
+app.use('/api', limiter);
 app.use('/api/v1/', index);
 app.use(Sentry.Handlers.tracingHandler());
 app.use(Sentry.Handlers.errorHandler());
+app.use(express.json({ limit: '15kb' }));
+app.use(cookieParser());
+app.use(controllers.error);
+app.use(sanitizer.clean({
+  xss: true,
+  noSql: true,
+  sql: true
+}));
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
+
+app.use((req, _res, next) => {
+  req.requestTime = new Date().toISOString();
+  console.log(req.headers);
+  next();
+})
 
 
 
@@ -86,6 +117,9 @@ app.get('/',(req,res)=>{
     })
   })
 
+app.all('*', (req, res, next) => {
+  next(new appError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
 
 app.use(Honeybadger.errorHandler)
 
@@ -97,17 +131,27 @@ app.use(Honeybadger.errorHandler)
   }
 
 
-  app.listen(port, ()=>{
+  const server = app.listen(port, () => {
     db_init();
     redis_init();
     ai_init();
     console.log(`server started on port: ${port}`);
+  });
+
+  process.on('unhandledRejection', err => {
+    console.log(err.name, err.message);
+    console.log('Unhandled Rection,closing app');
+    server.close(() => {
+      process.exit(1);
+    })
+
   });
 })()
 
 process.on('beforeExit', () => {
   worker_pool.terminate();
 });
+
 
 transaction.finish();
 

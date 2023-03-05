@@ -229,8 +229,7 @@ jobs:
             name: node-app
             path: |
               .
-              !.git
-              !node_modules
+              
         
         
 
