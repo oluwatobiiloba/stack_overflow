@@ -131,7 +131,7 @@ app.use(Honeybadger.errorHandler)
   }
 
 
-  const server = app.listen(port, () => {
+  app.listen(port, () => {
     db_init();
     redis_init();
     ai_init();
