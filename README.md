@@ -3,8 +3,88 @@
 [![DeepScan grade](https://deepscan.io/api/teams/20281/projects/23746/branches/724603/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=20281&pid=23746&bid=724603)
 [![Travis Build Status](https://app.travis-ci.com/oluwatobiiloba/stack_overflow.svg?branch=dev)](https://app.travis-ci.com/oluwatobiiloba/stack_overflow)
 [![DeepSource](https://deepsource.io/gh/oluwatobiiloba/stack_overflow.svg/?label=active+issues&show_trend=true&token=z3yJ6jOpH5l6M6LtBXTwja5a)](https://deepsource.io/gh/oluwatobiiloba/stack_overflow/?ref=repository-badge)
+[![Continous Test Workflow](https://github.com/oluwatobiiloba/stack_overflow/actions/workflows/node.js.yml/badge.svg)](https://github.com/oluwatobiiloba/stack_overflow/actions/workflows/node.js.yml)
 
+# Stackoverflow_lite
 
+This is a simple AI-Powered platform where users can ask and answer questions, generate answers using OpenAi Api, comment on answers, and vote answers/comments.
+
+# Depenedencies
+
+- [Redis Server](redis.io)
+- [OpenAi](https://openai.com/)
+- [Pm2](https://pm2.io/)
+- [Sentry](https://sentry.io/welcome/)
+- [HoneyBadger](https://www.honeybadger.io/)
+- Sequelize
+- MySql
+
+# How To Install
+
+- Clone the repository
+
+  ```node
+  git clone https://github.com/oluwatobiiloba/stack_overflow.git
+  ```
+
+- Install Dependencies
+
+  ```node
+  npm install pm2 -g
+  npm install --save sequelize
+  npm install --save mysql2
+  ```
+
+- Install Available Packages
+
+  ```node
+  npm install
+  ```
+
+- Setup Environment Variables and secrets, refer to `example.env` as a guide.
+  
+- Run Database Migrations
+
+  ```node
+  sequelize db:migrate
+  ```
+
+- run the application
+
+  ```node
+  npm run start 
+  ```
+  
+# Testing
+
+- Test is done using the Mocha Package.
+
+  ```node
+  npm run test
+  ```
+  
+# Live Server
+
+This app is hosted on Azure cloud alongside the database and the redis server.
+  <https://stackoverflowlite-flw.herokuapp.com>
+  
+# DATABASE SCHEMA
+
+![Database Schema](./Schema.png)
+
+# Documentation
+
+the base url is `/api/v1`and the main endpoints are:
+
+- `/users`
+
+- `/questions`
+
+- `/answers`
+
+- `/comments`
+
+- `/votes`
 
 
 # 📁 Postman Collection: USER
