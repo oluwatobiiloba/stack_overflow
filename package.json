@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A stackoverflow api clone",
   "scripts": {
-    "start": "npm install && sleep 3 && pm2 start ecosystem.config.js --env development && sleep 3",
+    "start": "pm2 start ecosystem.config.js --env development && sleep 3",
     "stop": "pm2 stop ecosystem.config.js --env development",
     "dev_start": "nodemon app.js",
     "test": "nyc mocha test/services/*.js --timeout 110000 --exit",
