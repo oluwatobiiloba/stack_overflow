@@ -42,9 +42,19 @@ const validationErrorDB = err => {
     return new AppError(message, 400);
 };
 
+/**
+ * A middleware function that handles validation errors by creating a new error object using the imported AppError class
+ * @function jwtError
+ * @returns {object} - an instance of AppError with a message and status code
+ */
 const jwtError = () =>
     new AppError('Invalid token. Please log in again!', 401);
 
+/**
+* A middleware function that handles validation errors by creating a new error object using the imported AppError class
+* @function jwtExpiredError
+* @returns {object} - an instance of AppError with a message and status code
+*/
 const jwtExpiredError = () =>
     new AppError('Your token has expired! Please log in again.', 401);
 
@@ -80,7 +90,7 @@ const sendErrorDev = (req, err, res) => {
  * @param {object} res - response object
  * @returns {object} - JSON object with status code, status, and message
  */
-const sendErrorProd = (_req, err, res) => {
+const sendErrorProd = (req, err, res) => {
     const { statusCode = 500, status = "error", message } = err;
 
     if (err.isOperational) {
@@ -92,7 +102,8 @@ const sendErrorProd = (_req, err, res) => {
         //console.error('ERROR 💥', err);
         res.status(statusCode).json({
             status,
-            message: 'Something went very wrong!'
+            message: 'Something went very wrong!',
+            method: req.method,
         });
     }
 };
