@@ -5,9 +5,8 @@ module.exports = {
     async signUp(req, res) {
         const data = req.body
         try {
-
             const newUser = await authServices.registerUser(data)
-            //const token = createSendToken(newUser.newUser,201,res)
+
             return res.status(201).json({
                 status: 'success',
                 message: "User registered",
@@ -19,7 +18,7 @@ module.exports = {
         }
         catch (err) {
             console.log(err.message)
-            AppError(err, req, res)
+            return AppError(err, req, res)
             // return res.status(500).json(err)
         }
     },
