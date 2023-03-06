@@ -97,7 +97,11 @@ const initDB = async () => {
 const initRedis = async () => {
   await redisClient.connect()
     .then(() => console.log('Redis server connected'))
-    .catch(err => console.log('Redis initialization failed:', err))
+    .catch(err => console.log('Redis initialization failed:', err));
+
+  redisClient.on('error', async (err) => {
+    console.log("Redis Timedout and reconnecting");
+  })
 }
 
 // create a async function to initialize openAi client
