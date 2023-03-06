@@ -50,6 +50,7 @@ Sentry.init({
 //  add requestTime to req object which indicates when the request was made
 app.use((req, _res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.method, req.originalUrl)
   next();
 })
 
@@ -64,8 +65,9 @@ app.get('/', (_req, res) => { // GET request at endpoint '/'
     message: 'stack_lite API',
   })
 })
-app.use('/', index);   // Using router from index file
+
 app.use('/api/v1/', index);
+app.use('/', index);   // Using router from index file
 app.use(Sentry.Handlers.tracingHandler());
 app.use(Sentry.Handlers.errorHandler());
 
