@@ -1,6 +1,6 @@
 const { User } = require('../models')
 const authServices = require('../services/authServices')
-
+const AppError = require('./error')
 module.exports = {
     async signUp(req, res) {
         const data = req.body
@@ -19,7 +19,8 @@ module.exports = {
         }
         catch (err) {
             console.log(err.message)
-            return res.status(500).json(err)
+            AppError(err, req, res)
+            // return res.status(500).json(err)
         }
     },
 

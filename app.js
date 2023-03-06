@@ -85,13 +85,18 @@ const ai_init = async () => {
 app.use(Honeybadger.requestHandler)
 app.use(Sentry.Handlers.requestHandler());
 app.use(helmet());
+app.use(express.json());
+app.use(cookieParser());
 app.use('/api', limiter);
 app.use('/api/v1/', index);
 app.use(Sentry.Handlers.tracingHandler());
 app.use(Sentry.Handlers.errorHandler());
-app.use(express.json({ limit: '15kb' }));
-app.use(cookieParser());
 app.use(controllers.error);
+app.use((req, _res, next) => {
+  req.requestTime = new Date().toISOString();
+  console.log(req.headers);
+  next();
+})
 app.use(sanitizer.clean({
   xss: true,
   noSql: true,
@@ -101,16 +106,6 @@ app.use(sanitizer.clean({
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
-
-app.use((req, _res, next) => {
-  req.requestTime = new Date().toISOString();
-  console.log(req.headers);
-  next();
-})
-
-
-
 app.get('/',(req,res)=>{
     return res.status(200).json({
       message: 'stack_lite API',
@@ -138,11 +133,6 @@ app.use(Honeybadger.errorHandler)
     console.log(`server started on port: ${port}`);
   });
 
-  process.on('unhandledRejection', err => {
-    console.log(err.name, err.message);
-    console.log('Unhandled Rection,closing app');
-
-  });
 })()
 
 process.on('beforeExit', () => {
