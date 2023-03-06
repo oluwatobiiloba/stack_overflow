@@ -19,8 +19,8 @@ const helmet = require('helmet')
 const appError = require('./util/app_error')
 const controllers = require('./controllers')
 const sanitizer = require("perfect-express-sanitizer");
-const csrf = require('lusca').csrf;
-
+const lusca = require('lusca')
+const session = require('express-session')
 
 //Set the number of threads to the number of cores 
 process.env.UV_THREADPOOL_SIZE = config.UV_THREADPOOL_SIZE
@@ -30,6 +30,12 @@ const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   message: "Too many requets from this IP,please try again in an hour"
 })
+
+app.use(session({
+  secret: config.JWT_SECRET,
+  resave: true,
+  saveUninitialized: true
+}));
 
 Sentry.init({
   dsn: process.env.SENTRY_URL,
@@ -88,7 +94,7 @@ app.use(Sentry.Handlers.requestHandler());
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-app.use(csrf())
+app.use(lusca.csrf())
 app.use('/api', limiter);
 app.use('/api/v1/', index);
 app.use(Sentry.Handlers.tracingHandler());
