@@ -71,7 +71,7 @@ const sendErrorDev = (req, err, res) => {
  * @param {object} res - response object
  * @returns {object} - JSON object with status code, status, and message
  */
-const sendErrorProd = (_req, err, res) => {
+const sendErrorProd = (err, res) => {
     const { statusCode = 500, status = "error", message } = err;
 
     if (err.isOperational) {
@@ -110,6 +110,6 @@ module.exports = (err, req, res) => {
         if (error.name === 'CastError') error = castError(error);
         if (error.name === "SequelizeUniqueConstraintError") error = duplicateFieldsDB(error);
         if (error.name === 'ValidationError') error = validationErrorDB(error);
-        sendErrorProd(req, error, res);
+        sendErrorProd(error, res);
     }
 };
