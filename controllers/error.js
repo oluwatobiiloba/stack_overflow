@@ -8,6 +8,7 @@ const AppError = require('./../util/app_error');
  * @returns {object} - an instance of AppError with a message and status code
  */
 const castError = err => {
+    console.log("in cast")
     const message = `Invalid ${err.path}: ${err.value}.`;
     return new AppError(message, 400);
 };
@@ -19,9 +20,7 @@ const castError = err => {
  * @returns {object} - an instance of AppError with a message and status code
  */
 const duplicateFieldsDB = err => {
-    const value = err.errmsg.match(/(["'])(\?.)*?\1/)[0];
-    console.log(value);
-
+    const value = err.errors[0].path;
     const message = `Duplicate field value: ${value}. Please use another value!`;
     return new AppError(message, 400);
 };
@@ -33,6 +32,7 @@ const duplicateFieldsDB = err => {
  * @returns {object} - an instance of AppError with a message and status code
  */
 const validationErrorDB = err => {
+    console.log("in validation")
     const errors = Object.values(err.errors).map(el => el.message);
 
     const message = `Invalid input data. ${errors.join('. ')}`;
@@ -101,13 +101,14 @@ module.exports = (err, req, res) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV !== 'development') {
         sendErrorDev(req, err, res);
     } else {
         let error = { ...err };
         error.message = err.message;
+        console.log(error.name)
         if (error.name === 'CastError') error = castError(error);
-        if (error.code === 11000) error = duplicateFieldsDB(error);
+        if (error.name === "SequelizeUniqueConstraintError") error = duplicateFieldsDB(error);
         if (error.name === 'ValidationError') error = validationErrorDB(error);
         sendErrorProd(error, res);
     }
