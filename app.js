@@ -5,7 +5,6 @@ const index = require("./routers");
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const app = express();
-const cookieParser = require('cookie-parser');
 const aiClient = require('./util/ai_helper')
 const redisClient = require('./util/redis_helper')
 const env = process.env.NODE_ENV || 'development';
@@ -16,7 +15,6 @@ const Tracing = require("@sentry/tracing");
 const { ProfilingIntegration } = require("@sentry/profiling-node")
 const worker_pool = require('./worker-pool/init')
 const helmet = require('helmet')
-const appError = require('./util/app_error')
 const controllers = require('./controllers')
 const sanitizer = require("perfect-express-sanitizer");
 
@@ -82,39 +80,38 @@ const ai_init = async () => {
       console.log('Unable to run AI 💥')
     }
   }
+app.use((req, _res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+})
+
+
 
 app.use(Honeybadger.requestHandler)
 app.use(Sentry.Handlers.requestHandler());
 app.use(helmet());
 app.use(express.json());
 app.use('/api', limiter);
+app.get('/', (_req, res) => {
+  return res.status(200).json({
+    message: 'stack_lite API',
+  })
+})
+app.use('/', index);
 app.use('/api/v1/', index);
 app.use(Sentry.Handlers.tracingHandler());
 app.use(Sentry.Handlers.errorHandler());
+
 app.use(controllers.error);
-app.use((req, _res, next) => {
-  req.requestTime = new Date().toISOString();
-  console.log(req.headers);
-  next();
-})
+
 app.use(sanitizer.clean({
   xss: true,
   noSql: true,
   sql: true
 }));
-
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-app.get('/',(req,res)=>{
-    return res.status(200).json({
-      message: 'stack_lite API',
-    })
-  })
-
-app.all('*', (req, res, next) => {
-  next(new appError(`Can't find ${req.originalUrl} on this server!`, 404));
-});
 
 app.use(Honeybadger.errorHandler)
 

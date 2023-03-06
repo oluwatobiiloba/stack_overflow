@@ -8,10 +8,14 @@ const AppError = require('./../util/app_error');
  * @returns {object} - an instance of AppError with a message and status code
  */
 const castError = err => {
-    console.log("in cast")
     const message = `Invalid ${err.path}: ${err.value}.`;
     return new AppError(message, 400);
 };
+
+// const routeError = (err) => {
+//     const message = err.message;
+//     return new AppError(message, 404);
+// }
 
 /**
  * A middleware function that handles duplicate field errors by creating a new error object using the imported AppError class
@@ -21,7 +25,7 @@ const castError = err => {
  */
 const duplicateFieldsDB = err => {
     const value = err.errors[0].path;
-    const message = `Duplicate field value: ${value}. Please use another value!`;
+    const message = `${value} already exists, Please use another value!`;
     return new AppError(message, 400);
 };
 
@@ -32,12 +36,17 @@ const duplicateFieldsDB = err => {
  * @returns {object} - an instance of AppError with a message and status code
  */
 const validationErrorDB = err => {
-    console.log("in validation")
     const errors = Object.values(err.errors).map(el => el.message);
 
     const message = `Invalid input data. ${errors.join('. ')}`;
     return new AppError(message, 400);
 };
+
+const jwtError = () =>
+    new AppError('Invalid token. Please log in again!', 401);
+
+const jwtExpiredError = () =>
+    new AppError('Your token has expired! Please log in again.', 401);
 
 /**
  * A middleware function that sends detailed error information in development environment
@@ -71,7 +80,7 @@ const sendErrorDev = (req, err, res) => {
  * @param {object} res - response object
  * @returns {object} - JSON object with status code, status, and message
  */
-const sendErrorProd = (err, res) => {
+const sendErrorProd = (_req, err, res) => {
     const { statusCode = 500, status = "error", message } = err;
 
     if (err.isOperational) {
@@ -80,7 +89,7 @@ const sendErrorProd = (err, res) => {
             message
         });
     } else {
-        console.error('ERROR 💥', err);
+        //console.error('ERROR 💥', err);
         res.status(statusCode).json({
             status,
             message: 'Something went very wrong!'
@@ -106,10 +115,13 @@ module.exports = (err, req, res) => {
     } else {
         let error = { ...err };
         error.message = err.message;
-        console.log(error.name)
         if (error.name === 'CastError') error = castError(error);
         if (error.name === "SequelizeUniqueConstraintError") error = duplicateFieldsDB(error);
         if (error.name === 'ValidationError') error = validationErrorDB(error);
-        sendErrorProd(error, res);
+        if (error.name === 'JsonWebTokenError') error = jwtError();
+        if (error.name === 'TokenExpiredError') error = jwtExpiredError();
+        if (error.name === 'SequelizeValidationError') error = validationErrorDB(error);
+        if (error.name === 'SequelizeDatabaseError') error = validationErrorDB(error);
+        sendErrorProd(req, error, res);
     }
 };
