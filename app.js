@@ -101,8 +101,8 @@ const initRedis = async () => {
     .then(() => console.log('Redis server connected'))
     .catch(err => console.log('Redis initialization failed:', err));
 
-  redisClient.on('error', async (err) => {
-    console.log("Redis Timedout and reconnecting");
+  redisClient.on('error', (err) => {
+    console.log("Redis Timedout and reconnecting", err);
   })
 }
 
