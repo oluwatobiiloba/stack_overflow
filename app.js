@@ -34,7 +34,8 @@ const limiter = rateLimit({
 app.use(session({
   secret: config.JWT_SECRET,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { secure: true }
 }));
 
 Sentry.init({
