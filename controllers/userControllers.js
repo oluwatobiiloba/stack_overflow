@@ -26,13 +26,11 @@ module.exports = {
     async getAllUsers(_req, res) {
 
         try {
-            const users = await User.findAll({ include: ['questions'] })
+            const users = await User.findAll()
             return res.status(201).json({
                 status: "success",
                 message: `${users.length} Users found`,
-                data: {
-                    users
-                }
+
             })
         } catch (err) {
             console.log(err)
