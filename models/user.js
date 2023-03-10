@@ -10,10 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Questions , Answers}) {
+    static associate({ Questions, Answers, verify_user }) {
       // define association here
       this.hasMany( Questions ,{ foreignKey:'userId', as : 'questions'});
-      this.hasMany( Answers ,{ foreignKey:'userId', as : 'answers'})
+      this.hasMany(Answers, { foreignKey: 'userId', as: 'answers' });
+      this.hasOne(verify_user, { foreignKey: 'user_id', as: 'verify_user' })
     }
 
     toJSON(){
@@ -96,6 +97,15 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+      passwordResetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      is_verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
     role: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -113,6 +123,30 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
     tableName:'users',
     modelName: 'User',
+  });
+  User.beforeBulkUpdate((user) => {
+    if (user.attributes.password) {
+      user = user.attributes;
+      const pool = worker_pool.get_proxy();
+      return new Promise((resolve, reject) => {
+        switch (true) {
+          case pool !== null:
+            pool.bcryptHashing(user.password).then(hashedPw => {
+              user.password = hashedPw
+              resolve(user);
+            }).catch(err => {
+              reject(err);
+            });
+            break;
+          default:
+            // If no worker pool, fallback to auth_hooks.hashPassword method
+            user.password = auth_hooks.hashPassword(user.password);
+            resolve(user);
+            break;
+        }
+      })
+    }
+    return user;
   });
   User.beforeCreate((user) => {
     const pool = worker_pool.get_proxy();
@@ -133,7 +167,8 @@ module.exports = (sequelize, DataTypes) => {
           break;
       }
     });
-  })
+  });
+
 
   // User.associate = (models) => {
   //   User.hasOne(models.Roles,{foreignKey: 'role_id'})

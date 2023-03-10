@@ -91,7 +91,9 @@ app.use(Honeybadger.errorHandler)
 
 // create a async function to initialize database
 const initDB = async () => {
-  await sequelize.authenticate()
+  await sequelize.authenticate().catch(err => {
+    console.log(err)
+  })
   console.log("table initialized")
 }
 
