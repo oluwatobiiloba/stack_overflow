@@ -160,13 +160,11 @@ module.exports = {
                 }
         const pool = await worker_pool.get_proxy();
                 if (pool === null) {
-                    sendEmail(mailOptions, (err, info) => {
-                        if (err) {
-                            console.log(err)
-                        } else {
-                            console.log(`Email sent: ${info.response}`)
-                        }
-                    })
+                    sendEmail(mailOptions)
+                        .then((res) => {
+                            console.log(`Email sent: ${res.response}`)
+                        })
+                        .catch((err) => { console.log(err) })
                 } else {
                     pool.sendMail(mailOptions)
                 }
