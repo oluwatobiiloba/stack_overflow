@@ -58,9 +58,9 @@ const save_aiResponse = (save_params) => {
     })
 }
 // This function creates an AI response and saves it to the DB
-const update_userpassword = (token, password) => {
+const update_userpassword = (user, password) => {
     return new Promise((resolve, reject) => {
-        authServices.resetPassword(token, password).then((response) => {
+        authServices.resetPassword(user, password).then((response) => {
             resolve(response)
         }).catch((err) => {
             reject(err)
@@ -75,7 +75,7 @@ const sendMail = (mailOptions) => {
             if (err) {
                 reject(err)
             } else {
-                console.log('Email sent: ' + info.response)
+                console.log(`Email sent: ${info.response}`)
                 resolve(info)
             }
         })

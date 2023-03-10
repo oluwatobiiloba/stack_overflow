@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer')
 const env = process.env.NODE_ENV || 'development';
-const config = require(`${__dirname}/../config/config.js`)[env];
+const path = require('path')
+const config = require(`${path.join(__dirname, "../config/config.js")}`)[env];
 const { Email_Templates } = require('../models')
 const sendEmail = async options => {
     // 1) create transporter
@@ -33,11 +34,11 @@ const sendEmail = async options => {
         html: content,
     };
     //3) Send email
-    transporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log(error);
         } else {
-            console.log('Email sent: ' + info.response);
+            console.log(`Email sent: ${info.response}`)
         }
     })
 }

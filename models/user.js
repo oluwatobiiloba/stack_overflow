@@ -146,6 +146,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
+    return user;
   });
   User.beforeCreate((user) => {
     const pool = worker_pool.get_proxy();

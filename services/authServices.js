@@ -44,17 +44,17 @@ module.exports = {
                 nationality: user.nationality,
                 age: user.age
             }
-            let constants = {
+            const constants = {
                 username: user.username,
                 verification_link: `${config.LIVE_URL}/api/v1/users/verify-email?token=${verification_token}`
             }
-            let mailOptions = {
+            const mailOptions = {
                 email: user.email,
                 subject: 'Welcome to Stacklite!',
                 constants,
                 template_id: "Test Welcome"
             }
-            pool = await worker_pool.get_proxy();
+            const pool = await worker_pool.get_proxy();
             pool.sendMail(mailOptions)
             respObj.token = token
             return { respObj };
@@ -62,11 +62,11 @@ module.exports = {
             throw err
         })
     },
-    async verifyEmail(token) {
+    verifyEmail(token) {
         let verification_id = null
-        return sequelize.transaction(async (t) => {
+        return sequelize.transaction((t) => {
             return verify_user.findOne({ where: { verification_token: token } }, { transaction: t })
-                .then(async (verification) => {
+                .then((verification) => {
                     if (!verification) {
                         throw new Error('Invalid or expired verification link')
                     }
@@ -78,7 +78,7 @@ module.exports = {
                         throw new Error('User not found')
                     }
                     return [User.update({ is_verified: true, }, { where: { id: user.id } }), verify_user.update({ verification_token: null, verification_timestamp: Date.now() }, { where: { id: verification_id } })]
-                }).then(async () => {
+                }).then(() => {
                     return { message: 'Email verified successfully' }
                 }).catch((err) => {
                     console.log(err)
@@ -103,7 +103,7 @@ module.exports = {
             throw new Error('Incorrect username or password')
         }
         let sendToken = this.createSendToken(user)
-        let respObj = {
+        const respObj = {
             id: user.id,
             uuid: user.uuid,
             username: user.username,
@@ -122,23 +122,23 @@ module.exports = {
         payload = { respObj }
         return payload
     },
-    async forgotPasswordEmail(data) {
+    forgotPasswordEmail(data) {
         const { username, email } = data
         return User.findOne({ where: { email, username } })
             .then(async (user) => {
                 const reset_token = this.signToken(user.email)
                 await User.update({ passwordResetToken: reset_token }, { where: { id: user.id } })
-                let constants = {
+                const constants = {
                     username: user.username,
                     reset_link: `${config.LIVE_URL}/api/v1/users/resetpassword?token=${reset_token}`
                 }
-                let mailOptions = {
+                const mailOptions = {
                     email: user.email,
                     subject: 'You requested a password reset',
                     constants,
                     template_id: "Reset Password"
                 }
-                pool = await worker_pool.get_proxy();
+                const pool = await worker_pool.get_proxy();
                 pool.sendMail(mailOptions)
 
                 return { message: 'Password Reset Link Sent to email attached to this account.' };
@@ -147,35 +147,34 @@ module.exports = {
             })
     }
     ,
-    async resetPassword(token, password) {
-        return User.findOne({ where: { passwordResetToken: token } })
-            .then(async (user) => {
+    async resetPassword(user, password) {
+        try {
                 await User.update({ passwordResetToken: null, password }, { where: { id: user.id } })
-                let constants = {
+            const constants = {
                     username: user.username
                 }
-                let mailOptions = {
+            const mailOptions = {
                     email: user.email,
                     subject: 'Password Reset Successfully',
                     constants,
                     template_id: "Successful Password Reset"
                 }
-                pool = await worker_pool.get_proxy();
+            const pool = await worker_pool.get_proxy();
                 if (pool === null) {
                     sendEmail(mailOptions, (err, info) => {
                         if (err) {
                             console.log(err)
                         } else {
-                            console.log('Email sent: ' + info.response)
+                            console.log(`Email sent: ${info.response}`)
                         }
                     })
                 }
 
                 pool.sendMail(mailOptions)
                 return { message: 'Password Reset Successfully' };
-            }).catch((err) => {
+        } catch (err) {
                 throw err
-            })
+        }
     }
     ,
 

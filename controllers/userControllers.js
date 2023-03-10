@@ -64,7 +64,8 @@ module.exports = {
         }
     },
     async resetPassword(req, res) {
-        const { token, password } = req.body;
+        const { password } = req.body;
+        const token = req.query.token
         if (!token || !password) {
             return res.status(400).json({
                 status: 'failed',
@@ -82,8 +83,13 @@ module.exports = {
                     message: 'User does not exist',
                 });
             }
+            const user_obj = {
+                email: user.email,
+                username: user.username,
+                id: user.id
+            }
             const pool = await worker_pool.get_proxy();
-            await pool.update_userpassword(token, password);
+            pool.update_userpassword(user_obj, password);
             return res.status(200).json({
                 status: 'success',
                 message: 'Password update has been initiated',
