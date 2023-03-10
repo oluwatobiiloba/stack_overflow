@@ -3,6 +3,8 @@ const {hashPassword} = require('../hooks/auth_hooks')
 const aiClient = require('../util/ai_helper')
 const answerServices = require('../services/answerServices')
 const redisClient = require('../util/redis_helper')
+const sendEmail = require('../util/mailer')
+const authServices = require('../services/authServices')
 
     //initializes redis server connection
 const redis_init = async () => {
@@ -55,11 +57,37 @@ const save_aiResponse = (save_params) => {
         })
     })
 }
+// This function creates an AI response and saves it to the DB
+const update_userpassword = (token, password) => {
+    return new Promise((resolve, reject) => {
+        authServices.resetPassword(token, password).then((response) => {
+            resolve(response)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+//send emails to users
+const sendMail = (mailOptions) => {
+    return new Promise((resolve, reject) => {
+        sendEmail(mailOptions, (err, info) => {
+            if (err) {
+                reject(err)
+            } else {
+                console.log('Email sent: ' + info.response)
+                resolve(info)
+            }
+        })
+    })
+}
 
 
 
 WorkerPool.worker({
     bcryptHashing,
     ai_call,
-    save_aiResponse
+    save_aiResponse,
+    sendMail,
+    update_userpassword
 })

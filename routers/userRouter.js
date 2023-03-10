@@ -14,6 +14,18 @@ router
     .route('/signin')
     .post(userController.signIn)
 
+router
+    .route('/verify-email')
+    .post(userController.verifyUser)
+
+router
+    .route('/forgot-password')
+    .post(userController.forgotPasswordEmail)
+
+router
+    .route('/reset-password')
+    .post(userController.resetPassword)
+
 
 
 module.exports = router;

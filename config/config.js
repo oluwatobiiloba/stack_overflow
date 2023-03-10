@@ -30,7 +30,11 @@ module.exports = {
     UV_THREADPOOL_SIZE: OS.cpus().length,
     WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true,
     AZURE_CACHE_FOR_REDIS_HOST_NAME: process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME,
-    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY
+    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY,
+    EMAIL_USERNAME: process.env.EMAIL_USERNAME,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    EMAIL_SERVICE: process.env.EMAIL_SERVICE,
+    LIVE_URL: "https://stacklite-dev.azurewebsites.net/"
   },
   test: {
     username: 'root',
@@ -59,7 +63,11 @@ module.exports = {
     UV_THREADPOOL_SIZE: OS.cpus().length,
     WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true,
     AZURE_CACHE_FOR_REDIS_HOST_NAME: process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME,
-    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY
+    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY,
+    EMAIL_USERNAME: process.env.EMAIL_USERNAME,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    EMAIL_SERVICE: process.env.EMAIL_SERVICE,
+    LIVE_URL: "https://stacklite-dev.azurewebsites.net/"
   },
   test_github_actions: {
     username: 'root',
@@ -79,14 +87,17 @@ module.exports = {
     HONEYBADGER_KEY: process.env.HONEYBADGER_KEY,
     CODECOV_TOKEN: process.env.CODECOV_TOKEN,
     SENTRY_URL: process.env.SENTRY_URL,
-    DD_CIVISIBILITY_AGENTLESS_ENABLED:
-      process.env.DD_CIVISIBILITY_AGENTLESS_ENABLED,
+    DD_CIVISIBILITY_AGENTLESS_ENABLED: process.env.DD_CIVISIBILITY_AGENTLESS_ENABLED,
     DD_API_KEY: process.env.DD_API_KEY,
     DD_SITE: process.env.DD_SITE,
     UV_THREADPOOL_SIZE: OS.cpus().length,
     WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true,
     AZURE_CACHE_FOR_REDIS_HOST_NAME: process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME,
-    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY
+    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY,
+    EMAIL_USERNAME: process.env.EMAIL_USERNAME,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    EMAIL_SERVICE: process.env.EMAIL_SERVICE,
+    LIVE_URL: "https://stacklite-dev.azurewebsites.net/"
   },
 
   production: {
@@ -116,7 +127,11 @@ module.exports = {
     UV_THREADPOOL_SIZE: OS.cpus().length - 2,
     WORKER_POOL_ENABLED: process.env.WORKER_POOL_ENABLED || true,
     AZURE_CACHE_FOR_REDIS_HOST_NAME: process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME,
-    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY
+    AZURE_CACHE_FOR_REDIS_ACCESS_KEY: process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY,
+    EMAIL_USERNAME: process.env.EMAIL_USERNAME,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    EMAIL_SERVICE: process.env.EMAIL_SERVICE,
+    LIVE_URL: "https://stacklite-dev.azurewebsites.net/"
   },
 };
 

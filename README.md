@@ -66,7 +66,7 @@ This is a simple AI-Powered platform where users can ask and answer questions, g
 # Live Server
 
 This app is hosted on Azure cloud alongside the database and the redis server.
-  <https://stackoverflowlite-flw.herokuapp.com>
+  <https://stacklite-dev.azurewebsites.net/>
   
 # DATABASE SCHEMA
 

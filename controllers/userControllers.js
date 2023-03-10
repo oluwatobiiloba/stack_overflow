@@ -1,5 +1,8 @@
 const { User } = require('../models')
+const worker_pool = require('../worker-pool/init')
 const authServices = require('../services/authServices')
+const jwt = require('jsonwebtoken');
+const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 const AppError = require('./error')
 module.exports = {
     async signUp(req, res) {
@@ -20,6 +23,76 @@ module.exports = {
             console.log(err.message)
             return AppError(err, req, res)
             // return res.status(500).json(err)
+        }
+    },
+    async verifyUser(req, res) {
+        const token = req.query.token
+        try {
+            const user = await authServices.verifyEmail(token)
+            return res.status(201).json({
+                status: 'success',
+                message: "User Verified",
+                data: {
+                    user,
+                }
+            })
+
+        } catch (err) {
+            return res.status(500).json({
+                status: 'failed',
+                message: err.message
+            })
+        }
+    },
+    async forgotPasswordEmail(req, res) {
+        const email = req.query.email
+        const username = req.query.username
+
+        const data = { email, username }
+        try {
+            const response = await authServices.forgotPasswordEmail(data)
+            return res.status(201).json({
+                status: 'success',
+                message: response,
+            })
+
+        } catch (err) {
+            return res.status(500).json({
+                status: 'failed',
+                message: err.message
+            })
+        }
+    },
+    async resetPassword(req, res) {
+        const { token, password } = req.body;
+        if (!token || !password) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Please provide token and password',
+            });
+        }
+        try {
+            jwt.verify(token, config.JWT_SECRET);
+            const user = await User.findOne({
+                where: { passwordResetToken: token },
+            });
+            if (!user) {
+                return res.status(404).json({
+                    status: 'failed',
+                    message: 'User does not exist',
+                });
+            }
+            const pool = await worker_pool.get_proxy();
+            await pool.update_userpassword(token, password);
+            return res.status(200).json({
+                status: 'success',
+                message: 'Password update has been initiated',
+            });
+        } catch (err) {
+            return res.status(500).json({
+                status: 'failed',
+                message: err.message,
+            });
         }
     },
 
