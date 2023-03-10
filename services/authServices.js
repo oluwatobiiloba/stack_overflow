@@ -148,18 +148,17 @@ module.exports = {
     }
     ,
     async resetPassword(user, password) {
-        try {
-                await User.update({ passwordResetToken: null, password }, { where: { id: user.id } })
-            const constants = {
+        await User.update({ passwordResetToken: null, password }, { where: { id: user.id } })
+        const constants = {
                     username: user.username
                 }
-            const mailOptions = {
+        const mailOptions = {
                     email: user.email,
                     subject: 'Password Reset Successfully',
                     constants,
                     template_id: "Successful Password Reset"
                 }
-            const pool = await worker_pool.get_proxy();
+        const pool = await worker_pool.get_proxy();
                 if (pool === null) {
                     sendEmail(mailOptions, (err, info) => {
                         if (err) {
@@ -168,13 +167,12 @@ module.exports = {
                             console.log(`Email sent: ${info.response}`)
                         }
                     })
+                } else {
+                    pool.sendMail(mailOptions)
                 }
 
-                pool.sendMail(mailOptions)
-                return { message: 'Password Reset Successfully' };
-        } catch (err) {
-                throw err
-        }
+        return { message: 'Password Reset Successfully' };
+
     }
     ,
 
