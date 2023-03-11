@@ -130,7 +130,7 @@ module.exports = {
                 await User.update({ passwordResetToken: reset_token }, { where: { id: user.id } })
                 const constants = {
                     username: user.username,
-                    reset_link: `${config.LIVE_URL}/api/v1/users/resetpassword?token=${reset_token}`
+                    reset_link: `${config.LIVE_URL}/api/v1/users/reset-password?token=${reset_token}`
                 }
                 const mailOptions = {
                     email: user.email,
