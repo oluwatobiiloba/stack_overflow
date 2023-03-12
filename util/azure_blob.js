@@ -1,8 +1,8 @@
 const { DefaultAzureCredential } = require("@azure/identity");
 const { KeyClient } = require("@azure/keyvault-keys");
 const { BlobServiceClient } = require("@azure/storage-blob");
-const { v1: uuidv1 } = require("uuid");
-const { Blob_cobtainers } = require('../models')
+//const { v1: uuidv1 } = require("uuid");
+const { Blob_cobtainers, User } = require('../models')
 require("dotenv").config();
 
 const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
@@ -18,12 +18,13 @@ module.exports = {
         return Blob_cobtainers.findOne({ where: { name } })
             .then(async (container) => {
                 if (!container) {
-                    const containerName = `${name}_${uuidv1()}`;
+                    const containerName = name
                     // Get a reference to a container
                     const containerClient = blobServiceClient.getContainerClient(containerName);
                     // Create the container
-                    const created_container = await containerClient.create()
-                    return Blob_cobtainers.create({ name: containerName, ref: created_container, url: containerClient.url });
+                    const created_container = await containerClient.create(containerName)
+                    const saved_container = JSON.stringify(created_container)
+                    return Blob_cobtainers.create({ name: containerName, ref: saved_container, url: containerClient.url });
                 } else {
                     return container
                 }
@@ -35,35 +36,71 @@ module.exports = {
             })
 
     },
-    async create_upload_blob(data, name, format, container_name) {
+    // An asynchronous function to create and upload a blob to Azure storage
+    async create_upload_blob(stream, format, container_name, uploadOptions, username, user_id) {
+
+        // Finds the Blob container using its name
         return Blob_cobtainers.findOne({ where: { name: container_name } })
+
+       // After finding it, create or use existing container and return it
             .then(async (container) => {
                 if (!container) {
-                    return this.create_container
-                } else {
-                    return container
-                }
-            }).then(async (container) => {
-                const blobName = `${name}_${uuidv1()}.${format}`
-                // Get a reference to the container
-                const containerClient = blobServiceClient.getContainerClient(container.name);
-                // Get a block blob client
-                const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-                const uploadBlobResponse = await blockBlobClient.upload(data, data.length);
-                console.log(
-                    `\nUploading to Azure storage as blob\n\tname: ${blobName}:\n\tURL: ${blockBlobClient.url}`
-                );
-                return [uploadBlobResponse, blockBlobClient]
-            }).catch((err) => {
-                throw err
+                 return this.create_container(container_name)
+             } else {
+                 return container
+             }
+         })
+
+            // After getting a reference to a Blob container, get a Block Blob client instance for the new Blob object, then upload it 
+            .then(async (container) => {
+
+                // Create the blob name with user id, username, date and file extension
+                const blobName = `${username}_${user_id}_${Date.now()}.${format.split('/')[1]}`
+
+         // Get a reference to the container
+             const containerClient = blobServiceClient.getContainerClient(container.name)
+
+             // Get a block blob client instance
+             const blockBlobClient = containerClient.getBlockBlobClient(blobName)
+
+             // Upload stream to the Blob previously created with uploadStream method
+             const uploadBlobResponse = await blockBlobClient.uploadStream(stream,
+                 uploadOptions.bufferSize, uploadOptions.maxBuffers,
+                 { blobHTTPHeaders: { blobContentType: format } })
+
+             // Print details of uploaded Blob object
+             console.log(`\nUploading to Azure storage as blob\n\tname: ${blobName}:\n\tURL: ${blockBlobClient.url}`)
+
+             // Return uploaded request ID and URL
+             return [uploadBlobResponse.requestId, blockBlobClient.url]
+         })
+
+            // Finally, modify User object profile_image property to link it to the recently uploaded Blob object
+            .then(async ([requestId, blobUrl]) => {
+
+                // Modify User object's properties and update them in the database
+                const meta = JSON.stringify({
+                    requestId
+                })
+                await User.update({ profile_image: blobUrl, meta: meta }, { where: { id: user_id } })
+
+                // Return the Blobs URL
+                return blobUrl
             })
 
+            // If there is an error uploading or modifying User object, throw the error and stop the function
+            .catch((err) => {
+                throw err
+            })
     },
 
+
     async list_user_blob(containerName) {
+        let blobdata
         // List the blob(s) in the container.
         const containerClient = blobServiceClient.getContainerClient(containerName)
-        for await (const blob of containerClient.listBlobsFlat()) {
+        const listBlobsResponse = await containerClient.listBlobFlatSegment();
+        for await (const blob of listBlobsResponse.segment.blobItems) {
             // Get Blob Client from name, to get the URL
             const tempBlockBlobClient = containerClient.getBlockBlobClient(blob.name);
 
@@ -71,8 +108,12 @@ module.exports = {
             console.log(
                 `\n\tname: ${blob.name}\n\tURL: ${tempBlockBlobClient.url}\n`
             );
+
         }
-        return listBlobsResponse.segment.blobItems;
+        if (listBlobsResponse.segment.blobItems.length) {
+            blobdata.items = listBlobsResponse.segment.blobItems;
+        }
+        return blobdata.items;
 
     },
     // Convert stream to text

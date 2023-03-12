@@ -34,7 +34,7 @@
     "helmet": "^6.0.1",
     "hpp": "^0.2.3",
     "into": "^0.2.0",
-    "into-stream": "^7.0.0",
+    "into-stream": "^6.0.0",
     "ioredis": "^5.3.1",
     "jsonwebtoken": "^9.0.0",
     "lusca": "^1.7.0",
@@ -51,7 +51,9 @@
     "promisify": "^0.0.3",
     "redis": "^4.5.1",
     "sequelize": "^6.28.2",
+    "sharp": "^0.31.3",
     "tedious": "^15.1.3",
+    "to-readable-stream": "^4.0.0",
     "uuid": "^9.0.0",
     "xss": "^1.0.14"
   },

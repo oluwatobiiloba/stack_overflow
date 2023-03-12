@@ -77,7 +77,7 @@ module.exports = {
                     if (!user) {
                         throw new Error('User not found')
                     }
-                    return [User.update({ is_verified: true, }, { where: { id: user.id } }), verify_user.update({ verification_token: null, verification_timestamp: Date.now() }, { where: { id: verification_id } })]
+                    return [User.update({ is_verified: true }, { where: { id: user.id } }), verify_user.update({ verification_token: null, verification_timestamp: Date.now() }, { where: { id: verification_id } })]
                 }).then(() => {
                     return { message: 'Email verified successfully' }
                 }).catch((err) => {

@@ -18,6 +18,7 @@ const worker_pool = require('./worker-pool/init')
 const helmet = require('helmet')
 const controllers = require('./controllers')
 const sanitizer = require("perfect-express-sanitizer");
+const middleware = require("./middleware")
 
 // Starting a transaction for tracing the time taken to initialize the server
 const transaction = Sentry.startTransaction({
@@ -59,6 +60,7 @@ app.use(Honeybadger.requestHandler)
 app.use(Sentry.Handlers.requestHandler());
 app.use(helmet());     // Improve security by adding HTTP headers 
 app.use(express.json());   //  parse json data(body)
+//app.use(middleware.uploadStrategy)
 app.use('/api', limiter);  // implementing rate limiter middleware
 app.get('/', (_req, res) => { // GET request at endpoint '/'
   return res.status(200).json({

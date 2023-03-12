@@ -1,7 +1,9 @@
 const auth = require("./auth");
+const uploadStrategy = require("./uploadStrategy")
 
 
 
 module.exports = {
-    auth
+    auth,
+    uploadStrategy
 };

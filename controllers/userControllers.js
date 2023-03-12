@@ -4,6 +4,8 @@ const authServices = require('../services/authServices')
 const jwt = require('jsonwebtoken');
 const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 const AppError = require('./error')
+const upload = require('../util/multer_upload')
+
 module.exports = {
     async signUp(req, res) {
         const data = req.body
@@ -117,6 +119,29 @@ module.exports = {
         }
     },
 
+    async upload_image(req, res) {
+        const data = {
+            originalname: req.file.originalname,
+            name: req.file.originalname,
+            user_id: req.user.id,
+            username: req.user.username,
+            file: req.file
+        }
+        console.log(req.file)
+
+        try {
+            const uploaded_res = await upload.upload(data)
+            res.status(200).json({
+                status: 'successful',
+                message: "Image Uploaded Successfully",
+                uploaded_res
+            })
+        } catch (err) {
+            console.log(err)
+            return res.status(500).json(err)
+        }
+
+    },
 
     async signIn(req, res) {
         const data = req.body
@@ -152,10 +177,10 @@ module.exports = {
             expires: new Date(Date.now() + 10 + 1000),
             httpOnly: true
         });
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
-             message: "Bye!"
-         })
+            message: "Bye!"
+        })
     }
 
 
