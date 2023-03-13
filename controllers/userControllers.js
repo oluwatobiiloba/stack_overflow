@@ -178,7 +178,7 @@ module.exports = {
                 })
             } else {
                 uploadData.is_worker = true
-                uploadData = await middleware.resizephoto(uploadData, () => { })
+                uploadData = await middleware.resizephoto(uploadData)
                 const uploaded_res = await authServices.upload_image(uploadData)
                 return res.status(200).json({
                     status: 'successful',
