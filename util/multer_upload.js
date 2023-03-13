@@ -10,7 +10,7 @@ const uploadOptions = { bufferSize: 4 * ONE_MEGABYTE, maxBuffers: 20 };
 const azure_blob = require("./azure_blob")
 
 module.exports = {
-    get(container1) {
+    get() {
         return azure_blob.list_user_blob(container1)
     },
     upload(data) {

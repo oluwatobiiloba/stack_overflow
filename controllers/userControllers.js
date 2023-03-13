@@ -104,7 +104,7 @@ module.exports = {
             });
         }
     },
-    ,
+
     async getresetPassword(req, res) {
         const token = req.query.token
         if (!token) {

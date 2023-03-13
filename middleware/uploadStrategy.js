@@ -2,6 +2,14 @@ const multer = require('multer');
 const inMemoryStorage = multer.memoryStorage();
 const AppError = require('../util/app_error')
 
+/**
+ * A middleware function that filters file type  errors by creating a new error object using the imported AppError class
+ * @function multerFilter
+ * @param {object} req
+ * @param {object} file
+ * @param {function} callback
+ * @returns {object} 
+ */
 const multerFilter = (req, file, callback) => {
     console.log(file)
     const type = file.mimetype.split('/')[0];

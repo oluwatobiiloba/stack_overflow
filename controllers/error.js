@@ -28,7 +28,12 @@ const duplicateFieldsDB = err => {
     const message = `${value} already exists, Please use another value!`;
     return new AppError(message, 400);
 };
-
+/**
+ * A middleware function that invalid file type  errors by creating a new error object using the imported AppError class
+ * @function profilePictureError
+ * @param {object} err
+ * @returns {object} - an instance of AppError with a message and status code
+ */
 const profilePictureError = err => {
     return new AppError(err.message, 400)
 }

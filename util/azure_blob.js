@@ -1,5 +1,4 @@
 const { DefaultAzureCredential } = require("@azure/identity");
-const { KeyClient } = require("@azure/keyvault-keys");
 const { BlobServiceClient } = require("@azure/storage-blob");
 //const { v1: uuidv1 } = require("uuid");
 const { Blob_cobtainers, User } = require('../models')
@@ -14,7 +13,7 @@ const blobServiceClient = new BlobServiceClient(
 );
 
 module.exports = {
-    async create_container(name) {
+    create_container(name) {
         return Blob_cobtainers.findOne({ where: { name } })
             .then(async (container) => {
                 if (!container) {
@@ -28,7 +27,7 @@ module.exports = {
                 } else {
                     return container
                 }
-            }).then(async (container) => {
+            }).then((container) => {
                 container.message = `Container was created successfully.\n\trequestId:${container.ref.requestId}\n\tURL: ${container.url}`
                 return container
             }).catch((err) => {
@@ -37,13 +36,13 @@ module.exports = {
 
     },
     // An asynchronous function to create and upload a blob to Azure storage
-    async create_upload_blob(stream, format, container_name, uploadOptions, username, user_id) {
+    create_upload_blob(stream, format, container_name, uploadOptions, username, user_id) {
 
         // Finds the Blob container using its name
         return Blob_cobtainers.findOne({ where: { name: container_name } })
 
        // After finding it, create or use existing container and return it
-            .then(async (container) => {
+            .then((container) => {
                 if (!container) {
                  return this.create_container(container_name)
              } else {
@@ -82,7 +81,7 @@ module.exports = {
                 const meta = JSON.stringify({
                     requestId
                 })
-                await User.update({ profile_image: blobUrl, meta: meta }, { where: { id: user_id } })
+                await User.update({ profile_image: blobUrl, meta }, { where: { id: user_id } })
 
                 // Return the Blobs URL
                 return blobUrl
@@ -96,7 +95,7 @@ module.exports = {
 
 
     async list_user_blob(containerName) {
-        let blobdata
+        let blobdata = null
         // List the blob(s) in the container.
         const containerClient = blobServiceClient.getContainerClient(containerName)
         const listBlobsResponse = await containerClient.listBlobFlatSegment();
@@ -127,7 +126,8 @@ module.exports = {
     },
 
 
-    async download_blob(blobName) {
+    async download_blob(blobName, containerName) {
+        const containerClient = blobServiceClient.getContainerClient(containerName)
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
         const downloadBlockBlobResponse = await blockBlobClient.download(0);
         console.log('\nDownloaded blob content...');

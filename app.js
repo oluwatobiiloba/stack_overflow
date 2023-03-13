@@ -3,7 +3,7 @@ require('dotenv').config({ path: './.env' });
 const express = require("express");
 const { sequelize } = require('./models');
 const index = require("./routers");
-const sharp = require('sharp')
+//const sharp = require('sharp')
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const app = express();
@@ -19,7 +19,7 @@ const worker_pool = require('./worker-pool/init')
 const helmet = require('helmet')
 const controllers = require('./controllers')
 const sanitizer = require("perfect-express-sanitizer");
-const middleware = require("./middleware")
+//const middleware = require("./middleware")
 
 // Starting a transaction for tracing the time taken to initialize the server
 const transaction = Sentry.startTransaction({
