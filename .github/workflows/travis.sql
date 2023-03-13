@@ -26,37 +26,66 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- # Create Table
 
-CREATE TABLE
-    `users` (
-        `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-        `id` int NOT NULL AUTO_INCREMENT,
-        `username` varchar(255) NOT NULL,
-        `password` varchar(255) NOT NULL,
-        `first_name` varchar(255) NOT NULL,
-        `last_name` varchar(255) NOT NULL,
-        `phonenumber` bigint NOT NULL,
-        `email` varchar(255) NOT NULL,
-        `role` int NOT NULL DEFAULT '1',
-        `stack` varchar(255) DEFAULT NULL,
-        `age` varchar(255) DEFAULT NULL,
-        `nationality` varchar(255) DEFAULT NULL,
-        `createdAt` datetime NOT NULL,
-        `updatedAt` datetime NOT NULL,
-        `userId` int DEFAULT NULL,
-        `is_verified` tinyint(1) NOT NULL DEFAULT '0',
-        `passwordResetToken` varchar(255) DEFAULT NULL,
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `username` (`username`),
-        UNIQUE KEY `username_2` (`username`),
-        UNIQUE KEY `username_3` (`username`),
-        UNIQUE KEY `username_4` (`username`),
-        UNIQUE KEY `username_5` (`username`),
-        KEY `userId` (`userId`),
-        CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `votes` (`id`) ON DELETE
-        SET
-            NULL ON UPDATE CASCADE
-    ) ENGINE = InnoDB AUTO_INCREMENT = 666 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+-- CREATE TABLE
+--     `users` (
+--         `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+--         `id` int NOT NULL AUTO_INCREMENT,
+--         `username` varchar(255) NOT NULL,
+--         `password` varchar(255) NOT NULL,
+--         `first_name` varchar(255) NOT NULL,
+--         `last_name` varchar(255) NOT NULL,
+--         `phonenumber` bigint NOT NULL,
+--         `email` varchar(255) NOT NULL,
+--         `role` int NOT NULL DEFAULT '1',
+--         `stack` varchar(255) DEFAULT NULL,
+--         `age` varchar(255) DEFAULT NULL,
+--         `nationality` varchar(255) DEFAULT NULL,
+--         `createdAt` datetime NOT NULL,
+--         `updatedAt` datetime NOT NULL,
+--         `userId` int DEFAULT NULL,
+--         `is_verified` tinyint(1) NOT NULL DEFAULT '0',
+--         `passwordResetToken` varchar(255) DEFAULT NULL,
+--         PRIMARY KEY (`id`),
+--         UNIQUE KEY `username` (`username`),
+--         UNIQUE KEY `username_2` (`username`),
+--         UNIQUE KEY `username_3` (`username`),
+--         UNIQUE KEY `username_4` (`username`),
+--         UNIQUE KEY `username_5` (`username`),
+--         KEY `userId` (`userId`),
+--         CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `votes` (`id`) ON DELETE
+--         SET
+--             NULL ON UPDATE CASCADE
+--     ) ENGINE = InnoDB AUTO_INCREMENT = 666 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
+CREATE TABLE `users` (
+  `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `phonenumber` bigint NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `role` int NOT NULL DEFAULT '1',
+  `stack` varchar(255) DEFAULT NULL,
+  `age` varchar(255) DEFAULT NULL,
+  `nationality` varchar(255) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `userId` int DEFAULT NULL,
+  `is_verified` tinyint(1) NOT NULL DEFAULT '0',
+  `passwordResetToken` varchar(255) DEFAULT NULL,
+  `profile_image` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `meta` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `username_2` (`username`),
+  UNIQUE KEY `username_3` (`username`),
+  UNIQUE KEY `username_4` (`username`),
+  UNIQUE KEY `username_5` (`username`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `votes` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=666 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 -- Create syntax for TABLE 'questions'
 
 CREATE TABLE
@@ -145,6 +174,15 @@ CREATE TABLE `email_templates` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE `blob_cobtainers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `ref` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --  Add Data
