@@ -119,7 +119,7 @@ module.exports = {
         }
     },
 
-    async upload_image(req, res) {
+    async upload_image(req, res, is_worker) {
         const data = {
             originalname: req.file.originalname,
             name: req.file.originalname,
@@ -127,18 +127,25 @@ module.exports = {
             username: req.user.username,
             file: req.file
         }
-        console.log(req.file)
 
         try {
             const uploaded_res = await upload.upload(data)
+            if (!is_worker) {
             res.status(200).json({
                 status: 'successful',
                 message: "Image Uploaded Successfully",
                 uploaded_res
             })
+            } else {
+                return uploaded_res
+            }
         } catch (err) {
             console.log(err)
-            return res.status(500).json(err)
+            if (!is_worker) {
+                res.status(500).json(err)
+            } else {
+                return err
+            }
         }
 
     },

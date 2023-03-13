@@ -12,5 +12,9 @@ module.exports = async (req, res, next) => {
     req.file.originalname = newFilename;
     req.file.mimetype = `image/${format}`;
     req.file.buffer = await resized.toBuffer();
-    next();
+    if (!req.is_worker) {
+        next();
+    } else {
+        return req
+    }
 };

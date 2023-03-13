@@ -5,6 +5,9 @@ const answerServices = require('../services/answerServices')
 const redisClient = require('../util/redis_helper')
 const sendEmail = require('../util/mailer')
 const authServices = require('../services/authServices')
+const middleware = require('../middleware')
+const controller = require("../controllers")
+
 
     //initializes redis server connection
 const redis_init = async () => {
@@ -82,8 +85,21 @@ const sendMail = (mailOptions) => {
     })
 }
 
-const upload_image = () => {
-
+const upload_image = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const is_worker = true
+            data.uploadData.is_worker = true
+            data.uploadData = await middleware.resizephoto(data.uploadData, () => { })
+            console.log(data.uploadData)
+            const uploaded_image = await controller.userController.upload_image(data.uploadData, null, is_worker)
+            console.log(uploaded_image)
+            resolve(uploaded_image)
+        } catch (err) {
+            console.log(err)
+            reject(err)
+        }
+    })
 }
 
 WorkerPool.worker({
@@ -91,5 +107,6 @@ WorkerPool.worker({
     ai_call,
     save_aiResponse,
     sendMail,
-    update_userpassword
+    update_userpassword,
+    upload_image
 })
