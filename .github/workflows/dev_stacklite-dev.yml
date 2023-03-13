@@ -25,7 +25,10 @@ env:
   JWT_EXPIRES: ${{vars.JWT_EXPIRES}}
   JWT_COOKIE_EXPIRES_IN: ${{vars.JWT_COOKIE_EXPIRES_IN}}
   BCRYPT_STRING: ${{secrets.BCRYPT_STRING}}
-
+  EMAIL_PASSWORD:  ${{secrets.EMAIL_PASSWORD}}
+  EMAIL_SERVICE: ${{secrets.EMAIL_SERVICE}}
+  EMAIL_USERNAME: ${{secrets.EMAIL_USERNAME}}
+  AZURE_STORAGE_ACCOUNT_NAME: ${{secrets.AZURE_STORAGE_ACCOUNT_NAME}}
 jobs:
   Unit_Test:
     name: 'Node.js v${{ matrix.node }}'
