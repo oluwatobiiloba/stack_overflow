@@ -87,10 +87,12 @@ const sendMail = (mailOptions) => {
 //upload image
 const upload_image = async (data) => {
     try {
-        data.uploadData.is_worker = true
-      const resized_photo = await middleware.resizephoto(data.uploadData)
-      data.uploadData = resized_photo
-      const uploaded_image = await authServices.upload_image(data.uploadData)
+        let payload = data
+        payload.uploadData.is_worker = true
+
+        const resized_photo = await middleware.resizephoto(payload.uploadData)
+        payload = resized_photo
+        const uploaded_image = await authServices.upload_image(payload)
       return uploaded_image
   } catch (err) {
       console.log(err)

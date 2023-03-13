@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
         .resize(500, 500)
         .toFormat('jpeg')
         .jpeg({ quality: 90 });
-    const format = resized.format || 'jpeg';
+    const format = 'jpeg';
     const lastIndex = req.file.originalname.lastIndexOf('.');
     const newFilename = `${req.file.originalname.substring(0, lastIndex)}.${format}`;
     req.file.originalname = newFilename;
@@ -17,5 +17,5 @@ module.exports = async (req, res, next) => {
         next();
     }
     return req
-
 };
+
