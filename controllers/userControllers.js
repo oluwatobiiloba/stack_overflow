@@ -4,7 +4,6 @@ const authServices = require('../services/authServices')
 const jwt = require('jsonwebtoken');
 const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 const AppError = require('./error')
-const upload = require('../util/multer_upload')
 const middleware = require('../middleware')
 
 module.exports = {

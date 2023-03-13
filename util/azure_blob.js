@@ -95,7 +95,7 @@ module.exports = {
 
 
     async list_user_blob(containerName) {
-        let blobdata = null
+        let blobdata = {}
         // List the blob(s) in the container.
         const containerClient = blobServiceClient.getContainerClient(containerName)
         const listBlobsResponse = await containerClient.listBlobFlatSegment();
