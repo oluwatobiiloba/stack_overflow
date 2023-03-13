@@ -25,12 +25,12 @@ router
 
 router
     .route('/reset-password')
-    .post(userController.resetPassword)
-
+    .get(userController.getresetPassword)
 
 router
     .route('/reset-password')
-    .get(userController.getresetPassword)
+    .post(userController.resetPassword)
+
 
 router
     .post('/upload-image', middleware.auth, middleware.uploadStrategy, userController.upload_image)

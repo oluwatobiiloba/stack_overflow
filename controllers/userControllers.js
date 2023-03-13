@@ -109,7 +109,7 @@ module.exports = {
         if (!token) {
             return res.status(400).json({
                 status: 'failed',
-                message: 'Please provide token and password',
+                message: 'Please provide token ',
             });
         }
         try {
@@ -131,7 +131,7 @@ module.exports = {
 
             return res.status(200).json({
                 status: 'success',
-                message: 'Password update has been initiated, you will recieve an email shorty',
+                message: 'Password Reset started',
                 user_obj
             });
         } catch (err) {
