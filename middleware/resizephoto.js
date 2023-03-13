@@ -15,10 +15,10 @@ module.exports = async (req, res, next) => {
     const resized_buffer = await resized.toBuffer();
 
     working_req.file.buffer = resized_buffer
-    req = working_req
+
     if (!req.is_worker) {
         next();                      
     }
-    return req
+    return working_req
 };
 
