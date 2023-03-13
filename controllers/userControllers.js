@@ -104,6 +104,44 @@ module.exports = {
             });
         }
     },
+    ,
+    async getresetPassword(req, res) {
+        const token = req.query.token
+        if (!token) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Please provide token and password',
+            });
+        }
+        try {
+            jwt.verify(token, config.JWT_SECRET);
+            const user = await User.findOne({
+                where: { passwordResetToken: token },
+            });
+            if (!user) {
+                return res.status(404).json({
+                    status: 'failed',
+                    message: 'User does not exist',
+                });
+            }
+            const user_obj = {
+                email: user.email,
+                username: user.username,
+                id: user.id
+            }
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Password update has been initiated, you will recieve an email shorty',
+                user_obj
+            });
+        } catch (err) {
+            return res.status(500).json({
+                status: 'failed',
+                message: err.message,
+            });
+        }
+    },
 
     async getAllUsers(_req, res) {
 
