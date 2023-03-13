@@ -82,7 +82,9 @@ const sendMail = (mailOptions) => {
     })
 }
 
+const upload_image = () => {
 
+}
 
 WorkerPool.worker({
     bcryptHashing,

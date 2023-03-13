@@ -29,7 +29,7 @@ router
     .post(userController.resetPassword)
 
 router
-    .post('/upload-image', middleware.auth, middleware.uploadStrategy, userController.upload_image)
+    .post('/upload-image', middleware.auth, middleware.uploadStrategy, middleware.resizephoto, userController.upload_image)
 
 
 module.exports = router;

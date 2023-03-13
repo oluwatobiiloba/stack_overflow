@@ -3,6 +3,7 @@ require('dotenv').config({ path: './.env' });
 const express = require("express");
 const { sequelize } = require('./models');
 const index = require("./routers");
+const sharp = require('sharp')
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const app = express();
@@ -13,7 +14,7 @@ const config = require(__dirname + '/config/config.js')[env];
 const Honeybadger = require('./util/logger');
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
-const { ProfilingIntegration } = require("@sentry/profiling-node")
+// const { ProfilingIntegration } = require("@sentry/profiling-node")
 const worker_pool = require('./worker-pool/init')
 const helmet = require('helmet')
 const controllers = require('./controllers')
@@ -40,7 +41,7 @@ const limiter = rateLimit({
 Sentry.init({
   dsn: process.env.SENTRY_URL,
   integrations: [
-    new ProfilingIntegration(),
+    //new ProfilingIntegration(),
     new Sentry.Integrations.Http({ tracing: true }),
     new Tracing.Integrations.Express({ app, }),
   ],
