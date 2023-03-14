@@ -28,7 +28,15 @@ const duplicateFieldsDB = err => {
     const message = `${value} already exists, Please use another value!`;
     return new AppError(message, 400);
 };
-
+/**
+ * A middleware function that invalid file type  errors by creating a new error object using the imported AppError class
+ * @function profilePictureError
+ * @param {object} err
+ * @returns {object} - an instance of AppError with a message and status code
+ */
+const profilePictureError = err => {
+    return new AppError(err.message, 400)
+}
 /**
  * A middleware function that handles validation errors by creating a new error object using the imported AppError class
  * @function validationErrorDB
@@ -124,6 +132,7 @@ module.exports = (err, req, res) => {
     if (process.env.NODE_ENV !== 'development') {
         sendErrorDev(req, err, res);
     } else {
+        console.log(err)
         let error = { ...err };
         error.message = err.message;
         if (error.name === 'CastError') error = castError(error);
@@ -133,6 +142,7 @@ module.exports = (err, req, res) => {
         if (error.name === 'TokenExpiredError') error = jwtExpiredError();
         if (error.name === 'SequelizeValidationError') error = validationErrorDB(error);
         if (error.name === 'SequelizeDatabaseError') error = validationErrorDB(error);
+        if (error.name === 'Upload Error') error = profilePictureError(error);
         sendErrorProd(req, error, res);
     }
 };

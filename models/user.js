@@ -112,6 +112,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 1,
     },
     stack: DataTypes.STRING,
+      profile_image: DataTypes.STRING,
+      meta: DataTypes.STRING,
     age: DataTypes.STRING,
     nationality: DataTypes.STRING
     }, {

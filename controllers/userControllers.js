@@ -4,6 +4,8 @@ const authServices = require('../services/authServices')
 const jwt = require('jsonwebtoken');
 const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 const AppError = require('./error')
+const middleware = require('../middleware')
+
 module.exports = {
     async signUp(req, res) {
         const data = req.body
@@ -92,7 +94,45 @@ module.exports = {
             pool.update_userpassword(user_obj, password);
             return res.status(200).json({
                 status: 'success',
-                message: 'Password update has been initiated',
+                message: 'Password update has been initiated, you will recieve an email shorty',
+            });
+        } catch (err) {
+            return res.status(500).json({
+                status: 'failed',
+                message: err.message,
+            });
+        }
+    },
+
+    async getresetPassword(req, res) {
+        const token = req.query.token
+        if (!token) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Please provide token ',
+            });
+        }
+        try {
+            jwt.verify(token, config.JWT_SECRET);
+            const user = await User.findOne({
+                where: { passwordResetToken: token },
+            });
+            if (!user) {
+                return res.status(404).json({
+                    status: 'failed',
+                    message: 'User does not exist',
+                });
+            }
+            const user_obj = {
+                email: user.email,
+                username: user.username,
+                id: user.id
+            }
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Password Reset started',
+                user_obj
             });
         } catch (err) {
             return res.status(500).json({
@@ -117,6 +157,42 @@ module.exports = {
         }
     },
 
+    async upload_image(req, res) {
+        let uploadData = {
+            file: req.file,
+            body: req.body,
+            user: {
+                id: req.user.id,
+                username: req.user.username,
+            }
+
+        }
+
+        try {
+            const pool = await worker_pool.get_proxy();
+            if (pool.upload_image) {
+                pool.upload_image({ uploadData })
+                return res.status(200).json({
+                    status: 'successful',
+                    message: "Image Upload in Progress",
+                })
+            } else {
+                uploadData.is_worker = true
+                uploadData = await middleware.resizephoto(uploadData)
+                const uploaded_res = await authServices.upload_image(uploadData)
+                return res.status(200).json({
+                    status: 'successful',
+                    message: "Image Upload in Progress",
+                    uploaded_res
+                })
+            }
+
+        } catch (err) {
+            console.log(err)
+            return err
+        }
+
+    },
 
     async signIn(req, res) {
         const data = req.body
@@ -152,10 +228,10 @@ module.exports = {
             expires: new Date(Date.now() + 10 + 1000),
             httpOnly: true
         });
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
-             message: "Bye!"
-         })
+            message: "Bye!"
+        })
     }
 
 

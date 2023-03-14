@@ -12,3 +12,4 @@ pm2 scale app +3
 pm2 start ecosystem.config.js --env development
 //docker push
 docker push stacklite.azurecr.io/stackoverflowlite
+pm2 start ecosystem.config.js --env development && sleep 3 && pm2 monit

@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 const worker_pool = require('../worker-pool/init')
 const sendEmail = require('../util/mailer')
+const upload = require("../util/multer_upload")
 
 
 module.exports = {
@@ -77,7 +78,7 @@ module.exports = {
                     if (!user) {
                         throw new Error('User not found')
                     }
-                    return [User.update({ is_verified: true, }, { where: { id: user.id } }), verify_user.update({ verification_token: null, verification_timestamp: Date.now() }, { where: { id: verification_id } })]
+                    return [User.update({ is_verified: true }, { where: { id: user.id } }), verify_user.update({ verification_token: null, verification_timestamp: Date.now() }, { where: { id: verification_id } })]
                 }).then(() => {
                     return { message: 'Email verified successfully' }
                 }).catch((err) => {
@@ -186,7 +187,28 @@ module.exports = {
             throw new Error('This user does not exist anymore')
         }
         return userExist
-    }
+    },
+
+
+    async upload_image(data) {
+        const payload = {
+            originalname: data.file.originalname,
+            name: data.file.originalname,
+            user_id: data.user.id,
+            username: data.user.username,
+            file: data.file
+        }
+        try {
+            const uploaded_res = await upload.upload(payload)
+            return uploaded_res
+        }
+        catch (err) {
+            console.log(err)
+            return err
+
+        }
+
+    },
 }
 
 
