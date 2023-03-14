@@ -6,10 +6,10 @@ require("dotenv").config();
 
 const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
 if (!accountName) throw Error('Azure Storage accountName not found');
-
+const credential = new DefaultAzureCredential()
 const blobServiceClient = new BlobServiceClient(
     `https://${accountName}.blob.core.windows.net`,
-    new DefaultAzureCredential()
+    credential
 );
 
 module.exports = {
