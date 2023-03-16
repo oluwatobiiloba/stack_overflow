@@ -1,4 +1,4 @@
-const { DefaultAzureCredential } = require("@azure/identity");
+//const { DefaultAzureCredential } = require("@azure/identity");
 const { EmailClient } = require("@azure/communication-email");
 const env = process.env.NODE_ENV || 'development';
 const path = require('path')
@@ -47,6 +47,7 @@ const sendEmail = async (options) => {
     } catch (e) {
         console.log(e);
     }
+    return null
 }
 
 module.exports = sendEmail

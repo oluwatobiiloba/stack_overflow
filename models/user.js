@@ -78,8 +78,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty:{
           msg:"Field cannot be empty"
         }
-    },
-    unique: true 
+      }
     },
     email: {
       type: DataTypes.STRING,
