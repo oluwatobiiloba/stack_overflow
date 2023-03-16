@@ -36,10 +36,9 @@ module.exports = {
                 }
             })
         } catch (err) {
-            console.log(err.message)
             return res.status(500).json({
                 status: 'failed',
-                message: err,
+                message: err.message,
             })
         }
 

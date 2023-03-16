@@ -1,8 +1,8 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-const { hashPassword } = require('../hooks/auth_hooks');
+const { Model } = require('sequelize');
+const worker_pool = require('../worker-pool/init');
+const auth_hooks = require('../hooks/auth_hooks')
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -10,10 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Questions , Answers}) {
+    static associate({ Questions, Answers, verify_user }) {
       // define association here
       this.hasMany( Questions ,{ foreignKey:'userId', as : 'questions'});
-      this.hasMany( Answers ,{ foreignKey:'userId', as : 'answers'})
+      this.hasMany(Answers, { foreignKey: 'userId', as: 'answers' });
+      this.hasOne(verify_user, { foreignKey: 'user_id', as: 'verify_user' })
     }
 
     toJSON(){
@@ -76,11 +77,11 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty:{
           msg:"Field cannot be empty"
         }
-    }
+      }
     },
     email: {
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
       validate:{
         isEmail:{
           msg:"Enter a valid email"
@@ -96,12 +97,23 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+      passwordResetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      is_verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
     role: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
     },
     stack: DataTypes.STRING,
+      profile_image: DataTypes.STRING,
+      meta: DataTypes.STRING,
     age: DataTypes.STRING,
     nationality: DataTypes.STRING
     }, {
@@ -114,7 +126,52 @@ module.exports = (sequelize, DataTypes) => {
     tableName:'users',
     modelName: 'User',
   });
-    User.beforeCreate(hashPassword)
+  User.beforeBulkUpdate((user) => {
+    if (user.attributes.password) {
+      user = user.attributes;
+      const pool = worker_pool.get_proxy();
+      return new Promise((resolve, reject) => {
+        switch (true) {
+          case pool !== null:
+            pool.bcryptHashing(user.password).then(hashedPw => {
+              user.password = hashedPw
+              resolve(user);
+            }).catch(err => {
+              reject(err);
+            });
+            break;
+          default:
+            // If no worker pool, fallback to auth_hooks.hashPassword method
+            user.password = auth_hooks.hashPassword(user.password);
+            resolve(user);
+            break;
+        }
+      })
+    }
+    return user;
+  });
+  User.beforeCreate((user) => {
+    const pool = worker_pool.get_proxy();
+    return new Promise((resolve, reject) => {
+      switch (true) {
+        case pool !== null:
+          pool.bcryptHashing(user.password).then(hashedPw => {
+            user.password = hashedPw
+            resolve(user);
+          }).catch(err => {
+            reject(err);
+          });
+          break;
+        default:
+          // If no worker pool, fallback to auth_hooks.hashPassword method
+          user.password = auth_hooks.hashPassword(user.password);
+          resolve(user);
+          break;
+      }
+    });
+  });
+
+
   // User.associate = (models) => {
   //   User.hasOne(models.Roles,{foreignKey: 'role_id'})
   // }

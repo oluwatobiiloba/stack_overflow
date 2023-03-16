@@ -1,0 +1,36 @@
+name: Automated API tests using Postman CLI
+
+on: push
+
+env:
+  NODE_ENV: test_github_actions
+  MYSQL_ROOT_PASSWORD: password
+  DD_CIVISIBILITY_AGENTLESS_ENABLED: ${{vars.DD_CIVISIBILITY_AGENTLESS_ENABLED}}
+  AI_KEY: ${{secrets.AI_KEY}}
+  AI_ORG: ${{secrets.AI_ORG}}
+  AI_UUID: ${{secrets.AI_UUID}}
+  HONEYBADGER_KEY: ${{secrets.HONEYBADGER_KEY}}
+  CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+  SENTRY_URL: ${{secrets.SENTRY_URL}}
+  DD_API_KEY: ${{secrets.DD_API_KEY}}
+  DD_SITE: ${{secrets.DD_SITE}}
+  JWT_SECRET: ${{secrets.JWT_SECRET}}
+  JWT_EXPIRES: ${{vars.JWT_EXPIRES}}
+  JWT_COOKIE_EXPIRES_IN: ${{vars.JWT_COOKIE_EXPIRES_IN}}
+  BCRYPT_STRING: ${{secrets.BCRYPT_STRING}}
+  POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+
+jobs:
+  automated-api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Run API tests
+        run: |
+          postman collection run "${{ github.workspace }}/postman/collections/Noob Community.json" -e "23034417-16f64787-aeec-4958-872a-1df3aa0d8494"
+

@@ -1,6 +1,7 @@
 const { Questions, sequelize } = require('../models')
 const aiClient = require('../util/ai_helper')
 const answerServices = require('./answerServices')
+const worker_pool = require('../worker-pool/init')
 
  module.exports = {
 
@@ -18,11 +19,6 @@ const answerServices = require('./answerServices')
 
      askAI(data) {
          const { question, user, ai_assist, ai_assist_type } = data
-         let model = null
-            let aiResponse = {
-                data: "Unavailable",
-                status: "not used"
-            }
 
 
          return sequelize.transaction((t) => {
@@ -63,35 +59,42 @@ const answerServices = require('./answerServices')
 
                         }
 
-                        //AI model selector
-                         if (ai_assist) {
-                             if (ai_assist_type === 'tips') {
-                                model = ai_models.ideas
-                            }
-                            if (ai_assist_type === 'slowcodegen') {
-                                model = ai_models.slowcodegen
-                            }
-                            if (ai_assist_type === 'fastcodegen') {
-                                model = ai_models.fastcodegen
-                            }
+             //AI model selector
+                         let model = null
+                         let pool = null
+                         switch (ai_assist_type) {
+                             case 'tips':
+                                 model = ai_models.ideas;
+                                 break;
+                             case 'slowcodegen':
+                                 model = ai_models.slowcodegen;
+                                 break;
+                             case 'fastcodegen':
+                                 model = ai_models.fastcodegen;
+                                 break;
+                             default:
+                                 throw new Error("Invalid question type");
+                         }
+                         //Pool worker selector
+                         pool = await worker_pool.get_proxy();
 
-                            //AI Lookup
-                            aiResponse = await aiClient.createCompletion(model);
-                        }
-                        let respdata = aiResponse.data
-                        let respstatus = aiResponse.status
-                         return [respdata, respstatus, question_id, ai_assist, askQuestion]
+                         return [pool, model, question_id, askQuestion]
                      }
 
-             ).catch(
+             ).then(async ([pool, model, question_id, askQuestion]) => {
+                 if (pool.ai_call) {
+                     return [await pool.ai_call(model), question_id, askQuestion, pool]
+                 } else {
+                     return [await aiClient.createCompletion(model), question_id, askQuestion]
+                 }
+             }).catch(
                  err => {
                      throw err
                  });
-
-         }).then(async ([respdata, respstatus, question_id, ai_assist_required, question_asked]) => {
-
+         }).then(async ([aiResponse, question_id, question_asked, pool]) => {
+             const respdata = aiResponse.data
+             const respstatus = aiResponse.status
              const ai_answer = (ai_assist) ? respdata.choices[0].text : "Not availabale or selected";
-
              const ai_status = (respstatus === 200) ? "SmartAI 💡💡💡" : "I'm yet to learn that";
            //save AI answer
 
@@ -102,13 +105,15 @@ const answerServices = require('./answerServices')
 
              }
                // Save Ai answere to db
-             if (ai_assist_required) {
+             if (ai_assist && pool.save_aiResponse) {
+                 pool.save_aiResponse(save_params)
+             } else {
                  await answerServices.createAnswer(save_params)
              }
              return { question_asked, ai_answer, ai_status }
 
          }).catch((err) => {
-             console.log(err)
+             throw err
          })
         },
 
@@ -117,22 +122,21 @@ const answerServices = require('./answerServices')
          return sequelize.transaction(async (t) => {
              try {
                  const questions = await Questions.findAll({ include: fields }, { transaction: t })
-                 if (!questions) {
-                     throw new Error('No qestions found 😔😔, nobody seems to need help')
+                 if (!questions || questions.length < 1) {
+                     throw new Error('No questions found 😔😔, nobody seems to need help')
                  }
                  return questions
              } catch (err) {
-                 console.log(err.message);
-                 throw err
+                 throw new Error("Error occured while fetching questions")
              }
          })
         },
 
-     getQuestionById(uuid) {
+     getQuestionById(id) {
          const fields = ['user', 'answers'];
 
          return sequelize.transaction((t) => {
-             return Questions.findOne({ where: { uuid: uuid }, include: fields }, { transaction: t }).then((question) => {
+             return Questions.findOne({ where: { id }, include: fields }, { transaction: t }).then((question) => {
                  if (!question) {
                      throw new Error('No qestions found 😔😔, nobody seems to need help')
                  }
@@ -145,7 +149,7 @@ const answerServices = require('./answerServices')
 
      async getQuestionsByUser(id) {
          const question = await Questions.findAll({ where: { userId: id }, include: ['user'] })
-         if (!question) {
+         if (!question || question.length < 1) {
              throw new Error("This user has no questions")
          }
          return question

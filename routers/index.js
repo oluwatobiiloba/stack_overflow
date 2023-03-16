@@ -15,7 +15,7 @@ router.use("/votes",voteRouter)
 router.all('*', (req, res) => {
     res.status(400).json({
         status: 'fail',
-        message: `Can't find ${req.originalUrl} on this server`
+        message: `Can't find (${req.method}) ${req.originalUrl} on this server`
     })
    
 });

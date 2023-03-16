@@ -1,74 +1,55 @@
-const { Answers, User, Comments } = require('../models');
-const logger = require('../util/logger');
+const { Answers, Comments } = require('../models');
 
-module.exports ={
-    async getAllComments(){
-        let fields = ["user","answers"]
-      
-        const comment = await Comments.findAll({include:fields}).catch(
+
+module.exports = {
+    async getAllComments() {
+        let fields = ["user", "answers"]
+
+        const comment = await Comments.findAll({ include: fields }).catch(
             err => {
-
-                logger.error(err);  
-
-            throw new Error('Something went wrong on our end: 😒')
-        })
-      return comment
-    },
-
-    getCommentsByUserId: async function(uuid){
-       
-        const user = await User.findOne({where: { uuid:uuid } })
-        if(!user){
-            throw new Error("No user with that Id")}
-        
-        const comment = await Comments.findAll({where:{userId:user.id}})
-        if(comment.length === 0){
-            throw new Error("This user has no comments, perhaps they're shy🤓")}
+                console.log(err)
+                throw new Error('Something went wrong on our end: 😒')
+            })
         return comment
     },
 
-    getCommentsByAnswerId: async function(uuid){
-
-        const answer = await Answers.findOne({where: { uuid:uuid }}).catch(
-            err => {
-                throw err
-            }
-        )
-        if(!answer){
-            throw new Error("This answer does not exist 🤔")}
-
-        const comment = await Comments.findAll({where:{answerId:answer.id}}).catch(
-            () => {
-                throw  new Error("This answer has no comments 🤥")
-            }
-        )
+    async getCommentsByUserId(id) {
+        const comment = await Comments.findAll({ where: { userId: id } })
+        if (comment.length === 0) {
+            throw new Error("This user has no comments, perhaps they're shy🤓")
+        }
         return comment
     },
 
-    creatComment: async function(query){
-        const { comment,userUuid,answerUuid } = query.body;
-
-        const user = await User.findOne({where: {uuuid:userUuid}}).catch(
-            () => {
-                throw new Error("No user found")
+    async getCommentsByAnswerId(id) {
+        try {
+            const answer = await Answers.findOne({ where: { id } })
+            if (!answer) {
+                throw new Error("This answer does not exist 🤔")
             }
-        )
-        if(!user){
-            throw new Error("No user with that Id")}
 
-        const answer = await Answers.findOne({where: {uuid:answerUuid}}).catch(
-            () => {
-                throw new Error("No answers found")
+            const comment = await Comments.findAll({ where: { answerId: id } })
+            if (comment.length < 1) {
+                throw new Error("This answer has no comments 🤥")
             }
-        )
-        if(!answer){
-            throw new Error("This answer does not exist 🤔")}
 
-        const newComment = await Comments.create({ comment: comment , userId:user.id , answerId:answer.id}).catch(
-            err => {
-                throw err
-            }
-        )
+            return comment
+
+        } catch (err) {
+            throw new Error("Something went wrong on our end: 😒");
+        }
+    },
+
+
+    async creatComment(payload) {
+        const { comment, answerId, userId } = payload;
+
+        const answer = await Answers.findOne({ where: { id: answerId } })
+        if (!answer) {
+            throw new Error("This answer does not exist 🤔")
+        }
+
+        const newComment = await Comments.create({ comment: comment, userId: userId, answerId: answer.id })
 
         return newComment
     }

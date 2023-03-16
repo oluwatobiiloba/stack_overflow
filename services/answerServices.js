@@ -30,13 +30,13 @@ module.exports = {
         return respObj;
 },
 
-    getAnswerById(uuid) {
+    getAnswerById(id) {
         const fields = ["user", 'question', 'comments', 'votes'];
         let resobj = {};
 
         return sequelize.transaction(async (t) => {
             const answer = await Answers.findOne({
-                where: { uuid },
+                where: { id },
                 include: fields,
                 transaction: t,
             });
@@ -52,7 +52,6 @@ module.exports = {
         });
     },
     createAnswer(data) {
-
         const { answer, userId, questionId } = data;
         const fields = ["user", 'question', 'comments', 'votes'];
 
@@ -60,22 +59,25 @@ module.exports = {
         return sequelize.transaction((t) => {
             return Questions.findOne({ where: { id: questionId } }, { transaction: t })
                 .then(async (question) => {
+
                     const user = await User.findOne({ where: { id: userId } }, { transaction: t });
+                    if (!user) {
+                        throw new Error("User does not exist")
+                    }
+
                     return { user, question };
                 })
                 .then(async ({ user, question }) => {
-
                     const newAnswer = await Answers.create({ answer, questionId: question.id, userId: user.id }, { transaction: t });
-                    const newVote = await Voters.create({ answerId: newAnswer.id, userId: user.id }, { transaction: t });
-                    return { newAnswer, newVote };
+                    return { newAnswer };
                 })
                 .then(async (resp) => {
                     const key = 'answers:all';
-                    await redisClient.setEx(key, 30, JSON.stringify(await Answers.findAll({ include: fields }, { transaction: t })));
+                    const all_answers = await Answers.findAll({ include: fields }, { transaction: t });
+                    await redisClient.setEx(key, 120, JSON.stringify(all_answers));
                     return resp
                 })
                 .catch(err => {
-                    console.log(err)
                     throw err;
                 });
         });
@@ -84,13 +86,13 @@ module.exports = {
 
     voteAnswer(data, user) {
         const { answer_id, upVote, downVote } = data;
-        const { uuid, id } = user;
+        const { id } = user;
+        return sequelize.transaction((t) => {
 
-        if (!uuid || !id) {
+            if (!id) {
             throw new Error("User does not exist");
         }
 
-        return sequelize.transaction((t) => {
             return Answers.findOne({ where: { id: answer_id } }, { transaction: t })
                 .then(
                     async (answer) => {
@@ -117,16 +119,14 @@ module.exports = {
                             case upVote === true && downVote === true:
                                 throw new Error("You can only upvote or downvote at a time");
                             default:
-                                vote.upvotes = false;
-                                vote.downvotes = false;
-                                break;
+                                throw new Error("Invalid Vote")
                         }
 
                         const savedVote = await vote.save({ transaction: t });
                         return [answer, savedVote];
                     })
                 .catch((err) => {
-                    throw err.message;
+                    throw err;
                 });
         }).then(async ([answer, vote]) => {
             const votecalc = await voteServices.getVotesByAnswer(answer_id, answer);
@@ -137,7 +137,7 @@ module.exports = {
             return cast
         }).catch(
             (err) => {
-                throw err.message;
+                throw err;
             }
         );
 
@@ -150,8 +150,7 @@ module.exports = {
         return sequelize.transaction((t) => {
 
             return User.findOne({ where: { id: user_id } }, { transaction: t })
-        .then(
-            async (user)=>{
+                .then(async (user) => {
                 if(!user){
                     throw new Error('No user with that id')
                    }
@@ -161,10 +160,9 @@ module.exports = {
                }
                 return {user,question}
             }
-        ).then(
-            async({user,question})=>{
+            ).then(async ({ user, question }) => {
                 const answer = await Answers.findAll({ where: { userId: user.id, questionId: question.id } }, { transaction: t })
-              if(!answer){
+                if (answer.length < 1) {
                 throw new Error('No answer with that question id or made by that user')
                }
                answer.map(

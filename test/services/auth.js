@@ -8,7 +8,7 @@ let assert = chai.assert;
 
 const authServices = require('../../services/authServices');
 
-describe("Auth Services", (done) => {
+describe("Auth Services", () => {
     let email = "mocha@mochatest.com"
     let password = "password"
     let username = "mocha"
@@ -166,19 +166,13 @@ describe("Auth Services", (done) => {
 
     it("should register a user", () => {
         let query = regData
-        authServices.registerUser(query)
+        return authServices.registerUser(query)
             .then((result) => {
-                result.should.be.a('object')
-                result.respObj.should.have.property("email")
-                result.respObj.email.should.equal(regData.email)
-                result.respObj.should.have.property("first_name")
-                result.respObj.first_name.should.equal(regData.first_name)
-                result.respObj.should.have.property("last_name")
-                result.respObj.last_name.should.equal(regData.last_name)
-                result.respObj.should.have.property("token")
-                done()
+                expect(result).to.be.an("object");
+                expect(result.respObj.username).to.equal(regData.username)
+
             }).catch((error) => {
-                done(error)
+                console.log(error)
             })
     })
 

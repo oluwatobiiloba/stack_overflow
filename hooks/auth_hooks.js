@@ -1,12 +1,14 @@
-const bcrypt = require('bcryptjs')
+// hash-worker.js
+const bcrypt = require('bcryptjs');
 
+// Export the hashPassword function
 module.exports = {
-    hashPassword: async function(user){
-        if (user.password) {
-            const salt = bcrypt.genSaltSync(10, process.env.BCRYPT_STRING);
-            user.password = bcrypt.hashSync(user.password, salt);
-           }
-           return user
-          }
-        
-    } 
+  hashPassword(password) {
+    // Hash the password using bcrypt
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
+    // Return the hashed password
+
+  }
+};
+
