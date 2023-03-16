@@ -70,7 +70,6 @@ module.exports = (sequelize, DataTypes) => {
     phonenumber: {
       type:DataTypes.BIGINT,
       allowNull: false,
-      unique: true,
       validate:{
         notNull:{
           msg:"Username cannot be null"
@@ -82,8 +81,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull:false,
-      unique: true,
+      allowNull: false,
       validate:{
         isEmail:{
           msg:"Enter a valid email"
