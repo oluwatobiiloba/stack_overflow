@@ -7,3 +7,4 @@ models/stack_overflow.code-workspace
 /.nyc_output
 newrelic_agent.log
 test.html
+remove_duplicates.js
