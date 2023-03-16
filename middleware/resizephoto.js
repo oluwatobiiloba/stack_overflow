@@ -2,7 +2,7 @@ const sharp = require('sharp');
 
 module.exports = async (req, res, next) => {
     const working_req = req
-    if (!working_req.file) return next();
+    if (!working_req.file && !req.is_worker) return next();
     const resized = sharp(working_req.file.buffer)
         .resize(500, 500)
         .toFormat('jpeg')

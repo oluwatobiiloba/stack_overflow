@@ -3,6 +3,7 @@ const env = process.env.NODE_ENV || 'development';
 const path = require('path')
 const config = require(`${path.join(__dirname, "../config/config.js")}`)[env];
 const { Email_Templates } = require('../models')
+
 const sendEmail = async options => {
     // 1) create transporter
     const transporter = nodemailer.createTransport({

@@ -34,7 +34,8 @@ module.exports = {
     EMAIL_USERNAME: process.env.EMAIL_USERNAME,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
     EMAIL_SERVICE: process.env.EMAIL_SERVICE,
-    LIVE_URL: "https://stacklite-dev.azurewebsites.net"
+    LIVE_URL: "https://stacklite-dev.azurewebsites.net",
+    COMMUNICATION_SERVICES_CONNECTION_STRING: process.env.COMMUNICATION_SERVICES_CONNECTION_STRING
   },
   test: {
     username: 'root',
@@ -67,7 +68,8 @@ module.exports = {
     EMAIL_USERNAME: process.env.EMAIL_USERNAME,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
     EMAIL_SERVICE: process.env.EMAIL_SERVICE,
-    LIVE_URL: "https://stacklite-dev.azurewebsites.net/"
+    LIVE_URL: "https://stacklite-dev.azurewebsites.net/",
+    COMMUNICATION_SERVICES_CONNECTION_STRING: process.env.COMMUNICATION_SERVICES_CONNECTION_STRING
   },
   test_github_actions: {
     username: 'root',
@@ -97,7 +99,8 @@ module.exports = {
     EMAIL_USERNAME: process.env.EMAIL_USERNAME,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
     EMAIL_SERVICE: process.env.EMAIL_SERVICE,
-    LIVE_URL: "https://stacklite-dev.azurewebsites.net/"
+    LIVE_URL: "https://stacklite-dev.azurewebsites.net/",
+    COMMUNICATION_SERVICES_CONNECTION_STRING: process.env.COMMUNICATION_SERVICES_CONNECTION_STRING
   },
 
   production: {
@@ -131,7 +134,8 @@ module.exports = {
     EMAIL_USERNAME: process.env.EMAIL_USERNAME,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
     EMAIL_SERVICE: process.env.EMAIL_SERVICE,
-    LIVE_URL: "https://stacklite-dev.azurewebsites.net/"
+    LIVE_URL: "https://stacklite-dev.azurewebsites.net/",
+    COMMUNICATION_SERVICES_CONNECTION_STRING: process.env.COMMUNICATION_SERVICES_CONNECTION_STRING
   },
 };
 
