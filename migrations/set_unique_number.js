@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    up: async (queryInterface, Sequelize) => {
+    up: async (queryInterface) => {
         await queryInterface.addConstraint('users', {
             type: 'unique',
             fields: ['phonenumber'],
@@ -9,7 +9,7 @@ module.exports = {
         });
     },
 
-    down: async (queryInterface, Sequelize) => {
+    down: async (queryInterface) => {
         await queryInterface.removeConstraint('Users', 'unique_email');
     }
 };
