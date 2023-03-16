@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('../config/config')[process.env.NODE_ENV || 'development'];
 const worker_pool = require('../worker-pool/init')
-const sendEmail = require('../util/mailer')
+const sendEmail = require('../util/azure_mailer')
 const upload = require("../util/multer_upload")
 
 
@@ -53,7 +53,8 @@ module.exports = {
                 email: user.email,
                 subject: 'Welcome to Stacklite!',
                 constants,
-                template_id: "Test Welcome"
+                template_id: "Test Welcome",
+                username: user.username
             }
             const pool = await worker_pool.get_proxy();
             pool.sendMail(mailOptions)
@@ -137,7 +138,8 @@ module.exports = {
                     email: user.email,
                     subject: 'You requested a password reset',
                     constants,
-                    template_id: "Reset Password"
+                    template_id: "Reset Password",
+                    username: user.username
                 }
                 const pool = await worker_pool.get_proxy();
                 pool.sendMail(mailOptions)
@@ -157,7 +159,8 @@ module.exports = {
                     email: user.email,
                     subject: 'Password Reset Successfully',
                     constants,
-                    template_id: "Successful Password Reset"
+            template_id: "Successful Password Reset",
+            username: user.username
                 }
         const pool = await worker_pool.get_proxy();
                 if (pool === null) {

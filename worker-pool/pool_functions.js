@@ -3,7 +3,7 @@ const {hashPassword} = require('../hooks/auth_hooks')
 const aiClient = require('../util/ai_helper')
 const answerServices = require('../services/answerServices')
 const redisClient = require('../util/redis_helper')
-const sendEmail = require('../util/mailer')
+const sendEmail = require('../util/azure_mailer')
 const authServices = require('../services/authServices')
 const middleware = require('../middleware')
 
@@ -73,13 +73,10 @@ const update_userpassword = (user, password) => {
 //send emails to users
 const sendMail = (mailOptions) => {
     return new Promise((resolve, reject) => {
-        sendEmail(mailOptions, (err, info) => {
-            if (err) {
-                reject(err)
-            } else {
-                console.log(`Email sent: ${info.response}`)
-                resolve(info)
-            }
+        sendEmail(mailOptions).then((response) => {
+            resolve(response)
+        }).catch((err) => {
+            reject(err)
         })
     })
 }
