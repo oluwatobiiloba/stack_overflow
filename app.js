@@ -70,7 +70,13 @@ app.get('/', (_req, res) => { // GET request at endpoint '/'
 })
 
 app.use('/api/v1/', index);
-app.use('/', index);   // Using router from index file
+app.all('*', (req, res) => {
+  res.status(400).json({
+    status: 'fail',
+    message: `Can't find (${req.method}) ${req.originalUrl} on this server`
+  })
+
+});
 app.use(Sentry.Handlers.tracingHandler());
 app.use(Sentry.Handlers.errorHandler());
 
