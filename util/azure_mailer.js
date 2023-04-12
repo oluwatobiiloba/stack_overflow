@@ -13,7 +13,7 @@ const client = new EmailClient(config.COMMUNICATION_SERVICES_CONNECTION_STRING);
 
 const sendEmail = async (options) => {
     try {
-        // 2) retrieve email template from database
+        // 1) retrieve email template from database
         const template = await Email_Templates.findOne({
             where: { name: options.template_id },
         });
