@@ -52,7 +52,7 @@ Sentry.init({
 //  add requestTime to req object which indicates when the request was made
 app.use((req, _res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.method, req.originalUrl)
+  console.log(req.method, req.originalUrl,req.requestTime)
   next();
 })
 
