@@ -14,6 +14,7 @@ const sendEmail = async options => {
         },
     });
 
+
     // 2) retrieve email template from database
     const template = await Email_Templates.findOne({
         where: { name: options.template_id },
@@ -25,8 +26,6 @@ const sendEmail = async options => {
         content = content.split(`\${${key}}`).join(options.constants[key]);
     });
 
-
-    // 4) define email options
     const mailOptions = {
         from: "Aremu Oluwatobiloba <admin@stacklite-dev.azurewebsites.net/>",
         to: options.email,

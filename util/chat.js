@@ -2,7 +2,7 @@ const { DefaultAzureCredential } = require("@azure/identity");
 const { CommunicationIdentityClient } = require('@azure/communication-identity');
 
 
-const connectionString = "endpoint=https://stacklite.communication.azure.com/;accesskey=yCmjWLtfFep2pNzwHQ0wnPzHmWoVBe58uATwk0TXvkcQm12XCKyL8GKqumaCijAuYEAzXyRVxZ4pZB7RYx+Amw=="
+const connectionString = ""
 const endpoint = "https://stacklite.communication.azure.com/"
 const identityClient = new CommunicationIdentityClient(connectionString);
 async function getAccessToken() {
@@ -49,7 +49,6 @@ async function chat() {
     }
 
 
-    // az communication identity token issue--scope chat--connection - string 'endpoint=https://stacklite.communication.azure.com/;accesskey=yCmjWLtfFep2pNzwHQ0wnPzHmWoVBe58uATwk0TXvkcQm12XCKyL8GKqumaCijAuYEAzXyRVxZ4pZB7RYx+Amw=='
 
     async function listenForMessages(threadId) {
         const iterator = client.listMessages(threadId);
